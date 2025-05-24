@@ -1,0 +1,58 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="20dp"
+    app:cardCornerRadius="16dp"
+    android:radius="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/course_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textCourseCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CSA101"
+                android:textSize="14sp"
+                android:textColor="?attr/courseCode"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/arrowImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_open_right"
+                android:contentDescription="Arrow" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textCourseTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Introduction to Computer Science"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="?attr/courseName"
+            android:layout_marginTop="2dp" />
+
+        <TextView
+            android:id="@+id/textCredits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credits: 3"
+            android:textSize="12sp"
+            android:textColor="?attr/courseCode"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

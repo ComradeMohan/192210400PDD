@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#0C70F2</color>
+    <color name="colorPrimary">#1A232C</color>
+    <color name="lightBackground">#EFF6FF</color>
+    <color name="ligthText">#4B5563</color>
+    <color name="lightGreen">#F0FDF4</color>
+    <color name="lightRed">#FFF7ED</color>
+    <color name="buttonBlue">#2563EB</color>
+    <color name="bottom_nav_selector_color">#9CA3AF</color>
+    <color name="blue_focus">#1976D2</color>
+    <color name="teal_700">#018786</color>
+    <color name="my_status_bar_color">#ffff</color>
+
+
+<!--    updates-->
+
+
+
+</resources>

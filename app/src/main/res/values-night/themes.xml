@@ -1,0 +1,26 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.UniValut" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+<!--        <item name="colorPrimary">@color/black</item> &ndash;&gt;-->
+
+        <item name="android:statusBarColor">#1A1D2E</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+
+        <item name="notificationIcon">#FF0000</item>  <!-- Red -->
+
+
+<!--        dark mode-->
+
+        <item name="app_name_color">@color/white</item>
+        <item name="colorStrokeDefault">#00000000</item>
+        <item name="inputBgBox">#19FFFFFF</item>
+        <item name="pendingSubject">#1A2642</item>
+        <item name="bottomNavigation">#1A2642</item>
+        <item name="courseCode">#8B93A7</item>
+        <item name="courseName">#ffff</item>
+        <item name="completeCourse">#1A4D3C</item>
+        <item name="pendingCourse">#4D3A1A</item>
+    </style>
+</resources>

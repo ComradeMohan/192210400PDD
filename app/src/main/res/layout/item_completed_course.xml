@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="?attr/pendingSubject">
+
+    <!-- Course Code + Name -->
+    <TextView
+        android:id="@+id/tvCourseName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="CSA05 Advanced Programming"
+        android:textSize="15sp"
+        android:textColor="?attr/app_name_color"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvCourseGrade"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0" />
+
+    <!-- Grade (right aligned) -->
+    <TextView
+        android:id="@+id/tvCourseGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A"
+        android:textSize="18sp"
+        android:textColor="?attr/app_name_color"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvCourseName"
+        app:layout_constraintBottom_toBottomOf="@id/tvCourseName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

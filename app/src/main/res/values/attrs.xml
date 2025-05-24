@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="notificationIcon" format="color" />
+    <attr name="app_name_color" format="color" />
+    <attr name="colorStrokeDefault" format="color" />
+    <attr name="inputBgBox" format="color"/>
+    <attr name="pendingSubject" format="color" />
+    <attr name="bottomNavigation" format="color" />
+    <attr name="courseCode" format="color" />
+    <attr name="courseName" format="color" />
+    <attr name="completeCourse" format="color" />
+    <attr name="pendingCourse" format="color" />
+
+</resources>

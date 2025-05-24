@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="titleStudents" type="id" />
+    <item name="bottomNavigationView" type="id" />
+    <item name="textViewCourseTitle" type="id" />
+    <item name="upload_button" type="id" />
+    <item name="cancel_button" type="id" />
+    <item name="file_list_layout" type="id" />
+    <item name="upload_box" type="id" />
+    <item name="frame_layout" type="id" />
+    <item name="uploadArea" type="id" />
+    <item name="tvSelectType" type="id" />
+</resources>
