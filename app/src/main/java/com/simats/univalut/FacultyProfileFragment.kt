@@ -32,8 +32,10 @@ class FacultyProfileFragment : Fragment() {
     private lateinit var regNoTextView: TextView
     private lateinit var logoutButton: LinearLayout
     private lateinit var settingsButton: LinearLayout
+    private lateinit var notification: LinearLayout
 
     private var facultyId: String? = null
+    private var collegeName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,13 @@ class FacultyProfileFragment : Fragment() {
         regNoTextView = view.findViewById(R.id.regNoTextView)
         logoutButton = view.findViewById(R.id.logoutButton)
         settingsButton = view.findViewById(R.id.settingsButton)
+        notification =  view.findViewById(R.id.academicRecordsButton)
 
+        notification.setOnClickListener {
+            val intent = Intent(requireContext(), StudentNotificationsActivity::class.java)
+            intent.putExtra("college", collegeName)
+            startActivity(intent)
+        }
         // Set default placeholder (e.g., 'F' for Faculty)
         profileImageView.setImageDrawable(getLetterDrawable('F'))
 
@@ -103,7 +111,7 @@ class FacultyProfileFragment : Fragment() {
                         .build()
 
                     val request = okhttp3.Request.Builder()
-                        .url("https://api-9buk.onrender.com/submit_feedback.php") // Replace with your actual URL
+                        .url("http://192.168.234.54/univault/submit_feedback.php") // Replace with your actual URL
                         .post(requestBody)
                         .build()
 
@@ -148,7 +156,7 @@ class FacultyProfileFragment : Fragment() {
     }
 
     private fun fetchFacultyDetails(facultyId: String) {
-        val url = "https://api-9buk.onrender.com/get_faculty_by_id.php?facultyId=$facultyId"
+        val url = "http://192.168.234.54/univault/get_faculty_by_id.php?facultyId=$facultyId"
 
         val requestQueue = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(
@@ -167,7 +175,7 @@ class FacultyProfileFragment : Fragment() {
                         emailTextView.text = faculty.optString("email", "Email not available")
                         phoneTextView.text = faculty.optString("phone_number", "Phone not available")
                         regNoTextView.text = "Staff ID: ${faculty.getString("login_id")}"
-
+                        collegeName = faculty.optString("college", "null")
                         // Set profile image as first letter of name
                         if (facultyName.isNotEmpty()) {
                             val firstLetter = facultyName[0].uppercaseChar()

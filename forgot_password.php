@@ -79,7 +79,7 @@ try {
     $mail->isHTML(true);
     $mail->Subject = 'UniValut Password Reset Request';
 
-    $reset_link = "http://192.168.224.54/UniValut/reset_password.php?token=" . $reset_token;
+    $reset_link = "http://192.168.234.54/UniValut/reset_password.php?token=" . $reset_token;
 
     $mail->Body = "
         Hi {$user['full_name']},<br><br>

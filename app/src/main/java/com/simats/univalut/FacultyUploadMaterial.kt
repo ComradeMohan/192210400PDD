@@ -1,5 +1,6 @@
 package com.simats.univalut
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -89,6 +90,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("Range")
     private fun getFileName(uri: Uri): String? {
         var result: String? = null
         val cursor = contentResolver.query(uri, null, null, null, null)
@@ -106,7 +108,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
         val inputStream = contentResolver.openInputStream(fileUri)
         val fileData = inputStream?.readBytes() ?: return
 
-        val url = "http://192.168.224.54/UniValut/upload_material.php"
+        val url = "http://192.168.234.54/UniValut/upload_material.php"
 
         val request = VolleyFileUpload(
             Request.Method.POST, url,
@@ -133,7 +135,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
     }
 
     private fun fetchPDFs(college: String, course: String) {
-        val url = "https://api-9buk.onrender.com/list_pdfs.php?college=$college&course=$course"
+        val url = "http://192.168.234.54/univault/list_pdfs.php?college=$college&course=$course"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -161,30 +163,56 @@ class FacultyUploadMaterial : AppCompatActivity() {
         Volley.newRequestQueue(this).add(request)
     }
 
-
     private fun addPDFRow(fileName: String, fileUrl: String, uploadDate: String) {
-        val rowLayout = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setPadding(10, 10, 10, 10)
+        val inflater = layoutInflater
+        val rowView = inflater.inflate(R.layout.item_uploaded_pdf, pdfContainer, false)
+
+        val fileNameText: TextView = rowView.findViewById(R.id.fileNameText)
+        val uploadDateText: TextView = rowView.findViewById(R.id.uploadDateText)
+        val deleteBtn: ImageButton = rowView.findViewById(R.id.deleteBtn)
+
+        fileNameText.text = fileName
+        uploadDateText.text = "Uploaded on: $uploadDate"
+
+        // Open PDF when clicking the row
+        rowView.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(Uri.parse(fileUrl), "application/pdf")
+            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            startActivity(intent)
         }
 
-        val textView = TextView(this).apply {
-            text = "$fileName\nUploaded on: $uploadDate"
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        // Delete button click
+        deleteBtn.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_confirm_delete, null)
+
+            val alertDialog = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create()
+
+            dialogView.findViewById<TextView>(R.id.dialogMessage).text =
+                "Are you sure you want to delete \"$fileName\"?"
+
+            dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            dialogView.findViewById<Button>(R.id.btnDelete).setOnClickListener {
+                deleteFileFromServer(fileName)
+                alertDialog.dismiss()
+            }
+
+            alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            alertDialog.show()
         }
 
-        val deleteBtn = Button(this).apply {
-            text = "Delete"
-            setOnClickListener { deleteFileFromServer(fileName) }
-        }
 
-        rowLayout.addView(textView)
-        rowLayout.addView(deleteBtn)
-        pdfContainer.addView(rowLayout)
+        pdfContainer.addView(rowView)
     }
 
+
     private fun deleteFileFromServer(fileName: String) {
-        val url = "http://192.168.224.54/UniValut/delete_material.php"
+        val url = "http://192.168.234.54/UniVault/delete_material.php"
 
         val request = object : StringRequest(Method.POST, url,
             Response.Listener {

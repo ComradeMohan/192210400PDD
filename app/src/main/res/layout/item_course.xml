@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="?attr/pendingSubject"
     android:padding="16dp"
     android:gravity="center_vertical">
 
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="CS101"
             android:textSize="12sp"
-            android:textColor="#6B7280" />
+            android:textColor="?attr/courseCode" />
 
         <TextView
             android:id="@+id/courseTitle"
@@ -27,7 +28,7 @@
             android:text="Introduction to Computer Science"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#111827" />
+            android:textColor="?attr/app_name_color" />
 
         <TextView
             android:id="@+id/courseInstructor"
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Dr. Sarah Johnson"
             android:textSize="14sp"
-            android:textColor="#6B7280" />
+            android:textColor="?attr/courseCode" />
     </LinearLayout>
 
     <RadioButton

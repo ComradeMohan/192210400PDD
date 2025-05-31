@@ -22,5 +22,19 @@
         <item name="courseName">#ffff</item>
         <item name="completeCourse">#1A4D3C</item>
         <item name="pendingCourse">#4D3A1A</item>
+
+
+
+        <item name="facultHomeBox">#132F4C</item>
+
+        <item name="facultyBottomNav">#1A3A6E</item>
+
+
+        <item name="adminBottomNav">#283593</item>
+        <item name="adminHomeBox">#33FFFFFF</item>
+        <item name="adminAddDeptBox">#fff</item>
+        <item name="adminAddFacultyBox">#fff</item>
+        <item name="adminUpload">#fff</item>
+
     </style>
 </resources>

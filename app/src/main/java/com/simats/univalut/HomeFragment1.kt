@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -46,7 +47,24 @@ class HomeFragment1 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        studentID = arguments?.getString("studentID") // Get student ID from arguments
+        studentID = arguments?.getString("studentID")
+
+        // Get student ID from arguments
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Your existing code to setup listeners, adapters, etc. (if any)
+
+        // SharedPreferences load degree progress
+        val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+        val savedProgress = sf.getInt("degreeProgress", 0)
+
+        val progressBar = view.findViewById<ProgressBar>(R.id.degreeProgressBar)
+        val percentageText = view.findViewById<TextView>(R.id.degreeProgressPercentage)
+
+        progressBar.progress = savedProgress
+        percentageText.text = "$savedProgress%"
     }
 
     override fun onCreateView(
@@ -101,7 +119,7 @@ class HomeFragment1 : Fragment() {
         subjectAdapter.updateData(filteredList)
     }
     private fun fetchStudentName(studentID: String) {
-        val url = "http://192.168.203.54/univault/fetch_student_name.php?studentID=$studentID"
+        val url = "http://192.168.234.54/univault/fetch_student_name.php?studentID=$studentID"
         val queue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -150,7 +168,7 @@ class HomeFragment1 : Fragment() {
     }
 
     fun fetchCollegeIdByName(collegeName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.203.54/univault/get_college_id.php" // Replace with your actual URL
+        val url = "http://192.168.234.54/univault/get_college_id.php" // Replace with your actual URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -185,7 +203,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     fun fetchDepartmentId(collegeId: Int, departmentName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.203.54/univault/get_department_id.php" // Replace with your PHP file URL
+        val url = "http://192.168.234.54/univault/get_department_id.php" // Replace with your PHP file URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -236,7 +254,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     private fun fetchPendingSubjects(studentId: String, departmentId: String) {
-        val urlStr = "http://192.168.203.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
+        val urlStr = "http://192.168.234.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
 
         Thread {
             try {
@@ -293,7 +311,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://192.168.203.54/univault/get_latest_notice.php?college=$college"
+        val url = "http://192.168.234.54/univault/get_latest_notice.php?college=$college"
         val ctx = context ?: return  // Safely get context or return if fragment is not attached
         val queue = Volley.newRequestQueue(ctx)
 

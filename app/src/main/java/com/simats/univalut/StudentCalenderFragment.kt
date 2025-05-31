@@ -56,7 +56,7 @@ class StudentCalenderFragment : Fragment() {
     }
 
     private fun fetchStudentName(studentID: String) {
-        val url = "http://192.168.203.54/univault/fetch_student_name.php?studentID=$studentID" // Adjust the URL
+        val url = "http://192.168.234.54/univault/fetch_student_name.php?studentID=$studentID" // Adjust the URL
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -83,7 +83,7 @@ class StudentCalenderFragment : Fragment() {
     }
 
     private fun fetchEvents(collegeName: String) {
-        val url = "http://192.168.203.54/univault/getEvents.php?college_name=$collegeName" // Adjust the URL
+        val url = "http://192.168.234.54/univault/getEvents.php?college_name=$collegeName" // Adjust the URL
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,

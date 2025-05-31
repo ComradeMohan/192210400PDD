@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="@drawable/bg_student_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                         android:layout_height="wrap_content"
                         android:text="Welcome,"
                         android:textSize="20sp"
-                        android:textColor="#222222" />
+                        android:textColor="?attr/app_name_color" />
 
                     <TextView
                         android:id="@+id/facultyNameTextView"
@@ -45,7 +45,8 @@
                         android:text="Faculty Name"
                         android:textStyle="bold"
                         android:textSize="24sp"
-                        android:textColor="#000000" />
+                        android:paddingLeft="20dp"
+                        android:textColor="?attr/app_name_color" />
                 </LinearLayout>
 
                 <ImageView
@@ -60,41 +61,33 @@
 
             <!-- Subject Card -->
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:id="@+id/notification_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:radius="8dp"
-                android:layout_marginBottom="10dp">
+                android:background="@drawable/announcement_bg"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
 
-                <LinearLayout
-                    android:id="@+id/notification_background"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvNoticeTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/announcement_bg"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:text="Notice Title"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#FFFFFF" />
 
-                    <TextView
-                        android:id="@+id/tvNoticeTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notice Title"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="#fff" />
-
-                    <TextView
-                        android:id="@+id/tvNoticeDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notice description will appear here."
-                        android:textSize="16sp"
-                        android:textColor="#ffff"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tvNoticeDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notice description will appear here."
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
             <!-- Upload & Announcement Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -112,7 +105,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="16dp"
-                    android:backgroundTint="#F1F7FE">
+                    android:backgroundTint="?attr/facultHomeBox">
 
                     <LinearLayout
                         android:id="@+id/uploadResourcesButton"
@@ -145,7 +138,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     app:cardCornerRadius="16dp"
-                    android:backgroundTint="#FFF5F2">
+                    android:backgroundTint="?attr/facultHomeBox">
 
                     <LinearLayout
                         android:id="@+id/sendAnnouncementButton"
@@ -175,18 +168,18 @@
 
             <!-- Latest Announcement -->
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="#E8F0FE">
+                app:cardCornerRadius="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:background="@drawable/cgpa_gradient" >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -207,8 +200,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Quote of the Day"
-                            android:textSize="16sp"
-                            android:textColor="#0D47A1"
+                            android:textSize="18dp"
+                            android:textColor="@color/blue_focus"
                             android:textStyle="bold"
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
@@ -218,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:text="Education is not the filling of a pail, but the lighting of a fire."
                         android:textSize="14sp"
-                        android:textColor="#666666"
+                        android:textColor="?attr/app_name_color"
                         android:fontStyle="italic"/>
 
                     <TextView
@@ -229,7 +222,7 @@
                         android:textColor="#999999"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
             <!-- Materials List -->
 <!--            <androidx.cardview.widget.CardView-->
 <!--                android:layout_width="match_parent"-->
@@ -293,7 +286,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?attr/pendingSubject">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -307,10 +302,11 @@
                         android:id="@+id/editTextQuickNote"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
+                        app:cardCornerRadius="16dp"
+                        android:background="@drawable/bg_gradient_dark_svg"
+                        android:gravity="start"
                         android:hint="Write your notes here..."
-                        android:background="@drawable/rounded_corners"
-                        android:padding="12dp"
-                        android:gravity="start"/>
+                        android:padding="12dp" />
 
                     <Button
                         android:id="@+id/buttonSaveNote"

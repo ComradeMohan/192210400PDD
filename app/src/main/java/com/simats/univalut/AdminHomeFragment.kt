@@ -2,13 +2,11 @@ package com.simats.univalut
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -21,16 +19,12 @@ import org.json.JSONObject
 
 class AdminHomeFragment : Fragment() {
 
-    private var adminId: String? = null
     private var _binding: FragmentAdminHomeBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var context: FragmentActivity
+    private var adminId: String? = null
     private var collegeName: String? = null
-
-
-
-    private lateinit var tvNoticeTitle: TextView
-    private lateinit var tvNoticeDescription: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,36 +35,30 @@ class AdminHomeFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize views safely here
-        tvNoticeTitle = view.findViewById(R.id.tvNoticeTitle)
-        tvNoticeDescription = view.findViewById(R.id.tvNoticeDescription)
-
-        adminId = arguments?.getString("admin_id")  // fixed key
-
+        adminId = arguments?.getString("admin_id")
         adminId?.let { fetchAdminDetails(it) }
 
-        binding.tvTotalStudents.text = "0"
-
+        binding.tvTotalStudents.text = "0"  // Placeholder for student count
         binding.rvRecentActivity.layoutManager = LinearLayoutManager(context)
-        binding.rvRecentActivity.adapter = RecentActivityAdapter(getDummyActivityList())
+
+
 
         binding.btnAddStudent.setOnClickListener {
             Toast.makeText(requireContext(), "Add Student clicked", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnAddFaculty.setOnClickListener {
-            Toast.makeText(requireContext(), "Add Faculty clicked", Toast.LENGTH_SHORT).show()
             showAddFacultyDialog()
         }
 
         binding.btnPostNotice.setOnClickListener {
-            val collegeName = binding.tvTitle.text.toString().split(" - ").last()
-            val intent = Intent(context, AdminPostNotice::class.java)
-            intent.putExtra("COLLEGE_NAME", collegeName)
+            val college = collegeName ?: return@setOnClickListener
+            val intent = Intent(context, AdminPostNotice::class.java).apply {
+                putExtra("COLLEGE_NAME", college)
+            }
             startActivity(intent)
         }
 
@@ -87,58 +75,79 @@ class AdminHomeFragment : Fragment() {
         }
     }
 
-    private fun fetchLatestNotice(college: String) {
-        val url = "https://api-9buk.onrender.com/get_latest_notice.php?college=$college"
-        val ctx = context ?: return  // Safely get context or return if fragment is not attached
-        val queue = Volley.newRequestQueue(ctx)
-
-        val jsonObjectRequest = JsonObjectRequest(
-            com.android.volley.Request.Method.GET, url, null,
-            { response ->
-                if (!isAdded) return@JsonObjectRequest  // Fragment no longer valid
-                val success = response.getBoolean("success")
-                if (success) {
-                    val title = response.getString("title")
-                    val description = response.getString("description")
-                    tvNoticeTitle.text = title
-                    tvNoticeDescription.text = description
-                } else {
-                    tvNoticeTitle.text = "No Notices"
-                    tvNoticeDescription.text = ""
-                }
-            },
-            {
-                if (!isAdded) return@JsonObjectRequest
-                tvNoticeTitle.text = "Error"
-                tvNoticeDescription.text = "Failed to fetch notice."
-            }
-        )
-        queue.add(jsonObjectRequest)
-    }
     private fun fetchAdminDetails(adminId: String) {
-        val url = "https://api-9buk.onrender.com/getAdminDetails.php?admin_id=$adminId"
-
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+        val url = "http://192.168.234.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
                     val name = response.getString("name")
-                    val college = response.getString("college")
-                    collegeName = college
+                    collegeName = response.getString("college")
+                    binding.tvTitle.text = "$name - $collegeName"
                     collegeName?.let { fetchLatestNotice(it) }
-                    binding.tvTitle.text = "$name - $college"
+                    fetchFeedbacks()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Error parsing admin details", Toast.LENGTH_SHORT).show()
-
                 }
             },
-            { error ->
-                if (!isAdded) return@JsonObjectRequest
-                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+            {
+                Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT).show()
             })
 
-        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest)
+        Volley.newRequestQueue(requireContext()).add(request)
     }
+
+    private fun fetchLatestNotice(college: String) {
+        val url = "http://192.168.234.54/univault/get_latest_notice.php?college=$college"
+        val request = JsonObjectRequest(Request.Method.GET, url, null,
+            { response ->
+                if (response.getBoolean("success")) {
+                    binding.tvNoticeTitle.text = response.getString("title")
+                    binding.tvNoticeDescription.text = response.getString("description")
+                } else {
+                    binding.tvNoticeTitle.text = "No Notices"
+                    binding.tvNoticeDescription.text = ""
+                }
+            },
+            {
+                binding.tvNoticeTitle.text = "Error"
+                binding.tvNoticeDescription.text = "Failed to fetch notice."
+            })
+
+        Volley.newRequestQueue(requireContext()).add(request)
+    }
+
+    private fun fetchFeedbacks() {
+        val college = collegeName ?: return  // Skip if college name is null
+        val url = "http://192.168.234.54/univault/get_feedbacks.php?college=$college"
+
+        val request = JsonObjectRequest(Request.Method.GET, url, null,
+            { response ->
+                if (response.getBoolean("success")) {
+                    val feedbackList = mutableListOf<Feedback>()
+                    val dataArray = response.getJSONArray("data")
+                    for (i in 0 until dataArray.length()) {
+                        val obj = dataArray.getJSONObject(i)
+                        feedbackList.add(
+                            Feedback(
+                                user_id = obj.getString("user_id"),
+                                feedback = obj.getString("feedback"),
+                                created_at = obj.getString("submitted_at")
+                            )
+                        )
+                    }
+                    binding.rvRecentActivity.adapter = FeedbackAdapter(feedbackList)
+                } else {
+                    Toast.makeText(requireContext(), "No feedbacks found", Toast.LENGTH_SHORT).show()
+                }
+            },
+            {
+                Toast.makeText(requireContext(), "Error loading feedbacks", Toast.LENGTH_SHORT).show()
+            })
+
+        Volley.newRequestQueue(requireContext()).add(request)
+    }
+
 
     private fun showAddFacultyDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_faculty, null)
@@ -157,6 +166,8 @@ class AdminHomeFragment : Fragment() {
 
         etCollege.setText(collegeName)
         etPassword.setText("welcome")
+        etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+
         btnSubmit.isEnabled = false
 
         getNextFacultyId { newId ->
@@ -169,24 +180,48 @@ class AdminHomeFragment : Fragment() {
             val email = etEmail.text.toString().trim()
             val phone = etPhone.text.toString().trim()
             val loginId = etLoginId.text.toString().trim()
-            val collegeName = etCollege.text.toString().trim()
-            val password = "welcome"
+            val college = etCollege.text.toString().trim()
 
             if (name.isEmpty() || email.isEmpty() || phone.isEmpty()) {
                 Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            postFacultyToServer(name, email, phone, collegeName, loginId, password)
+            postFacultyToServer(name, email, phone, college, loginId, "welcome")
             dialog.dismiss()
         }
 
         dialog.show()
     }
 
-    private fun postFacultyToServer(name: String, email: String, phone: String, college: String, loginId: String, password: String) {
-        val url = "https://api-9buk.onrender.com/faculty_register.php"
+    private fun getNextFacultyId(callback: (String) -> Unit) {
+        val college = collegeName ?: run {
+            callback("FAC001")
+            return
+        }
+        val url = "http://192.168.234.54/univault/getNextFacultyId.php?college=${college.replace(" ", "%20")}"
 
+        val request = JsonObjectRequest(Request.Method.GET, url, null,
+            { response ->
+                try {
+                    callback(response.getString("next_id"))
+                } catch (e: Exception) {
+                    callback("FAC001")
+                }
+            },
+            {
+                callback("FAC001")
+            })
+
+        Volley.newRequestQueue(requireContext()).add(request)
+    }
+
+
+    private fun postFacultyToServer(
+        name: String, email: String, phone: String,
+        college: String, loginId: String, password: String
+    ) {
+        val url = "http://192.168.234.54/univault/faculty_register.php"
         val params = JSONObject().apply {
             put("name", name)
             put("email", email)
@@ -207,45 +242,17 @@ class AdminHomeFragment : Fragment() {
         Volley.newRequestQueue(requireContext()).add(request)
     }
 
-    private fun getNextFacultyId(callback: (String) -> Unit) {
-        val url = "https://api-9buk.onrender.com/getNextFacultyId.php"
-
-        val request = JsonObjectRequest(Request.Method.GET, url, null,
-            { response ->
-                try {
-                    val nextId = response.getString("next_id")
-                    callback(nextId)
-                } catch (e: Exception) {
-                    callback("SSE001")
-                }
-            },
-            {
-                callback("SSE001")
-            })
-
-        Volley.newRequestQueue(requireContext()).add(request)
-    }
-
-    private fun getDummyActivityList(): List<String> {
-        return listOf(
-            "Student John added to CS101",
-            "Notice posted: Midterm postponed",
-            "Dr. Smith uploaded lecture slides",
-            "Faculty Jane added to ME201"
-        )
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     companion object {
-        fun newInstance(adminId: String): Fragment {
+        fun newInstance(adminId: String): AdminHomeFragment {
             val fragment = AdminHomeFragment()
-            val args = Bundle()
-            args.putString("admin_id", adminId) // fixed key
-            fragment.arguments = args
+            fragment.arguments = Bundle().apply {
+                putString("admin_id", adminId)
+            }
             return fragment
         }
     }

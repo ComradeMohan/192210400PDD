@@ -13,6 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/admin_bg_gradient"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
@@ -20,6 +21,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+            <!-- 📅 Calendar View -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -27,25 +29,27 @@
                 app:cardCornerRadius="16dp"
                 android:background="@color/lightBackground"
                 app:cardElevation="4dp">
-            <CalendarView
-                android:id="@+id/calendarView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@color/lightBackground"
-                android:firstDayOfWeek="2"
-                android:focusedMonthDateColor="#000000"
-                android:unfocusedMonthDateColor="#888888"
-                android:selectedWeekBackgroundColor="#2196F3"
-                android:weekSeparatorLineColor="#DDDDDD"
-                android:dateTextAppearance="@style/CalendarDateText"
-                android:weekDayTextAppearance="@style/CalendarWeekDayText"/>
+
+                <CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/pendingSubject"
+                    android:firstDayOfWeek="2"
+                    android:focusedMonthDateColor="#C51A1A"
+                    android:unfocusedMonthDateColor="#888888"
+                    android:selectedWeekBackgroundColor="#2196F3"
+                    android:weekSeparatorLineColor="#DDDDDD"
+                    android:dateTextAppearance="@style/CalendarDateText"
+                    android:weekDayTextAppearance="@style/CalendarWeekDayText"/>
             </androidx.cardview.widget.CardView>
             <Button
                 android:id="@+id/buttonAddEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Event"
+                android:backgroundTint="@color/blue_focus"
+                android:textColor="@color/white"
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center"/>
             <TextView
@@ -54,10 +58,10 @@
                 android:text="Events"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="24dp"
+                android:textColor="?attr/app_name_color"
                 android:layout_marginBottom="8dp"/>
 
+            <!-- 📋 RecyclerView for Events -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewEvents"
                 android:layout_width="match_parent"

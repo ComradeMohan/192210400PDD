@@ -31,6 +31,9 @@ class AdminCalenderFragment : Fragment() {
     private var adminId: String? = null
     private var collegeName: String? = null
 
+    // Flag to prevent double add
+    private var isAddingEvent = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,9 +50,6 @@ class AdminCalenderFragment : Fragment() {
         adminId = arguments?.getString("admin_id")
         adminId?.let { fetchAdminDetails(it) }
 
-        // Fetch events from backend (placeholder)
-
-
         // Add event button
         view.findViewById<Button>(R.id.buttonAddEvent).setOnClickListener {
             showAddEventDialog()
@@ -59,7 +59,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "https://api-9buk.onrender.com/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://192.168.234.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
@@ -78,17 +78,16 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchEvents() {
-        val url = "https://api-9buk.onrender.com/getEvents.php?college_name=$collegeName"
+        val url = "http://192.168.234.54/univault/getEvents.php?college_name=$collegeName"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
-                    Log.d("AdminCalenderFragment", "Response: $response") // Log the entire response
+                    Log.d("AdminCalenderFragment", "Response: $response")
 
-                    eventList.clear() // Clear the previous event list
+                    eventList.clear()
 
-                    // Assuming the response contains a JSON array of events
-                    val eventsArray = response.getJSONArray("data") // Adjust this based on your response structure
+                    val eventsArray = response.getJSONArray("data")
                     for (i in 0 until eventsArray.length()) {
                         val eventObj = eventsArray.getJSONObject(i)
                         val title = eventObj.getString("title")
@@ -101,7 +100,6 @@ class AdminCalenderFragment : Fragment() {
                         eventList.add(event)
                     }
 
-                    // Notify the adapter about the new data
                     eventAdapter.notifyDataSetChanged()
 
                 } catch (e: Exception) {
@@ -110,18 +108,13 @@ class AdminCalenderFragment : Fragment() {
                 }
             },
             { error ->
-                Log.e("AdminCalenderFragment", "Error: ${error.message}") // Log the error
+                Log.e("AdminCalenderFragment", "Error: ${error.message}")
                 Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         )
 
-        // Add the request to the queue
         Volley.newRequestQueue(requireContext()).add(request)
     }
-
-
-
-
 
     private fun showAddEventDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_event, null)
@@ -139,6 +132,9 @@ class AdminCalenderFragment : Fragment() {
             .setTitle("Add New Event")
             .setView(dialogView)
             .setPositiveButton("Add") { dialog, _ ->
+                if (isAddingEvent) return@setPositiveButton
+                isAddingEvent = true
+
                 val title = editTextTitle.text.toString().trim()
                 val type = editTextType.text.toString().trim()
                 val description = editTextDescription.text.toString().trim()
@@ -157,23 +153,22 @@ class AdminCalenderFragment : Fragment() {
                         description = description
                     )
 
-                    eventList.add(newEvent)
-                    eventAdapter.notifyItemInserted(eventList.size - 1)
-
-                    addEventToBackend(newEvent)
+                    addEventToBackend(newEvent) {
+                        isAddingEvent = false
+                        dialog.dismiss()
+                    }
                 } catch (e: DateTimeParseException) {
                     Toast.makeText(requireContext(), "Invalid date format (yyyy-MM-dd)", Toast.LENGTH_SHORT).show()
+                    isAddingEvent = false
                 }
-
-                dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
     }
 
-    private fun addEventToBackend(event: Event) {
-        val url = "https://api-9buk.onrender.com/addEvent.php" // Replace with your backend URL
+    private fun addEventToBackend(event: Event, callback: () -> Unit) {
+        val url = "http://192.168.234.54/univault/addEvent.php"
 
         val params = HashMap<String, String>().apply {
             put("title", event.title)
@@ -191,9 +186,15 @@ class AdminCalenderFragment : Fragment() {
                 val status = response.optString("status")
                 val message = response.optString("message")
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+                if (status == "success") {
+                    fetchEvents()
+                }
+                callback()
             },
             { error ->
                 Toast.makeText(requireContext(), "Network error: ${error.message}", Toast.LENGTH_SHORT).show()
+                callback()
             }
         )
 

@@ -124,7 +124,6 @@ class ProfileFragment : Fragment() {
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_feedback, null)
             val etFeedback = dialogView.findViewById<EditText>(R.id.etFeedback)
             val tvUserId = dialogView.findViewById<TextView>(R.id.tvUserId)
-
             // Set user ID
             tvUserId.text = "User ID: ${studentID ?: "Unknown"}"
 
@@ -145,10 +144,11 @@ class ProfileFragment : Fragment() {
                     val requestBody = FormBody.Builder()
                         .add("user_id", userId)
                         .add("feedback", feedback)
+                        .add("college", collegeName ?: "Unknown")
                         .build()
 
                     val request = Request.Builder()
-                        .url("http://192.168.203.54/univault/submit_feedback.php") // Replace with your actual URL
+                        .url("http://192.168.234.54/univault/submit_feedback.php") // Replace with your actual URL
                         .post(requestBody)
                         .build()
 
@@ -190,7 +190,7 @@ class ProfileFragment : Fragment() {
 
     private fun fetchStudentData(studentNumber: String) {
         val client = OkHttpClient()
-        val url = "http://192.168.203.54/univault/get_student.php?student_number=$studentNumber"
+        val url = "http://192.168.234.54/univault/get_student.php?student_number=$studentNumber"
 
         val request = Request.Builder()
             .url(url)

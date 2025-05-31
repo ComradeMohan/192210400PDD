@@ -68,7 +68,7 @@ class StudentGrades : Activity() {
             var allSuccess = true
             for ((courseId, grade) in courseGradeMap) {
                 try {
-                    val url = URL("http://192.168.203.54/univault/submit_student_grades.php")
+                    val url = URL("http://192.168.234.54/univault/submit_student_grades.php")
                     val conn = url.openConnection() as HttpURLConnection
                     conn.requestMethod = "POST"
                     conn.doOutput = true
@@ -103,7 +103,7 @@ class StudentGrades : Activity() {
     }
 
     private fun fetchGradesFromServer(collegeId: String) {
-        val urlStr = "http://192.168.203.54/univault/fetch_grades.php?college_id=$collegeId"
+        val urlStr = "http://192.168.234.54/univault/fetch_grades.php?college_id=$collegeId"
         thread {
             try {
                 val conn = URL(urlStr).openConnection() as HttpURLConnection
@@ -129,7 +129,7 @@ class StudentGrades : Activity() {
     }
 
     private fun fetchPendingCourses(studentId: String, departmentId: String) {
-        val urlStr = "http://192.168.203.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
+        val urlStr = "http://192.168.234.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
         thread {
             try {
                 val conn = URL(urlStr).openConnection() as HttpURLConnection

@@ -59,6 +59,15 @@ class FacultyMaterialsFragment : Fragment() {
                 startActivity(intent)
             }
         }
+        val searchBar: EditText = view.findViewById(R.id.searchBar)
+        searchBar.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                adapter.filter.filter(s)
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
 
         backButton.setOnClickListener {
             requireActivity().onBackPressed()
@@ -70,7 +79,7 @@ class FacultyMaterialsFragment : Fragment() {
 
     private fun fetchCollegeAndCourses(facultyId: String) {
         val queue = Volley.newRequestQueue(requireContext())
-        val url = "https://api-9buk.onrender.com/get_college_by_faculty.php"
+        val url = "http://192.168.234.54/univault/get_college_by_faculty.php"
 
         val requestBody = JSONObject()
         requestBody.put("faculty_id", facultyId)
@@ -96,7 +105,7 @@ class FacultyMaterialsFragment : Fragment() {
     private fun fetchCourses(college: String) {
         val queue = Volley.newRequestQueue(requireContext())
         val encodedCollege = Uri.encode(college)
-        val url = "https://api-9buk.onrender.com/getCoursesByCollege.php?college=$encodedCollege"
+        val url = "http://192.168.234.54/univault/getCoursesByCollege.php?college=$encodedCollege"
 
         val courseRequest = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->

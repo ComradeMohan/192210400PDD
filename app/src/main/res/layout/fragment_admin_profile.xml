@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9FAFB">
+    android:background="@drawable/admin_bg_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,13 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@android:color/white"
+            android:background="@drawable/rounded_corners"
             android:padding="16dp"
             android:layout_marginBottom="16dp"
-            android:elevation="4dp"
             android:gravity="center"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="#50ffffff"
             android:clipToPadding="false"
             android:layout_gravity="center"
             android:backgroundTintMode="src_in"
@@ -29,8 +29,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/profile_header_background"
-                android:background="@android:color/darker_gray"
+                android:src="@drawable/ic_profile"
                 android:layout_gravity="center"
                 android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop"
@@ -44,24 +43,25 @@
                 android:text="Mohan Reddy"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:textColor="#111827"
+                android:textColor="?attr/app_name_color"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="College Administrator"
-                android:textColor="#6B7280"
+                android:textColor="?attr/pendingSubject"
                 android:layout_gravity="center"
                 android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="mohan.reddy@college.edu"
-                android:textColor="#4B5563"
-                android:drawableLeft="@android:drawable/ic_dialog_email"
+                android:textColor="?attr/courseName"
+                android:drawableLeft="@drawable/ic_email"
+                android:drawableTint="?attr/app_name_color"
                 android:drawablePadding="6dp"
                 android:layout_marginTop="4dp" />
 
@@ -70,8 +70,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+91 98765 43210"
-                android:textColor="#4B5563"
-                android:drawableLeft="@android:drawable/ic_menu_call"
+                android:textColor="?attr/courseName"
+                android:drawableLeft="@drawable/ic_phone"
+                android:drawableTint="?attr/app_name_color"
                 android:drawablePadding="6dp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
@@ -81,14 +82,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
-            android:background="#F9FAFB">
+            android:background="@android:color/transparent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Account Details"
                 android:textStyle="bold"
-                android:textColor="#111827"
+                android:textColor="?attr/app_name_color"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
@@ -103,13 +104,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
-                    android:textColor="#6B7280"
-                    android:textSize="12sp"/>
+                    android:textColor="?attr/courseCode"
+                    android:textSize="12sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F3F4F6"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?attr/inputBgBox"
                     android:padding="10dp"
                     android:layout_marginTop="4dp">
 
@@ -117,10 +119,11 @@
                         android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter name"
                         android:background="@android:color/transparent"
-                        android:textColor="#111827"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:hint="Enter name"
+                        android:textColor="?attr/app_name_color"
+                        tools:ignore="TouchTargetSizeCheck" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -135,13 +138,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Email"
-                    android:textColor="#6B7280"
+                    android:textColor="?attr/courseCode"
                     android:textSize="12sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F3F4F6"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?attr/inputBgBox"
+                    android:textColor="?attr/app_name_color"
                     android:padding="10dp"
                     android:layout_marginTop="4dp">
 
@@ -149,9 +154,12 @@
                         android:id="@+id/etEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter email"
                         android:background="@android:color/transparent"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:hint="Enter email"
+                        android:textColor="?attr/app_name_color"
+                        android:textColorHint="?attr/app_name_color"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:id="@+id/btnEditEmail"
@@ -175,13 +183,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phone"
-                    android:textColor="#6B7280"
+                    android:textColor="?attr/courseCode"
                     android:textSize="12sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F3F4F6"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?attr/inputBgBox"
                     android:padding="10dp"
                     android:layout_marginTop="4dp">
 
@@ -189,9 +198,11 @@
                         android:id="@+id/etPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Phone Number"
                         android:background="@android:color/transparent"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:hint="Enter Phone Number"
+                        android:textColor="?attr/app_name_color"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:id="@+id/btnEditPhone"
@@ -214,13 +225,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="College Name"
-                    android:textColor="#6B7280"
+                    android:textColor="?attr/courseCode"
                     android:textSize="12sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F3F4F6"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?attr/inputBgBox"
                     android:padding="10dp"
                     android:layout_marginTop="4dp">
 
@@ -228,10 +240,11 @@
                         android:id="@+id/etDepartment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Department"
                         android:background="@android:color/transparent"
-                        android:textColor="#111827"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:hint="Enter Department"
+                        android:textColor="?attr/app_name_color"
+                        tools:ignore="TouchTargetSizeCheck" />
 
 
                 </RelativeLayout>
@@ -248,13 +261,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Employee ID"
-                    android:textColor="#6B7280"
+                    android:textColor="?attr/courseCode"
                     android:textSize="12sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F3F4F6"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?attr/inputBgBox"
                     android:padding="10dp"
                     android:layout_marginTop="4dp">
 
@@ -262,10 +276,11 @@
                         android:id="@+id/etEmployeeId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Employee ID"
                         android:background="@android:color/transparent"
-                        android:textColor="#111827"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:hint="Enter Employee ID"
+                        android:textColor="?attr/app_name_color"
+                        tools:ignore="TouchTargetSizeCheck" />
 
 
                 </RelativeLayout>
@@ -295,7 +310,7 @@
                     android:layout_weight="1"
                     android:text="Change Password"
                     android:textSize="16sp"
-                    android:textColor="#111827"/>
+                    android:textColor="?attr/courseCode"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -327,7 +342,7 @@
                     android:layout_weight="1"
                     android:text="Logout"
                     android:textSize="16sp"
-                    android:textColor="#111827"/>
+                    android:textColor="?attr/courseCode"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

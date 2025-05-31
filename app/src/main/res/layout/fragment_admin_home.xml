@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@drawable/admin_bg_gradient">
 
     <!-- Main vertical content -->
     <LinearLayout
@@ -28,36 +28,36 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Admin Dashboard"
-                android:textSize="20sp"
+                android:textSize="24dp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/ivProfile"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="12dp"
-                android:contentDescription="Profile Picture"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile_header_background" />
+            <!--            <ImageView-->
+            <!--                android:id="@+id/ivProfile"-->
+            <!--                android:layout_width="36dp"-->
+            <!--                android:layout_height="36dp"-->
+            <!--                android:layout_marginStart="12dp"-->
+            <!--                android:contentDescription="Profile Picture"-->
+            <!--                android:scaleType="centerCrop"-->
+            <!--                android:src="@drawable/profile_header_background" />-->
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="374dp"
             android:layout_height="72dp"
-            android:padding="16dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:clipToOutline="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="100dp"
             android:layout_marginRight="100dp"
-            android:backgroundTintMode="src_in"
-            android:backgroundTint="#DCEAFE"
             android:layout_marginBottom="16dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:background="@drawable/rounded_bg_light_blue">
+            android:background="@drawable/rounded_bg_light_blue"
+            android:backgroundTint="?attr/adminHomeBox"
+            android:backgroundTintMode="src_in"
+            android:clipToOutline="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <ImageView
                 android:layout_width="32dp"
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total Students"
-                    android:textColor="#1E40AF"
+                    android:textColor="?attr/courseCode"
                     android:textSize="14sp" />
 
                 <TextView
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="2450"
-                    android:textColor="#1E40AF"
+                    android:textColor="?attr/app_name_color"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -140,43 +140,54 @@
             android:useDefaultMargins="true">
 
             <!-- Add Student -->
+
+            <!-- Add Faculty -->
             <LinearLayout
                 android:id="@+id/btnAddStudent"
                 android:layout_width="0dp"
-                android:layout_height="72dp"
+                android:layout_height="80dp"
+                android:layout_row="0"
+                android:layout_column="0"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:layout_margin="4dp"
+                android:background="@drawable/admin_add_dept_box"
+                android:clickable="true"
                 android:elevation="2dp"
-                android:background="@drawable/rounded_bg_light_blue">
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/icon_background_white"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+
+
 
                 <TextView
-                    android:text=""
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/ic_add" />
-
-
-                <TextView
-                    android:text="Add Dept/Courses"
-                    android:textColor="#2563EB"
-                    android:textSize="14sp"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:layout_width="wrap_content"/>
+                    android:layout_gravity="center_horizontal"
+                    android:text="Add Dept/Courses"
+                    android:textColor="?attr/adminAddDeptBox"
+                    android:textSize="14sp" />
 
 
             </LinearLayout>
 
-            <!-- Add Faculty -->
             <LinearLayout
                 android:id="@+id/btnAddFaculty"
                 android:layout_width="0dp"
-                android:layout_height="72dp"
+                android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -185,17 +196,26 @@
                 android:focusable="true"
                 android:layout_margin="4dp"
                 android:elevation="2dp"
-                android:background="@drawable/rounded_bg_light_blue">
+                android:background="@drawable/admin_add_faculty_box">
 
-                <TextView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/ic_add" />
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/icon_background_white"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_person_add"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+
 
 
                 <TextView
                     android:text="Add Faculty"
-                    android:textColor="#2563EB"
+                    android:textColor="?attr/adminAddFacultyBox"
                     android:textSize="14sp"
                     android:layout_gravity="center_horizontal"
                     android:layout_height="20dp"
@@ -207,7 +227,7 @@
             <LinearLayout
                 android:id="@+id/btnPostNotice"
                 android:layout_width="0dp"
-                android:layout_height="72dp"
+                android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -217,19 +237,25 @@
                 android:layout_margin="4dp"
                 android:elevation="2dp"
                 android:background="@drawable/rounded_bg_light_purple">
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/icon_background_white"
+                    android:layout_gravity="center">
 
-                <TextView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:textSize="24sp"
-                    android:background="@drawable/ic_post_notice"
-                    android:layout_gravity="center_horizontal" />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_post_notice"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+
 
                 <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="Post Notice"
-                    android:textColor="#7C3AED"
+                    android:textColor="?attr/adminAddFacultyBox"
                     android:textSize="14sp"
                     android:layout_gravity="center_horizontal" />
 
@@ -239,7 +265,7 @@
             <LinearLayout
                 android:id="@+id/btnUploadFiles"
                 android:layout_width="0dp"
-                android:layout_height="72dp"
+                android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -250,18 +276,24 @@
                 android:elevation="2dp"
                 android:background="@drawable/rounded_bg_light_green">
 
-                <TextView
-                    android:layout_width="25dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/ic_doc"
-                    android:textSize="24sp"
-                    android:layout_gravity="center_horizontal" />
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/icon_background_white"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_doc"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
 
                 <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="Upload Files"
-                    android:textColor="#16A34A"
+                    android:textColor="?attr/adminUpload"
                     android:textSize="14sp"
                     android:layout_gravity="center_horizontal" />
 
@@ -271,7 +303,7 @@
 
         <!-- Recent Activity -->
         <TextView
-            android:text="Recent Activity"
+            android:text="Feedbacks"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="24dp"

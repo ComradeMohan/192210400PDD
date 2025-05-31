@@ -28,8 +28,9 @@ class RegisterActivity : AppCompatActivity() {
 
 
     private val collegeDomainMap = mapOf(
-        "Saveetha School of Engineering" to "saveetha.com",
-        "Another College Name" to "anothercollege.edu"
+        "Saveetha School of Engineering" to "saveetha",
+        "Panmialar Engineering College" to "panimalar",
+        "Saveetha Engineering College" to "sec"
         // Add other colleges and their domains here
     )
 
@@ -80,13 +81,13 @@ class RegisterActivity : AppCompatActivity() {
             } else if (password != confirmPassword) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
             } else {
-
                 val requiredDomain = collegeDomainMap[college]
-                if (requiredDomain != null && !email.endsWith("@$requiredDomain", ignoreCase = true)) {
-                    emailInput.error = "Email must end with @$requiredDomain"
+                if (requiredDomain != null && !email.contains(requiredDomain, ignoreCase = true)) {
+                    emailInput.error = "Email must contain \"$requiredDomain\""
                     emailInput.requestFocus()
                     return@setOnClickListener
                 }
+
                 registerUser(fullName, studentNumber, email, password, department, yearOfStudy, college)
             }
         }
@@ -98,7 +99,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun fetchCollegeList() {
-        val url = "http://192.168.203.54/univault/get_colleges.php"
+        val url = "http://192.168.234.54/univault/get_colleges.php"
 
         val request = Request.Builder().url(url).get().build()
 
@@ -152,7 +153,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun fetchDepartments(collegeId: String) {
-        val url = "http://192.168.203.54/univault/fetch_departments_by_college.php?college_id=$collegeId"
+        val url = "http://192.168.234.54/univault/fetch_departments_by_college.php?college_id=$collegeId"
 
         val request = Request.Builder().url(url).get().build()
 
@@ -197,7 +198,7 @@ class RegisterActivity : AppCompatActivity() {
         yearOfStudy: String,
         college: String
     ) {
-        val url = "http://192.168.203.54/univault/register-smtp.php"
+        val url = "http://192.168.234.54/univault/register-smtp.php"
 
         val json = JSONObject().apply {
             put("full_name", fullName)

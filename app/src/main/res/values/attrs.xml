@@ -12,4 +12,18 @@
     <attr name="completeCourse" format="color" />
     <attr name="pendingCourse" format="color" />
 
+
+<!--    facylty-->
+
+    <attr name="facultyBottomNav" format="color" />
+    <attr name="facultHomeBox" format="color" />
+
+
+
+    <attr name="adminBottomNav" format="color" />
+    <attr name="adminHomeBox" format="color" />
+    <attr name="adminAddDeptBox" format="color" />
+    <attr name="adminAddFacultyBox" format="color" />
+    <attr name="adminUpload" format="color" />
+
 </resources>

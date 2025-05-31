@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -44,10 +45,10 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.3.1")
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
     implementation ("androidx.fragment:fragment-ktx:1.5.5")
-
     implementation ("com.google.android.gms:play-services-auth:21.1.0") // Use the latest version
-    //text to drawble for profile image
     implementation ("com.applandeo:material-calendar-view:1.9.2")
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
+    implementation("com.google.firebase:firebase-messaging")
 
 
     implementation(libs.androidx.core.ktx)
@@ -59,6 +60,7 @@ dependencies {
     implementation(libs.volley)
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
+//    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

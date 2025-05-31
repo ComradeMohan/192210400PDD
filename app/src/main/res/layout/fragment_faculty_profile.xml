@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="#F8F8F8"
-        android:layout_marginTop="24dp">
+        android:background="@drawable/bg_student_background">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -54,7 +53,7 @@
                 android:text="Name"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/app_name_color"
                 app:layout_constraintTop_toBottomOf="@+id/profileImageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -65,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:text="Faculty"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimary" app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+                android:textColor="?attr/app_name_color"
+                app:layout_constraintTop_toBottomOf="@+id/nameTextView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -112,7 +112,7 @@
                         android:layout_marginStart="16dp"
                         android:text="Mail ID"
                         android:textSize="16sp"
-                        android:textColor="@android:color/black" />
+                        android:textColor="?attr/app_name_color" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -125,7 +125,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_phone" />
+                        android:src="@drawable/ic_call" />
 
                     <TextView
                         android:id="@+id/phoneTextView"
@@ -134,7 +134,7 @@
                         android:layout_marginStart="16dp"
                         android:text="+91 9xxx"
                         android:textSize="16sp"
-                        android:textColor="@android:color/black" />
+                        android:textColor="?attr/app_name_color" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -147,7 +147,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_card"/>
+                        android:src="@drawable/ic_student_number"/>
 
                     <TextView
                         android:id="@+id/regNoTextView"
@@ -156,7 +156,7 @@
                         android:layout_marginStart="16dp"
                         android:text="Staff ID: COLLege"
                         android:textSize="16sp"
-                        android:textColor="@android:color/black" />
+                        android:textColor="?attr/app_name_color" />
                 </LinearLayout>
 
 
@@ -194,7 +194,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_book" />
+                    android:src="@drawable/ic_notifications"
+                    app:tint="@color/blue_focus" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -203,7 +205,7 @@
                     android:layout_weight="1"
                     android:text="Notifications"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="?attr/app_name_color" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -239,7 +241,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_help" />
+                    android:src="@drawable/ic_key" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -248,7 +250,7 @@
                     android:layout_weight="1"
                     android:text="Change Password"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="?attr/app_name_color" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -281,11 +283,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_settings"
-                    app:tint="@color/colorPrimary" />
+                    android:src="@drawable/ic_feedback" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -294,7 +297,7 @@
                     android:layout_weight="1"
                     android:text="Feedback"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="?attr/app_name_color" />
 
                 <ImageView
                     android:layout_width="wrap_content"

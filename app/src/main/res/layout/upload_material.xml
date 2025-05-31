@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@drawable/bg_gradient_dark_svg">
 
     <ScrollView
         android:layout_width="0dp"
@@ -28,22 +28,23 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingVertical="12dp">
-
                 <ImageView
                     android:id="@+id/backButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_back"
-                    android:contentDescription="Back"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/black"
+                    android:src="@drawable/ic_goback"
+                    app:tint="@color/blue_focus" />
+
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Upload Materials"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/blue_focus"
                     android:gravity="center"/>
             </LinearLayout>
 
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Course Code"
                 android:textSize="16sp"
-                android:textColor="#222222"
+                android:textColor="?attr/courseCode"
                 android:layout_marginTop="8dp"/>
 
             <!-- Upload Area (HTML Drag & Drop zone equivalent) -->
@@ -64,7 +65,8 @@
                 android:layout_height="150dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@color/lightBackground"
+                android:background="@drawable/rounded_corners"
+                android:backgroundTint="?attr/pendingSubject"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -92,7 +94,7 @@
                 android:text="Select Resource Type"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="?attr/app_name_color"
                 android:layout_marginBottom="8dp"/>
 
             <!-- Dropdown Simulation (HTML select element) -->
@@ -102,9 +104,9 @@
                 android:layout_height="wrap_content"
                 android:text="Select type"
                 android:textSize="16sp"
-                android:textColor="#222222"
+                android:textColor="?attr/app_name_color"
                 android:padding="12dp"
-                android:background="@color/white"
+                android:background="?attr/pendingSubject"
                 android:drawableEnd="@android:drawable/arrow_down_float"
                 android:gravity="center_vertical"
                 android:clickable="true"
@@ -118,8 +120,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No file selected"
-                android:textSize="14sp"
-                android:textColor="#333"
+                android:textSize="20sp"
+                android:textColor="?attr/app_name_color"
                 android:layout_marginTop="16dp"/>
 
             <!-- Submit Button (HTML <button>) -->
@@ -140,9 +142,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Resources"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="@color/blue_focus"
                 android:layout_marginBottom="12dp"/>
             <ScrollView
                 android:layout_width="match_parent"

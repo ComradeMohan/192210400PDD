@@ -38,7 +38,7 @@ class StudentNotificationsActivity : AppCompatActivity() {
     }
     //changed in online mode
     private fun fetchNotices(collegeName: String) {
-        val url = "http://192.168.203.54/univault/fetch_notices.php?college=$collegeName"
+        val url = "http://192.168.234.54/univault/fetch_notices.php?college=$collegeName"
 
         Thread {
             try {
