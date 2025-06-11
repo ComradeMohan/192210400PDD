@@ -6,13 +6,12 @@
     android:padding="16dp"
     android:background="@drawable/bg_student_background">
 
-    <!-- Back button -->
+    <!-- Back button  src is removed add later if needed -->
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_goback"
         android:contentDescription="Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

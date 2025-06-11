@@ -33,6 +33,7 @@ class AdminCalenderFragment : Fragment() {
 
     // Flag to prevent double add
     private var isAddingEvent = false
+    private lateinit var csvPickerLauncher: androidx.activity.result.ActivityResultLauncher<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,12 +55,16 @@ class AdminCalenderFragment : Fragment() {
         view.findViewById<Button>(R.id.buttonAddEvent).setOnClickListener {
             showAddEventDialog()
         }
+        view.findViewById<Button>(R.id.buttonAddSupply).setOnClickListener {
+            csvPickerLauncher.launch("text/csv")
+        }
+
 
         return view
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://192.168.234.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://192.168.205.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
@@ -78,7 +83,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchEvents() {
-        val url = "http://192.168.234.54/univault/getEvents.php?college_name=$collegeName"
+        val url = "http://192.168.205.54/univault/getEvents.php?college_name=$collegeName"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -168,7 +173,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun addEventToBackend(event: Event, callback: () -> Unit) {
-        val url = "http://192.168.234.54/univault/addEvent.php"
+        val url = "http://192.168.205.54/univault/addEvent.php"
 
         val params = HashMap<String, String>().apply {
             put("title", event.title)

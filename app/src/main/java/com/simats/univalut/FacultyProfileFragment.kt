@@ -111,7 +111,7 @@ class FacultyProfileFragment : Fragment() {
                         .build()
 
                     val request = okhttp3.Request.Builder()
-                        .url("http://192.168.234.54/univault/submit_feedback.php") // Replace with your actual URL
+                        .url("http://192.168.205.54/univault/submit_feedback.php") // Replace with your actual URL
                         .post(requestBody)
                         .build()
 
@@ -140,12 +140,29 @@ class FacultyProfileFragment : Fragment() {
             dialog.show()
         }
         logoutButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Logout Clicked", Toast.LENGTH_SHORT).show()
-            val sharedPreferences = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
-            sharedPreferences.edit().clear().apply()
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout, null)
+            val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
+            val btnLogout = dialogView.findViewById<Button>(R.id.btnLogout)
+
+            val dialog = android.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create()
+
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnLogout.setOnClickListener {
+                dialog.dismiss()
+                val sharedPreferences = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+                sharedPreferences.edit().clear().apply()
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.show()
         }
 
         facultyId?.let {
@@ -156,7 +173,7 @@ class FacultyProfileFragment : Fragment() {
     }
 
     private fun fetchFacultyDetails(facultyId: String) {
-        val url = "http://192.168.234.54/univault/get_faculty_by_id.php?facultyId=$facultyId"
+        val url = "http://192.168.205.54/univault/get_faculty_by_id.php?facultyId=$facultyId"
 
         val requestQueue = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(

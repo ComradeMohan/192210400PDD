@@ -112,7 +112,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
         }
     }
     private fun fetchCollegeId(collegeName: String) {
-        val url = "http://192.168.234.54/univault/get_college_id.php"
+        val url = "http://192.168.205.54/univault/get_college_id.php"
 
         val formBody = FormBody.Builder()
             .add("college_name", collegeName)
@@ -163,7 +163,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
         })
     }
     private fun fetchDepartmentId(collegeId: String, departmentName: String) {
-        val url = "http://192.168.234.54/univault/get_department_id.php"
+        val url = "http://192.168.205.54/univault/get_department_id.php"
 
         val formBody = FormBody.Builder()
             .add("college_id", collegeId)
@@ -213,7 +213,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
         })
     }
     private fun fetchCourses(departmentId: String) {
-        val url = "http://192.168.234.54/univault/get_courses_by_department.php"
+        val url = "http://192.168.205.54/univault/get_courses_by_department.php"
 
         val formBody = FormBody.Builder()
             .add("department_id", departmentId)
@@ -265,7 +265,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
         })
     }
     private fun fetchGradePoints(collegeId: String) {
-        val url = "http://192.168.234.54/univault/get_grade_points.php?college_id=$collegeId"
+        val url = "http://192.168.205.54/univault/get_grade_points.php?college_id=$collegeId"
 
         val request = Request.Builder()
             .url(url)
@@ -312,7 +312,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
         })
     }
     private fun fetchCompletedCourses(studentId: String, departmentId: String) {
-        val url = "http://192.168.234.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
+        val url = "http://192.168.205.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
 
         val request = Request.Builder().url(url).build()
 
@@ -378,6 +378,10 @@ class AcadmicRecordActivity : AppCompatActivity() {
                             val cgpa = if (totalCredits > 0) totalPoints / totalCredits else 0.0
                             val cgpaValueTextView = findViewById<TextView>(R.id.cgpaValue)
                             cgpaValueTextView.text = "%.2f".format(cgpa)
+
+// Store CGPA as Float in SharedPreferences
+                            val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+                            sf.edit().putFloat("cgpaValue", cgpa.toFloat()).apply()
 
                             // Update the Grade Distribution UI dynamically
                             // Iterate through the grade counts map

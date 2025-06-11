@@ -14,39 +14,35 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONArray
 
 class FacultyUploadMaterial : AppCompatActivity() {
 
     private val FILE_REQUEST_CODE = 1001
-    private var selectedFileUri: Uri? = null
+    private val selectedFileUris = mutableListOf<Uri>()
     private lateinit var collegeName: String
     private lateinit var courseCode: String
     private lateinit var pdfContainer: LinearLayout
+    private lateinit var selectedFileTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.upload_material)
 
-        // Initialize intent values
         collegeName = intent.getStringExtra("COLLEGE_NAME") ?: return
         courseCode = intent.getStringExtra("COURSE_CODE") ?: return
 
-        // UI references
         val courseCodeTextView: TextView = findViewById(R.id.course_code)
         courseCodeTextView.text = courseCode
 
         val tvSelectType: TextView = findViewById(R.id.tvSelectType)
-        val selectedFileTextView: TextView = findViewById(R.id.tvSelectedFile)
+        selectedFileTextView = findViewById(R.id.tvSelectedFile)
         val uploadArea: LinearLayout = findViewById(R.id.uploadArea)
         val submitButton: Button = findViewById(R.id.btnSubmitResources)
         val backButton: ImageView = findViewById(R.id.backButton)
         pdfContainer = findViewById(R.id.pdfContainer)
 
-        // Go back
         backButton.setOnClickListener { onBackPressed() }
 
-        // Resource type selection
         tvSelectType.setOnClickListener {
             val items = arrayOf("Lecture Notes", "Assignments", "PDF Resources")
             AlertDialog.Builder(this)
@@ -55,65 +51,80 @@ class FacultyUploadMaterial : AppCompatActivity() {
                 .show()
         }
 
-        // File picker
         uploadArea.setOnClickListener { openFilePicker() }
 
-        // Submit upload
         submitButton.setOnClickListener {
             val selectedType = tvSelectType.text.toString()
             when {
                 selectedType == "Select type" || selectedType.isBlank() -> showError("Please select a resource type.")
-                selectedFileUri == null -> showError("Please select a file to upload.")
-                else -> uploadFile(selectedType)
+                selectedFileUris.isEmpty() -> showError("Please select at least one file.")
+                else -> {
+                    for (uri in selectedFileUris) {
+                        uploadFile(selectedType, uri)
+                    }
+                }
             }
         }
 
-        // Fetch uploaded files
         fetchPDFs(collegeName, courseCode)
     }
 
     private fun openFilePicker() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.type = "*/*"
-        startActivityForResult(intent, FILE_REQUEST_CODE)
+        startActivityForResult(Intent.createChooser(intent, "Select files"), FILE_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                selectedFileUri = uri
-                val fileName = getFileName(uri)
-                findViewById<TextView>(R.id.tvSelectedFile).text = fileName ?: "Unknown file"
-                Toast.makeText(this, "Selected file: $fileName", Toast.LENGTH_SHORT).show()
+            selectedFileUris.clear()
+
+            val fileNames = mutableListOf<String>()
+            if (data?.clipData != null) {
+                val count = data.clipData!!.itemCount
+                for (i in 0 until count) {
+                    val fileUri = data.clipData!!.getItemAt(i).uri
+                    selectedFileUris.add(fileUri)
+                    getFileName(fileUri)?.let { fileNames.add(it) }
+                }
+            } else if (data?.data != null) {
+                val fileUri = data.data!!
+                selectedFileUris.add(fileUri)
+                getFileName(fileUri)?.let { fileNames.add(it) }
+            }
+
+            selectedFileTextView.text = if (fileNames.isNotEmpty()) {
+                "Selected: ${fileNames.joinToString(", ")}"
+            } else {
+                "No files selected"
             }
         }
     }
 
     @SuppressLint("Range")
     private fun getFileName(uri: Uri): String? {
-        var result: String? = null
         val cursor = contentResolver.query(uri, null, null, null, null)
         cursor?.use {
             if (it.moveToFirst()) {
-                result = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                return it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
             }
         }
-        return result
+        return null
     }
 
-    private fun uploadFile(resourceType: String) {
-        val fileUri = selectedFileUri ?: return
+    private fun uploadFile(resourceType: String, fileUri: Uri) {
         val fileName = getFileName(fileUri) ?: "file_${System.currentTimeMillis()}"
         val inputStream = contentResolver.openInputStream(fileUri)
         val fileData = inputStream?.readBytes() ?: return
 
-        val url = "http://192.168.234.54/UniValut/upload_material.php"
+        val url = "http://192.168.205.54/UniVault/upload_material.php"
 
         val request = VolleyFileUpload(
             Request.Method.POST, url,
             {
-                showSuccess("Uploaded to $collegeName/$courseCode/$fileName")
+                showSuccess("Uploaded $fileName")
                 pdfContainer.removeAllViews()
                 fetchPDFs(collegeName, courseCode)
             },
@@ -135,7 +146,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
     }
 
     private fun fetchPDFs(college: String, course: String) {
-        val url = "http://192.168.234.54/univault/list_pdfs.php?college=$college&course=$course"
+        val url = "http://192.168.205.54/univault/list_pdfs.php?college=$college&course=$course"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -174,7 +185,6 @@ class FacultyUploadMaterial : AppCompatActivity() {
         fileNameText.text = fileName
         uploadDateText.text = "Uploaded on: $uploadDate"
 
-        // Open PDF when clicking the row
         rowView.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(Uri.parse(fileUrl), "application/pdf")
@@ -182,7 +192,6 @@ class FacultyUploadMaterial : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Delete button click
         deleteBtn.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.dialog_confirm_delete, null)
 
@@ -206,13 +215,11 @@ class FacultyUploadMaterial : AppCompatActivity() {
             alertDialog.show()
         }
 
-
         pdfContainer.addView(rowView)
     }
 
-
     private fun deleteFileFromServer(fileName: String) {
-        val url = "http://192.168.234.54/UniVault/delete_material.php"
+        val url = "http://192.168.205.54/UniVault/delete_material.php"
 
         val request = object : StringRequest(Method.POST, url,
             Response.Listener {

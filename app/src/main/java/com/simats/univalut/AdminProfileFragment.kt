@@ -7,6 +7,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -45,12 +46,29 @@ class AdminProfileFragment : Fragment() {
         logoutButton = view.findViewById(R.id.logoutButton)
 
         logoutButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Logout Clicked", Toast.LENGTH_SHORT).show()
-            val sharedPreferences = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
-            sharedPreferences.edit().clear().apply()
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout, null)
+            val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
+            val btnLogout = dialogView.findViewById<Button>(R.id.btnLogout)
+
+            val dialog = android.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create()
+
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnLogout.setOnClickListener {
+                dialog.dismiss()
+                val sharedPreferences = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+                sharedPreferences.edit().clear().apply()
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.show()
         }
         // Fetch real data
         fetchAdminDetails(adminId, view)
@@ -95,7 +113,7 @@ class AdminProfileFragment : Fragment() {
     private fun fetchAdminDetails(adminId: String?, view: View) {
         if (adminId == null) return
 
-        val url = "http://192.168.234.54/univault/get_admin_details.php?admin_id=$adminId"
+        val url = "http://192.168.205.54/univault/get_admin_details.php?admin_id=$adminId"
         val requestQueue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(

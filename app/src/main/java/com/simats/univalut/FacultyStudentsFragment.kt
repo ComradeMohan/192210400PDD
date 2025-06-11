@@ -1,5 +1,6 @@
 package com.simats.univalut
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -16,12 +17,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import okhttp3.OkHttpClient
 import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 
 class FacultyStudentsFragment : Fragment() {
 
@@ -55,7 +60,7 @@ class FacultyStudentsFragment : Fragment() {
 
     // Function to fetch the college name from the server
     private fun fetchCollegeName(facultyId: String) {
-        val url = "http://192.168.234.54/univault/get_faculty_name.php?facultyId=$facultyId"
+        val url = "http://192.168.205.54/univault/get_faculty_name.php?facultyId=$facultyId"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -77,7 +82,7 @@ class FacultyStudentsFragment : Fragment() {
 
     // Function to fetch the list of students from the college
     private fun fetchStudentsByCollege(college: String) {
-        val url = "http://192.168.234.54/univault/fetch_students_by_college.php?college=$college"
+        val url = "http://192.168.205.54/univault/fetch_students_by_college.php?college=$college"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -138,13 +143,57 @@ class FacultyStudentsFragment : Fragment() {
                 val firstLetter = name[0].uppercaseChar()
                 studentImageView.setImageDrawable(getLetterDrawable(firstLetter))
             } else {
-                // Optionally set a default drawable or clear image
                 studentImageView.setImageDrawable(null)
             }
+
+            // Add this block to handle click
+            view.setOnClickListener {
+                fetchStudentDepartment(number) { departmentId ->
+                    if (departmentId != null) {
+                        val intent = Intent(requireContext(), AcadmicRecordActivity::class.java)
+                        intent.putExtra("studentID", number)
+                        intent.putExtra("department", departmentId)
+                        intent.putExtra("collegeName", collegeName)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(requireContext(), "Could not fetch department", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+
 
             studentsListLayout.addView(view)
         }
     }
+    private fun fetchStudentDepartment(studentNumber: String, callback: (String?) -> Unit) {
+        Thread {
+            var department: String? = null
+            try {
+                val url = URL("http://192.168.205.54/univault/get_student.php?student_number=$studentNumber")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+                connection.connectTimeout = 5000
+                connection.readTimeout = 5000
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val stream = connection.inputStream
+                    val response = stream.bufferedReader().use { it.readText() }
+                    val jsonObject = org.json.JSONObject(response)
+                    if (jsonObject.getBoolean("success")) {
+                        val studentData = jsonObject.getJSONObject("data")
+                        department = studentData.getString("department")
+                    }
+                }
+                connection.disconnect()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            activity?.runOnUiThread { callback(department) }
+        }.start()
+    }
+
     private fun getLetterDrawable(letter: Char, size: Int = 80): BitmapDrawable {
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)

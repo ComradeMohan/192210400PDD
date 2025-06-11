@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CSA0123"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Subject Name"
+            android:textColor="@color/black"
             android:layout_marginTop="4dp"
             android:textSize="15sp" />
 
@@ -35,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Faculty Name"
+            android:textColor="@color/black"
             android:layout_marginTop="4dp" />
 
         <LinearLayout

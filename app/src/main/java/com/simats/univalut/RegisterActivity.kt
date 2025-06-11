@@ -99,7 +99,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun fetchCollegeList() {
-        val url = "http://192.168.234.54/univault/get_colleges.php"
+        val url = "http://192.168.205.54/univault/get_colleges.php"
 
         val request = Request.Builder().url(url).get().build()
 
@@ -153,7 +153,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun fetchDepartments(collegeId: String) {
-        val url = "http://192.168.234.54/univault/fetch_departments_by_college.php?college_id=$collegeId"
+        val url = "http://192.168.205.54/univault/fetch_departments_by_college.php?college_id=$collegeId"
 
         val request = Request.Builder().url(url).get().build()
 
@@ -198,7 +198,7 @@ class RegisterActivity : AppCompatActivity() {
         yearOfStudy: String,
         college: String
     ) {
-        val url = "http://192.168.234.54/univault/register-smtp.php"
+        val url = "http://192.168.205.54/univault/register-smtp.php"
 
         val json = JSONObject().apply {
             put("full_name", fullName)

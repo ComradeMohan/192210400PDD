@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="College Administrator"
-                android:textColor="?attr/pendingSubject"
+                android:textColor="?attr/app_name_color"
                 android:layout_gravity="center"
                 android:layout_marginBottom="8dp" />
 
@@ -297,6 +297,7 @@
                 android:orientation="horizontal"
                 android:padding="16dp"
                 android:layout_marginTop="16dp">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -310,7 +311,7 @@
                     android:layout_weight="1"
                     android:text="Change Password"
                     android:textSize="16sp"
-                    android:textColor="?attr/courseCode"/>
+                    android:textColor="?attr/app_name_color"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -342,7 +343,7 @@
                     android:layout_weight="1"
                     android:text="Logout"
                     android:textSize="16sp"
-                    android:textColor="?attr/courseCode"/>
+                    android:textColor="?attr/app_name_color"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

@@ -145,9 +145,19 @@ class EventAdapter(private val eventList: MutableList<Event>) : RecyclerView.Ada
         Log.d("EventAdapter", "Alarm scheduled")
     }
     // Method to update the event list dynamically
+    // You can remove this method if you're using updateData() from outside
     fun updateEvents(events: List<Event>) {
-        eventList.clear() // Clear the current list
-        eventList.addAll(events) // Add the new events
-        notifyDataSetChanged() // Notify the adapter to refresh the view
+        eventList.clear()
+        eventList.addAll(events)
+        notifyDataSetChanged()
     }
+
+
+    fun updateData(newEvents: List<Event>) {
+        eventList.clear()
+        eventList.addAll(newEvents)
+        notifyDataSetChanged()
+    }
+
+
 }

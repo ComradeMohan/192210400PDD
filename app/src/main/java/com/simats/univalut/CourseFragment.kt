@@ -92,7 +92,7 @@
             }
         }
         private fun fetchCollegeName(studentID: String, adapter: CourseAdapter) {
-            val url = "http://192.168.234.54/univault/fetch_student_name.php?studentID=$studentID"
+            val url = "http://192.168.205.54/univault/fetch_student_name.php?studentID=$studentID"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(
@@ -122,7 +122,7 @@
         }
 
         private fun fetchCourses(collegeName: String, adapter: CourseAdapter) {
-            val url = "http://192.168.234.54/univault/fetch_courses.php?college=$collegeName"
+            val url = "http://192.168.205.54/univault/fetch_courses.php?college=$collegeName"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(

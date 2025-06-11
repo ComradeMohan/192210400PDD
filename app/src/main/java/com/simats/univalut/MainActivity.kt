@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUEST_CODE_POST_NOTIFICATIONS = 1001
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

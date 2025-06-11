@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.simats.univalut.databinding.FragmentAdminHomeBinding
 import org.json.JSONObject
@@ -25,6 +26,7 @@ class AdminHomeFragment : Fragment() {
     private lateinit var context: FragmentActivity
     private var adminId: String? = null
     private var collegeName: String? = null
+    private var collegeId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,10 +47,19 @@ class AdminHomeFragment : Fragment() {
         binding.rvRecentActivity.layoutManager = LinearLayoutManager(context)
 
 
-
-        binding.btnAddStudent.setOnClickListener {
-            Toast.makeText(requireContext(), "Add Student clicked", Toast.LENGTH_SHORT).show()
+        binding.btnAddDept.setOnClickListener {
+            val fragment = ManageDepartmentFragment().apply {
+                arguments = Bundle().apply {
+                    putString("admin_id", adminId)
+                    putString("college_id", collegeId)
+                }
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
+
 
         binding.btnAddFaculty.setOnClickListener {
             showAddFacultyDialog()
@@ -74,17 +85,117 @@ class AdminHomeFragment : Fragment() {
                 .commit()
         }
     }
+    private fun showAddDepartmentDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_department, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Add Department")
+            .setView(dialogView)
+            .create()
+
+        val etDeptName = dialogView.findViewById<EditText>(R.id.etDeptName)
+        val btnSubmitDept = dialogView.findViewById<Button>(R.id.btnSubmitDept)
+
+        btnSubmitDept.setOnClickListener {
+            val deptName = etDeptName.text.toString().trim()
+            if (deptName.isEmpty() || collegeName.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Please enter department name", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            addDepartmentToServer(collegeName!!, deptName)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+    private fun addDepartmentToServer(college: String, departmentName: String) {
+        fetchCollegeIdByName(college) { collegeId ->
+            if (collegeId == null) {
+                Toast.makeText(requireContext(), "Invalid college name", Toast.LENGTH_SHORT).show()
+                return@fetchCollegeIdByName
+            }
+
+            val url = "http://+/univault/add_department.php"
+
+            val request = object : StringRequest(Request.Method.POST, url,
+                { response ->
+                    Toast.makeText(requireContext(), "Department added successfully", Toast.LENGTH_SHORT).show()
+                },
+                { error ->
+                    Toast.makeText(requireContext(), "Failed: ${error.message}", Toast.LENGTH_SHORT).show()
+                }) {
+
+                override fun getParams(): Map<String, String> {
+                    return mapOf(
+                        "college_id" to collegeId,
+                        "name" to departmentName
+                    )
+                }
+            }
+
+            Volley.newRequestQueue(requireContext()).add(request)
+        }
+    }
+
+
+
+    private fun fetchCollegeIdByName(collegeName: String, onResult: (String?) -> Unit) {
+        val url = "http://192.168.205.54/univault/get_college_id.php" // Replace IP if testing on device
+        val params = HashMap<String, String>()
+        params["college_name"] = collegeName
+
+        val request = object : StringRequest(Method.POST, url,
+            { response ->
+                try {
+                    val json = JSONObject(response)
+                    if (json.getBoolean("success")) {
+                        collegeId = json.getString("college_id")
+                        onResult(collegeId)
+                    } else {
+                        Toast.makeText(requireContext(), "College not found", Toast.LENGTH_SHORT).show()
+                        onResult(null)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Parsing error", Toast.LENGTH_SHORT).show()
+                    onResult(null)
+                }
+            },
+            { error ->
+                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                onResult(null)
+            }) {
+
+            override fun getParams(): Map<String, String> {
+                return params
+            }
+        }
+
+        Volley.newRequestQueue(requireContext()).add(request)
+    }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://192.168.234.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://192.168.205.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
                     val name = response.getString("name")
                     collegeName = response.getString("college")
+                    val studentCount = response.getInt("student_count")
+
                     binding.tvTitle.text = "$name - $collegeName"
-                    collegeName?.let { fetchLatestNotice(it) }
-                    fetchFeedbacks()
+                    binding.tvTotalStudents.text = studentCount.toString()
+
+                    collegeName?.let {
+                        fetchLatestNotice(it)
+                        fetchFeedbacks()
+                    }
+                    collegeName?.let {
+                        fetchCollegeIdByName(it) { id ->
+                            collegeId = id
+                            // Do something if needed after getting ID
+                        }
+                    }
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Error parsing admin details", Toast.LENGTH_SHORT).show()
@@ -98,7 +209,7 @@ class AdminHomeFragment : Fragment() {
     }
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://192.168.234.54/univault/get_latest_notice.php?college=$college"
+        val url = "http://192.168.205.54/univault/get_latest_notice.php?college=$college"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 if (response.getBoolean("success")) {
@@ -119,7 +230,7 @@ class AdminHomeFragment : Fragment() {
 
     private fun fetchFeedbacks() {
         val college = collegeName ?: return  // Skip if college name is null
-        val url = "http://192.168.234.54/univault/get_feedbacks.php?college=$college"
+        val url = "http://192.168.205.54/univault/get_feedbacks.php?college=$college"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -199,7 +310,7 @@ class AdminHomeFragment : Fragment() {
             callback("FAC001")
             return
         }
-        val url = "http://192.168.234.54/univault/getNextFacultyId.php?college=${college.replace(" ", "%20")}"
+        val url = "http://192.168.205.54/univault/getNextFacultyId.php?college=${college.replace(" ", "%20")}"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -221,7 +332,7 @@ class AdminHomeFragment : Fragment() {
         name: String, email: String, phone: String,
         college: String, loginId: String, password: String
     ) {
-        val url = "http://192.168.234.54/univault/faculty_register.php"
+        val url = "http://192.168.205.54/univault/faculty_register.php"
         val params = JSONObject().apply {
             put("name", name)
             put("email", email)

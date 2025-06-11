@@ -143,7 +143,7 @@
 
             <!-- Add Faculty -->
             <LinearLayout
-                android:id="@+id/btnAddStudent"
+                android:id="@+id/btnAddDept"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_row="0"

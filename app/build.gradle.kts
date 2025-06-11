@@ -50,6 +50,11 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
     implementation("com.google.firebase:firebase-messaging")
 
+    implementation ("com.applandeo:material-calendar-view:1.9.2")
+
+    implementation ("net.gotev:uploadservice:4.7.0")
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -60,6 +65,7 @@ dependencies {
     implementation(libs.volley)
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
 //    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
