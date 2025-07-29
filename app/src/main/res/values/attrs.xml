@@ -26,4 +26,8 @@
     <attr name="adminAddFacultyBox" format="color" />
     <attr name="adminUpload" format="color" />
 
+
+    <attr name="mode"  format="color" />
+    <attr name="recycleviewbox"  format="color" />
+
 </resources>

@@ -36,5 +36,9 @@
         <item name="adminAddFacultyBox">#fff</item>
         <item name="adminUpload">#fff</item>
 
+
+        <item name="mode">#80212121</item>
+
+        <item name="recycleviewbox">#2C2C2C</item>
     </style>
 </resources>

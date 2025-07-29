@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:background="?attr/recycleviewbox"
         android:minHeight="72dp">
 
         <!-- Course Indicator -->
@@ -69,7 +70,7 @@
                 android:text="Course Name"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary"
+                android:textColor="?attr/app_name_color"
                 android:layout_marginBottom="2dp" />
 
 

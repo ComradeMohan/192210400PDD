@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@android:color/white">
+    android:background="?attr/recycleviewbox">
 
     <TextView
         android:id="@+id/tvDialogTitle"
@@ -19,9 +19,11 @@
         android:id="@+id/etCourseName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:hint="Course Name"
         android:inputType="text"
-        android:background="@drawable/edittext_bg"
+        android:background="?attr/inputBgBox"
+        android:textColor="?attr/app_name_color"
         android:padding="12dp" />
 
     <Button

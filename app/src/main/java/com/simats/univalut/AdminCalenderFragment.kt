@@ -55,9 +55,9 @@ class AdminCalenderFragment : Fragment() {
         view.findViewById<Button>(R.id.buttonAddEvent).setOnClickListener {
             showAddEventDialog()
         }
-        view.findViewById<Button>(R.id.buttonAddSupply).setOnClickListener {
-            csvPickerLauncher.launch("text/csv")
-        }
+//        view.findViewById<Button>(R.id.buttonAddSupply).setOnClickListener {
+//            csvPickerLauncher.launch("text/csv")
+//        }
 
 
         return view

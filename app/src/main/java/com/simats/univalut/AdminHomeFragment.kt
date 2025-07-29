@@ -243,7 +243,7 @@ class AdminHomeFragment : Fragment() {
                             Feedback(
                                 user_id = obj.getString("user_id"),
                                 feedback = obj.getString("feedback"),
-                                created_at = obj.getString("submitted_at")
+                                created_at = obj.getString("created_at")
                             )
                         )
                     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_primary"
+    android:background="?attr/mode"
     android:padding="20dp">
 
     <!-- Header and RecyclerView section -->
@@ -21,7 +21,7 @@
             android:text="Academic Management"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary"
+            android:textColor="?attr/app_name_color"
             android:layout_marginBottom="8dp" />
 
         <TextView
@@ -40,7 +40,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/card_background">
+            app:cardBackgroundColor="?attr/recycleviewbox">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                         android:text="Departments"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="?attr/app_name_color" />
                 </LinearLayout>
 
                 <!-- RecyclerView -->
@@ -82,6 +82,7 @@
                     android:layout_weight="1"
                     android:nestedScrollingEnabled="true"
                     android:background="@drawable/recycler_background"
+                    android:backgroundTint="?attr/recycleviewbox"
                     android:padding="8dp" />
 
             </LinearLayout>

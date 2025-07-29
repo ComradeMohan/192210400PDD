@@ -41,8 +41,8 @@
         <item name="adminAddFacultyBox">#2563EB</item>
         <item name="adminUpload">#16A34A</item>
 <!--        font name-->
-
-
+<item name="mode">#fff</item>
+<item name="recycleviewbox">#fff</item>
 
     </style>
 

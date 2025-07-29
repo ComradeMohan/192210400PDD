@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@drawable/bg_dialog_rounded">
+    android:background="@drawable/bg_dialog_rounded"
+    android:backgroundTint="@color/your_header_color">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
