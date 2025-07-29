@@ -1,6 +1,7 @@
 package com.simats.univalut
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -34,6 +35,8 @@ class AdminCoursesFragment : Fragment() {
 
     private var facultyList: MutableList<String> = mutableListOf("Select Faculty")
     private var isFormVisible = false
+    private lateinit var searchCourses: EditText
+    private var allCoursesJsonArray: JSONArray = JSONArray()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -41,6 +44,16 @@ class AdminCoursesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_admin_courses, container, false)
+        searchCourses = view.findViewById(R.id.searchCourses)
+
+        searchCourses.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                filterCourses(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         // UI Initialization
         btnAddCourse = view.findViewById(R.id.btnAddCourse)
@@ -72,7 +85,7 @@ class AdminCoursesFragment : Fragment() {
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://192.168.205.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://10.143.152.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
@@ -98,13 +111,14 @@ class AdminCoursesFragment : Fragment() {
 
     private fun loadCoursesForCollege(college: String) {
         val encodedCollege = URLEncoder.encode(college, StandardCharsets.UTF_8.name())
-        val url = "http://192.168.205.54/univault/getCoursesByCollege.php?college=$encodedCollege"
+        val url = "http://10.143.152.54/univault/getCoursesByCollege.php?college=$encodedCollege"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
                     if (response.getBoolean("success")) {
                         val coursesJsonArray = response.getJSONArray("courses")
+                        allCoursesJsonArray = coursesJsonArray // Save for filtering
                         populateCourseList(coursesJsonArray)
                     } else {
                         Toast.makeText(requireContext(), "No courses found for $college", Toast.LENGTH_SHORT).show()
@@ -120,9 +134,31 @@ class AdminCoursesFragment : Fragment() {
 
         Volley.newRequestQueue(requireContext()).add(request)
     }
+    private fun filterCourses(query: String) {
+        val filteredArray = JSONArray()
+
+        for (i in 0 until allCoursesJsonArray.length()) {
+            val course = allCoursesJsonArray.getJSONObject(i)
+
+            val courseCode = course.getString("course_code").lowercase()
+            val subjectName = course.getString("subject_name").lowercase()
+            val facultyName = course.getString("faculty_name").lowercase()
+
+            if (
+                courseCode.contains(query.lowercase()) ||
+                subjectName.contains(query.lowercase()) ||
+                facultyName.contains(query.lowercase())
+            ) {
+                filteredArray.put(course)
+            }
+        }
+
+        populateCourseList(filteredArray)
+    }
+
 
     private fun loadFacultyForCollege(college: String) {
-        val url = "http://192.168.205.54/univault/getFacultyByCollege.php?college=$collegeName"
+        val url = "http://10.143.152.54/univault/getFacultyByCollege.php?college=$collegeName"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -196,18 +232,62 @@ class AdminCoursesFragment : Fragment() {
 
         for (i in 0 until coursesJsonArray.length()) {
             val course = coursesJsonArray.getJSONObject(i)
-            val courseCardView = LayoutInflater.from(requireContext()).inflate(R.layout.course_card_item, coursesListLayout, false)
+            val courseCardView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.course_card_item, coursesListLayout, false)
 
             val courseCodeTextView = courseCardView.findViewById<TextView>(R.id.tvCourseCode)
             val subjectNameTextView = courseCardView.findViewById<TextView>(R.id.tvSubjectName)
             val facultyNameTextView = courseCardView.findViewById<TextView>(R.id.tvFacultyName)
+            val btnDelete = courseCardView.findViewById<ImageView>(R.id.btnDelete)
+
+            val courseId = course.getString("course_code") // Assumes your API returns this
+            val courseName = course.getString("subject_name")
 
             courseCodeTextView.text = course.getString("course_code")
-            subjectNameTextView.text = course.getString("subject_name")
+            subjectNameTextView.text = courseName
             facultyNameTextView.text = course.getString("faculty_name")
+
+            btnDelete.setOnClickListener {
+                confirmAndDeleteCourse(courseId, courseName)
+            }
 
             coursesListLayout.addView(courseCardView)
         }
+    }
+
+    private fun confirmAndDeleteCourse(courseId: String, courseName: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Course")
+            .setMessage("Are you sure you want to delete \"$courseName\"?")
+            .setPositiveButton("Yes") { _, _ ->
+                deleteCourse(courseId)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteCourse(courseId: String) {
+        val url = "http://10.143.152.54/univault/deleteCourse.php?course_id=$courseId"
+
+        val request = JsonObjectRequest(Request.Method.GET, url, null,
+            { response ->
+                try {
+                    if (response.getBoolean("success")) {
+                        Toast.makeText(requireContext(), "Course deleted", Toast.LENGTH_SHORT).show()
+                        collegeName?.let { loadCoursesForCollege(it) }
+                    } else {
+                        Toast.makeText(requireContext(), response.getString("message"), Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            },
+            { error ->
+                error.printStackTrace()
+                Toast.makeText(requireContext(), "Error deleting course", Toast.LENGTH_SHORT).show()
+            })
+
+        Volley.newRequestQueue(requireContext()).add(request)
     }
 
     private fun saveCourseForm() {
@@ -236,7 +316,7 @@ class AdminCoursesFragment : Fragment() {
             put("college", collegeName)
         }
 
-        val url = "http://192.168.205.54/univault/addCourse.php"
+        val url = "http://10.143.152.54/univault/addCourse.php"
         val request = JsonObjectRequest(Request.Method.POST, url, courseData,
             { response ->
                 try {

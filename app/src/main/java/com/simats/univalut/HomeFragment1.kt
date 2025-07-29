@@ -54,36 +54,28 @@ class HomeFragment1 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Your existing code to setup listeners, adapters, etc. (if any)
-
-        // SharedPreferences load degree progress
         val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
         val savedProgress = sf.getInt("degreeProgress", 0)
         val cgpaValue = sf.getFloat("cgpaValue", 0.0F)
 
-        val cgpa = view.findViewById<TextView>(R.id.cgpaValue)
+        val cgpaText = view.findViewById<TextView>(R.id.cgpaValue)
         val progressBar = view.findViewById<ProgressBar>(R.id.degreeProgressBar)
         val percentageText = view.findViewById<TextView>(R.id.degreeProgressPercentage)
-        cgpa.text = "CGPA : $cgpaValue"
+        val predictionText = view.findViewById<TextView>(R.id.predictedCgpaTextView)
+
+        // Set CGPA and progress
+        cgpaText.text = "CGPA : %.2f".format(cgpaValue)
         progressBar.progress = savedProgress
         percentageText.text = "$savedProgress%"
 
-        val estimatedFutureCGPA = when {
-            cgpaValue >= 9 -> 8.8F
-            cgpaValue >= 8 -> 8.5F
-            cgpaValue >= 7 -> 8.0F
-            cgpaValue >= 6 -> 7.5F
-            else -> 7.0F
-        }
+        // ✅ Calculate predicted CGPA
+        val roundedCgpa = cgpaValue.toInt().toFloat() // truncate decimal, e.g., 6.7 → 6
+        val predictedCgpa = (roundedCgpa + cgpaValue) / 2f
 
-// ✅ Calculate predicted final CGPA
-        val currentProgress = savedProgress / 100.0F
-        val predictedFinalCGPA = (cgpaValue * currentProgress + estimatedFutureCGPA * (1 - currentProgress))
-
-// ✅ Show prediction
-        val predictionText = view.findViewById<TextView>(R.id.predictedCgpaTextView)
-        predictionText.text = "Predicted Final CGPA: %.2f".format(predictedFinalCGPA)
+        // ✅ Display predicted final CGPA
+        predictionText.text = "Predicted CGPA: %.2f".format(predictedCgpa)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +95,6 @@ class HomeFragment1 : Fragment() {
         // Initialize Views
         tvGreeting = view.findViewById(R.id.tvGreeting)
         tvStudentName = view.findViewById(R.id.tvStudentName)
-        etSearch = view.findViewById(R.id.etSearch)
         tvNoticeTitle = view.findViewById(R.id.tvNoticeTitle)
         tvNoticeDescription = view.findViewById(R.id.tvNoticeDescription)
 
@@ -137,7 +128,7 @@ class HomeFragment1 : Fragment() {
         subjectAdapter.updateData(filteredList)
     }
     private fun fetchStudentName(studentID: String) {
-        val url = "http://192.168.205.54/univault/fetch_student_name.php?studentID=$studentID"
+        val url = "http://10.143.152.54/univault/fetch_student_name.php?studentID=$studentID"
         val queue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -148,6 +139,8 @@ class HomeFragment1 : Fragment() {
                 if (success) {
                     val name = response.getString("name")
                     collegeName = response.getString("college")
+                    val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+                    sf.edit().putString("collegeName", collegeName).apply()
                     val departmentName = response.getString("dept")
                     // Check if fragment is still attached before using context
                     if (isAdded) {
@@ -186,7 +179,7 @@ class HomeFragment1 : Fragment() {
     }
 
     fun fetchCollegeIdByName(collegeName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.205.54/univault/get_college_id.php" // Replace with your actual URL
+        val url = "http://10.143.152.54/univault/get_college_id.php" // Replace with your actual URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -221,7 +214,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     fun fetchDepartmentId(collegeId: Int, departmentName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.205.54/univault/get_department_id.php" // Replace with your PHP file URL
+        val url = "http://10.143.152.54/univault/get_department_id.php" // Replace with your PHP file URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -233,6 +226,10 @@ class HomeFragment1 : Fragment() {
                     if (jsonObject.getBoolean("success")) {
                         // Extract the department ID
                         val departmentId = jsonObject.getInt("department_id")
+                        val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+                        sf.edit().putInt("collegeId", collegeId).apply()
+                        sf.edit().putInt("departmentId", departmentId).apply()
+
                         fetchPendingSubjects(studentID.toString(), departmentId.toString())
                         // Pass the department ID to the callback
                         callback(departmentId)
@@ -272,7 +269,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     private fun fetchPendingSubjects(studentId: String, departmentId: String) {
-        val urlStr = "http://192.168.205.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
+        val urlStr = "http://10.143.152.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
 
         Thread {
             try {
@@ -329,7 +326,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://192.168.205.54/univault/get_latest_notice.php?college=$college"
+        val url = "http://10.143.152.54/univault/get_latest_notice.php?college=$college"
         val ctx = context ?: return  // Safely get context or return if fragment is not attached
         val queue = Volley.newRequestQueue(ctx)
 

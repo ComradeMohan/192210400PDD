@@ -160,7 +160,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="CGPA : "
+                        android:text="CGPA : 0"
                         android:textColor="?attr/app_name_color"
                         android:textSize="16sp" />
 
@@ -170,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
                         android:textColor="?attr/app_name_color"
-                        android:text="Predicted CGPA"
+                        android:text="Predicted CGPA : 0"
                         android:textSize="16sp" />
                 </LinearLayout>
 

@@ -1,4 +1,5 @@
-    import android.content.Intent
+import android.content.Context
+import android.content.Intent
     import android.os.Bundle
     import android.text.Editable
     import android.text.TextWatcher
@@ -44,6 +45,11 @@
             collegeName = arguments?.getString("collegeName")
 
             editTextSearch = view.findViewById(R.id.editTextSearch)
+
+            if (collegeName.isNullOrEmpty()) {
+                val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+                collegeName = sf.getString("collegeName", null)
+            }
 
             val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCourses)
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -92,7 +98,7 @@
             }
         }
         private fun fetchCollegeName(studentID: String, adapter: CourseAdapter) {
-            val url = "http://192.168.205.54/univault/fetch_student_name.php?studentID=$studentID"
+            val url = "http://10.143.152.54/univault/fetch_student_name.php?studentID=$studentID"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(
@@ -122,7 +128,7 @@
         }
 
         private fun fetchCourses(collegeName: String, adapter: CourseAdapter) {
-            val url = "http://192.168.205.54/univault/fetch_courses.php?college=$collegeName"
+            val url = "http://10.143.152.54/univault/fetch_courses.php?college=$collegeName"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(

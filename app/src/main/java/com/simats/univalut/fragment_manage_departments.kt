@@ -25,7 +25,7 @@ class ManageDepartmentsFragment : Fragment() {
     private lateinit var adapter: DepartmentsAdapter
 
     // Replace with your backend URLs
-    private val baseUrl = "http://192.168.205.54/univault"
+    private val baseUrl = "http://10.143.152.54/univault"
     private val collegeName = "Your College" // You may want to pass this dynamically
 
     override fun onCreateView(

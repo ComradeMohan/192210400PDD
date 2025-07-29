@@ -60,4 +60,11 @@
         <item name="cornerSize">16dp</item>
     </style>
 
+    <style name="CustomDatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorAccent">#1976D2</item> <!-- Change to your theme color -->
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
+
 </resources>

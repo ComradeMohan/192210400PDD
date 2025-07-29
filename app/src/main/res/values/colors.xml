@@ -32,4 +32,41 @@
 
 
 
+
+
+    <color name="background_primary">#F8FAFC</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="item_background">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#1E293B</color>
+    <color name="text_secondary">#64748B</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_primary">#3B82F6</color>
+    <color name="accent_secondary">#10B981</color>
+
+    <!-- Department Theme -->
+    <color name="department_indicator">#3B82F6</color>
+
+    <!-- Course Theme -->
+    <color name="course_indicator">#10B981</color>
+    <color name="course_icon_bg">#ECFDF5</color>
+    <color name="course_icon_tint">#10B981</color>
+
+    <!-- Delete Button -->
+    <color name="delete_button_bg">#FEF2F2</color>
+    <color name="delete_button_tint">#EF4444</color>
+
+
+
+
+    <color name="primary_color">#1976D2</color>
+    <color name="accent_color">#FF5722</color>
+    <color name="background_light">#F5F5F5</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="stroke_color">#E0E0E0</color>
+    <color name="text_tertiary">#BDBDBD</color>
+    <color name="icon_tint">#9E9E9E</color>
+    <!-- Legacy Colors -->
 </resources>

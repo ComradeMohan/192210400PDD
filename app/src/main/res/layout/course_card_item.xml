@@ -5,15 +5,27 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="6dp"
+    android:layout_marginHorizontal="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp"
         android:background="@drawable/course_item_bg">
 
+        <!-- Delete Button (Top-Right) -->
+        <ImageView
+            android:id="@+id/btnDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_delete"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="Delete"
+            app:tint="@android:color/holo_red_dark" />
+
+        <!-- Course Code -->
         <TextView
             android:id="@+id/tvCourseCode"
             android:layout_width="wrap_content"
@@ -21,44 +33,33 @@
             android:text="CSA0123"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/btnDelete"
+            android:layout_toStartOf="@+id/btnDelete"
+            android:layout_marginEnd="8dp" />
 
+        <!-- Subject Name -->
         <TextView
             android:id="@+id/tvSubjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Subject Name"
             android:textColor="@color/black"
-            android:layout_marginTop="4dp"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_below="@+id/tvCourseCode"
+            android:layout_marginTop="8dp" />
 
+        <!-- Faculty Name -->
         <TextView
             android:id="@+id/tvFacultyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Faculty Name"
             android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_below="@+id/tvSubjectName"
             android:layout_marginTop="4dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/btnEdit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="12dp"
-                android:src="@android:drawable/ic_menu_edit" />
-
-            <ImageView
-                android:id="@+id/btnDelete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_delete" />
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

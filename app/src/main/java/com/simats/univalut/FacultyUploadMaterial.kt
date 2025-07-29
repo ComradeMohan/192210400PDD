@@ -119,7 +119,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
         val inputStream = contentResolver.openInputStream(fileUri)
         val fileData = inputStream?.readBytes() ?: return
 
-        val url = "http://192.168.205.54/UniVault/upload_material.php"
+        val url = "http://10.143.152.54/UniVault/upload_material.php"
 
         val request = VolleyFileUpload(
             Request.Method.POST, url,
@@ -146,7 +146,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
     }
 
     private fun fetchPDFs(college: String, course: String) {
-        val url = "http://192.168.205.54/univault/list_pdfs.php?college=$college&course=$course"
+        val url = "http://10.143.152.54/univault/list_pdfs.php?college=$college&course=$course"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -219,7 +219,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
     }
 
     private fun deleteFileFromServer(fileName: String) {
-        val url = "http://192.168.205.54/UniVault/delete_material.php"
+        val url = "http://10.143.152.54/UniVault/delete_material.php"
 
         val request = object : StringRequest(Method.POST, url,
             Response.Listener {

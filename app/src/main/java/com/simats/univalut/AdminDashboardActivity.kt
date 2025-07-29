@@ -30,7 +30,6 @@ class AdminDashboardActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> replaceFragment(AdminHomeFragment.newInstance(ID ?: ""))
                 R.id.nav_courses -> replaceFragment(AdminCoursesFragment.newInstance(ID ?: ""))
-
                 R.id.nav_calender -> replaceFragment(AdminCalenderFragment.newInstance(ID ?: ""))
                 R.id.nav_profile -> replaceFragment(AdminProfileFragment.newInstance(ID ?: ""))
             }

@@ -79,7 +79,7 @@ class FacultyMaterialsFragment : Fragment() {
 
     private fun fetchCollegeAndCourses(facultyId: String) {
         val queue = Volley.newRequestQueue(requireContext())
-        val url = "http://192.168.205.54/univault/get_college_by_faculty.php"
+        val url = "http://10.143.152.54/univault/get_college_by_faculty.php"
 
         val requestBody = JSONObject()
         requestBody.put("faculty_id", facultyId)
@@ -105,7 +105,7 @@ class FacultyMaterialsFragment : Fragment() {
     private fun fetchCourses(college: String) {
         val queue = Volley.newRequestQueue(requireContext())
         val encodedCollege = Uri.encode(college)
-        val url = "http://192.168.205.54/univault/getCoursesByCollege.php?college=$encodedCollege"
+        val url = "http://10.143.152.54/univault/getCoursesByCollege.php?college=$encodedCollege"
 
         val courseRequest = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->

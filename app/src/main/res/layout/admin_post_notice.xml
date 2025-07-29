@@ -18,11 +18,11 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="?attr/homeAsUpIndicator"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            tools:ignore="ContentDescription" />
+            android:src="?attr/homeAsUpIndicator"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +43,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="ExtraText">
 
             <!-- Notice Title -->
             <TextView
@@ -92,67 +93,6 @@
                 android:inputType="textMultiLine"/>
 
             <!-- Schedule -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Schedule"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="16dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_calendar"
-                        android:layout_marginEnd="8dp"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select date"
-                        android:textSize="14sp"
-                        android:textColor="#A9A9A9"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp"
-                    android:layout_marginStart="8dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_clock"
-                        android:layout_marginEnd="8dp"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select time"
-                        android:textSize="14sp"
-                        android:textColor="#A9A9A9"/>
-                </LinearLayout>
-            </LinearLayout>
 
             <!-- Attachment -->
             <TextView
@@ -221,15 +161,32 @@
 
 
             </LinearLayout>
-            '<Button
-            android:id="@+id/btnSubmitResources"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Post Notice "
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@color/buttonBlue"
-            android:padding="12dp"/>
+
+            <FrameLayout
+                android:id="@+id/postNoticeFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+                <Button
+                    android:id="@+id/btnSubmitResources"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Post Notice "
+                    android:textSize="18sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="@color/buttonBlue"
+                    android:padding="12dp"/>
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
+
             <Button
                 android:id="@+id/btnCancel"
                 android:text="Cancel"

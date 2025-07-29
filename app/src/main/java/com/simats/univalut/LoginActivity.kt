@@ -103,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendForgotPasswordRequest(userId: String) {
-        val url = "http://192.168.205.54/univault/forgot_password.php" // Adjust if needed
+        val url = "http://10.143.152.54/univault/forgot_password.php" // Adjust if needed
 
         val json = JSONObject().apply {
             put("student_number", userId)
@@ -140,7 +140,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(studentNumber: String, password: String) {
-        val url = "http://192.168.205.54/univault/login.php" // Adjust if needed
+        val url = "http://10.143.152.54/univault/login.php" // Adjust if needed
 
         val json = JSONObject().apply {
             put("student_number", studentNumber)
@@ -278,7 +278,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendTokenToServer(token: String, userId: String, college: String) {
-        val url = "http://192.168.205.54/univault/save_fcm_token.php"
+        val url = "http://10.143.152.54/univault/save_fcm_token.php"
 
         val json = JSONObject().apply {
             put("user_id", userId)

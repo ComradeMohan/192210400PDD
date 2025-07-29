@@ -1,5 +1,6 @@
 package com.simats.univalut
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import android.widget.ImageView
+import androidx.core.content.ContentProviderCompat.requireContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -28,8 +30,11 @@ class StudentNotificationsActivity : AppCompatActivity() {
         notificationsContainer = findViewById(R.id.notifications_container)
 
         // Get the college name from the Intent
-        val collegeName = intent.getStringExtra("college")
-
+        var collegeName = intent.getStringExtra("college")
+        if (collegeName.isNullOrEmpty()) {
+            val sf = getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+            collegeName = sf.getString("collegeName", null)
+        }
         // Set the college name to the TextView
         tvCollegeName.text = collegeName ?: "College not found"
 
@@ -38,7 +43,7 @@ class StudentNotificationsActivity : AppCompatActivity() {
     }
     //changed in online mode
     private fun fetchNotices(collegeName: String) {
-        val url = "http://192.168.205.54/univault/fetch_notices.php?college=$collegeName"
+        val url = "http://10.143.152.54/univault/fetch_notices.php?college=$collegeName"
 
         Thread {
             try {

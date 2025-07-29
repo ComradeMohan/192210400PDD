@@ -64,7 +64,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://192.168.205.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://10.143.152.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
@@ -83,7 +83,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchEvents() {
-        val url = "http://192.168.205.54/univault/getEvents.php?college_name=$collegeName"
+        val url = "http://10.143.152.54/univault/getEvents.php?college_name=$collegeName"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -133,47 +133,46 @@ class AdminCalenderFragment : Fragment() {
         startDateTextView.setOnClickListener { showDatePicker(startDateTextView) }
         endDateTextView.setOnClickListener { showDatePicker(endDateTextView) }
 
-        AlertDialog.Builder(requireContext())
+        val alertDialog = AlertDialog.Builder(requireContext())
             .setTitle("Add New Event")
             .setView(dialogView)
-            .setPositiveButton("Add") { dialog, _ ->
-                if (isAddingEvent) return@setPositiveButton
-                isAddingEvent = true
+            .setPositiveButton("Add", null)
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .create()
 
+        alertDialog.setOnShowListener {
+            val addButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            addButton.setOnClickListener {
                 val title = editTextTitle.text.toString().trim()
                 val type = editTextType.text.toString().trim()
                 val description = editTextDescription.text.toString().trim()
                 val startDateStr = startDateTextView.text.toString()
                 val endDateStr = endDateTextView.text.toString()
 
+                if (title.isEmpty() || type.isEmpty() || description.isEmpty() || startDateStr == "Pick Start Date" || endDateStr == "Pick End Date") {
+                    Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 try {
                     val startDate = LocalDate.parse(startDateStr)
                     val endDate = LocalDate.parse(endDateStr)
 
-                    val newEvent = Event(
-                        title = title,
-                        type = type,
-                        startDate = startDate,
-                        endDate = endDate,
-                        description = description
-                    )
-
+                    val newEvent = Event(title, type, startDate, endDate, description)
                     addEventToBackend(newEvent) {
-                        isAddingEvent = false
-                        dialog.dismiss()
+                        alertDialog.dismiss()
                     }
                 } catch (e: DateTimeParseException) {
                     Toast.makeText(requireContext(), "Invalid date format (yyyy-MM-dd)", Toast.LENGTH_SHORT).show()
-                    isAddingEvent = false
                 }
             }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            .create()
-            .show()
+        }
+
+        alertDialog.show()
     }
 
     private fun addEventToBackend(event: Event, callback: () -> Unit) {
-        val url = "http://192.168.205.54/univault/addEvent.php"
+        val url = "http://10.143.152.54/univault/addEvent.php"
 
         val params = HashMap<String, String>().apply {
             put("title", event.title)
@@ -212,11 +211,33 @@ class AdminCalenderFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        DatePickerDialog(requireContext(), { _, y, m, d ->
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, y, m, d ->
             val date = LocalDate.of(y, m + 1, d)
             targetTextView.text = date.toString()
-        }, year, month, day).show()
+        }, year, month, day)
+
+        // Rule 1: Start date must be today or future
+        if (targetTextView == startDateTextView) {
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+        }
+
+        // Rule 2: End date must be >= selected start date
+        if (targetTextView == endDateTextView && startDateTextView.text.isNotEmpty()) {
+            try {
+                val selectedStart = LocalDate.parse(startDateTextView.text.toString())
+                val startMillis = Calendar.getInstance().apply {
+                    set(selectedStart.year, selectedStart.monthValue - 1, selectedStart.dayOfMonth)
+                }.timeInMillis
+                datePickerDialog.datePicker.minDate = startMillis
+            } catch (e: Exception) {
+                // fallback to today's date
+                datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+            }
+        }
+
+        datePickerDialog.show()
     }
+
 
     companion object {
         fun newInstance(adminId: String): AdminCalenderFragment {

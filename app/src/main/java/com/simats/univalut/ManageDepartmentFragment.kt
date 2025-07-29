@@ -56,13 +56,22 @@ class ManageDepartmentFragment : Fragment() {
         // Setup Departments RecyclerView
         deptAdapter = DepartmentAdapter(departments,
             onClick = { dept ->
-                selectedDepartmentId = dept.id
-                showCoursesForDepartment(dept.id)
+                val bundle = Bundle().apply {
+                    putString("department_id", dept.id)
+                    putString("department_name", dept.name)
+                }
+
+                val fragment = DepartmentCoursesFragment()
+                fragment.arguments = bundle
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment) // Replace with your container ID
+                    .addToBackStack(null)
+                    .commit()
             },
-            onDelete = { dept ->
-                confirmAndDeleteDepartment(dept)
-            }
+            onDelete = { dept -> confirmAndDeleteDepartment(dept) }
         )
+
         binding.rvDepartments.layoutManager = LinearLayoutManager(requireContext())
         binding.rvDepartments.adapter = deptAdapter
 
@@ -72,19 +81,20 @@ class ManageDepartmentFragment : Fragment() {
                 confirmAndDeleteCourse(course)
             }
         )
-        binding.rvCourses.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvCourses.adapter = courseAdapter
+//        binding.rvCourses.layoutManager = LinearLayoutManager(requireContext())
+//        binding.rvCourses.adapter = courseAdapter
 
         // Button listeners
         binding.btnAddDepartment.setOnClickListener { showAddDepartmentDialog() }
-        binding.btnAddCourse.setOnClickListener { showAddCourseDialog() }
+
+      //  binding.btnAddCourse.setOnClickListener { showAddCourseDialog() }
 
         // Fetch departments initially
         collegeId?.let { fetchDepartments(it) }
     }
 
     private fun fetchDepartments(collegeId: String) {
-        val url = "http://192.168.205.54/univault/get_departments.php?college_id=$collegeId"
+        val url = "http://10.143.152.54/univault/get_departments.php?college_id=$collegeId"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = StringRequest(Request.Method.GET, url,
@@ -106,11 +116,11 @@ class ManageDepartmentFragment : Fragment() {
                         deptAdapter.notifyDataSetChanged()
 
                         // Clear courses UI until department selected
-                        courses.clear()
-                        courseAdapter.notifyDataSetChanged()
-                        binding.tvCoursesTitle.visibility = View.GONE
-                        binding.rvCourses.visibility = View.GONE
-                        binding.btnAddCourse.visibility = View.GONE
+//                        courses.clear()
+//                        courseAdapter.notifyDataSetChanged()
+//                        binding.tvCoursesTitle.visibility = View.GONE
+//                        binding.rvCourses.visibility = View.GONE
+//                        binding.btnAddCourse.visibility = View.GONE
                     } else {
                         Toast.makeText(requireContext(), "No departments found", Toast.LENGTH_SHORT).show()
                     }
@@ -149,7 +159,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun addDepartment(name: String) {
-        val url = "http://192.168.205.54/univault/add_department.php"
+        val url = "http://10.143.152.54/univault/add_department.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -181,7 +191,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun deleteDepartment(deptId: String) {
-        val url = "http://192.168.205.54/univault/delete_department.php"
+        val url = "http://10.143.152.54/univault/delete_department.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -189,11 +199,11 @@ class ManageDepartmentFragment : Fragment() {
                 Toast.makeText(requireContext(), "Department deleted", Toast.LENGTH_SHORT).show()
                 collegeId?.let { fetchDepartments(it) }
                 // Also clear courses UI
-                courses.clear()
-                courseAdapter.notifyDataSetChanged()
-                binding.tvCoursesTitle.visibility = View.GONE
-                binding.rvCourses.visibility = View.GONE
-                binding.btnAddCourse.visibility = View.GONE
+//                courses.clear()
+//                courseAdapter.notifyDataSetChanged()
+//                binding.tvCoursesTitle.visibility = View.GONE
+//                binding.rvCourses.visibility = View.GONE
+//                binding.btnAddCourse.visibility = View.GONE
             },
             { error ->
                 Toast.makeText(requireContext(), "Failed to delete department: ${error.message}", Toast.LENGTH_SHORT).show()
@@ -206,16 +216,16 @@ class ManageDepartmentFragment : Fragment() {
         queue.add(request)
     }
 
-    private fun showCoursesForDepartment(departmentId: String) {
-        binding.tvCoursesTitle.visibility = View.VISIBLE
-        binding.rvCourses.visibility = View.VISIBLE
-        binding.btnAddCourse.visibility = View.VISIBLE
-
-        fetchCourses(departmentId)
-    }
+//    private fun showCoursesForDepartment(departmentId: String) {
+//        binding.tvCoursesTitle.visibility = View.VISIBLE
+//        binding.rvCourses.visibility = View.VISIBLE
+//        binding.btnAddCourse.visibility = View.VISIBLE
+//
+//        fetchCourses(departmentId)
+//    }
 
     private fun fetchCourses(departmentId: String) {
-        val url = "http://192.168.205.54/univault/get_courses.php?department_id=$departmentId"
+        val url = "http://10.143.152.54/univault/get_courses.php?department_id=$departmentId"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = StringRequest(Request.Method.GET, url,
@@ -281,7 +291,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun addCourse(departmentId: String, name: String) {
-        val url = "http://192.168.205.54/univault/add_course.php"
+        val url = "http://10.143.152.54/univault/add_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -313,7 +323,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun deleteCourse(courseId: String) {
-        val url = "http://192.168.205.54/univault/delete_course.php"
+        val url = "http://10.143.152.54/univault/delete_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,

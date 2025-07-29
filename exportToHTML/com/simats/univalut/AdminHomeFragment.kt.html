@@ -95,7 +95,7 @@ AdminHomeFragment.kt</font>
     <span class="s2">}</span>
 
     <span class="s1">private </span><span class="s0">fun </span><span class="s1">fetchAdminDetails</span><span class="s2">(</span><span class="s1">adminId: String</span><span class="s2">) {</span>
-        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://192.168.205.54/univault/getAdminDetails.php?admin_id=</span><span class="s0">$</span><span class="s1">adminId</span><span class="s3">&quot;</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.143.152.54/univault/getAdminDetails.php?admin_id=</span><span class="s0">$</span><span class="s1">adminId</span><span class="s3">&quot;</span>
         <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
             <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
                 <span class="s0">try </span><span class="s2">{</span>
@@ -117,7 +117,7 @@ AdminHomeFragment.kt</font>
     <span class="s2">}</span>
 
     <span class="s1">private </span><span class="s0">fun </span><span class="s1">fetchLatestNotice</span><span class="s2">(</span><span class="s1">college: String</span><span class="s2">) {</span>
-        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://192.168.205.54/univault/get_latest_notice.php?college=</span><span class="s0">$</span><span class="s1">college</span><span class="s3">&quot;</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.143.152.54/univault/get_latest_notice.php?college=</span><span class="s0">$</span><span class="s1">college</span><span class="s3">&quot;</span>
         <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
             <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
                 <span class="s0">if </span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">getBoolean</span><span class="s2">(</span><span class="s3">&quot;success&quot;</span><span class="s2">)) {</span>
@@ -138,7 +138,7 @@ AdminHomeFragment.kt</font>
 
     <span class="s1">private </span><span class="s0">fun </span><span class="s1">fetchFeedbacks</span><span class="s2">() {</span>
         <span class="s0">val </span><span class="s1">college </span><span class="s2">= </span><span class="s1">collegeName ?: </span><span class="s0">return  </span><span class="s4">// Skip if college name is null</span>
-        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://192.168.205.54/univault/get_feedbacks.php?college=</span><span class="s0">$</span><span class="s1">college</span><span class="s3">&quot;</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.143.152.54/univault/get_feedbacks.php?college=</span><span class="s0">$</span><span class="s1">college</span><span class="s3">&quot;</span>
 
         <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
             <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
@@ -218,7 +218,7 @@ AdminHomeFragment.kt</font>
             <span class="s1">callback</span><span class="s2">(</span><span class="s3">&quot;FAC001&quot;</span><span class="s2">)</span>
             <span class="s0">return</span>
         <span class="s2">}</span>
-        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://192.168.205.54/univault/getNextFacultyId.php?college=</span><span class="s0">${</span><span class="s1">college</span><span class="s2">.</span><span class="s1">replace</span><span class="s2">(</span><span class="s3">&quot; &quot;</span><span class="s2">, </span><span class="s3">&quot;%20&quot;</span><span class="s2">)</span><span class="s0">}</span><span class="s3">&quot;</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.143.152.54/univault/getNextFacultyId.php?college=</span><span class="s0">${</span><span class="s1">college</span><span class="s2">.</span><span class="s1">replace</span><span class="s2">(</span><span class="s3">&quot; &quot;</span><span class="s2">, </span><span class="s3">&quot;%20&quot;</span><span class="s2">)</span><span class="s0">}</span><span class="s3">&quot;</span>
 
         <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
             <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
@@ -240,7 +240,7 @@ AdminHomeFragment.kt</font>
         <span class="s1">name: String</span><span class="s2">, </span><span class="s1">email: String</span><span class="s2">, </span><span class="s1">phone: String</span><span class="s2">,</span>
         <span class="s1">college: String</span><span class="s2">, </span><span class="s1">loginId: String</span><span class="s2">, </span><span class="s1">password: String</span>
     <span class="s2">) {</span>
-        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://192.168.205.54/univault/faculty_register.php&quot;</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.143.152.54/univault/faculty_register.php&quot;</span>
         <span class="s0">val </span><span class="s1">params </span><span class="s2">= </span><span class="s1">JSONObject</span><span class="s2">().</span><span class="s1">apply </span><span class="s2">{</span>
             <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;name&quot;</span><span class="s2">, </span><span class="s1">name</span><span class="s2">)</span>
             <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;email&quot;</span><span class="s2">, </span><span class="s1">email</span><span class="s2">)</span>
