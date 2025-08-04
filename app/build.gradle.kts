@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.simats.univalut"
+    namespace = "com.simats.univault"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.simats.univalut"
+        applicationId = "com.simats.univault"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
@@ -19,7 +19,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true // Correct syntax for View Binding
+        viewBinding = true
     }
 
     buildTypes {
@@ -31,46 +31,52 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
 }
 
 dependencies {
-    implementation ("com.google.android.material:material:1.11.0")
-    implementation ("androidx.appcompat:appcompat:1.3.1")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("androidx.fragment:fragment-ktx:1.5.5")
-    implementation ("com.google.android.gms:play-services-auth:21.1.0") // Use the latest version
-    implementation ("com.applandeo:material-calendar-view:1.9.2")
+    // Core AndroidX and Material
+    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.5")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Firebase + Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:21.1.0") // for Google Sign-In
     implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
     implementation("com.google.firebase:firebase-messaging")
 
-    implementation ("com.applandeo:material-calendar-view:1.9.2")
+    // Networking
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation(libs.volley)
 
-    implementation ("net.gotev:uploadservice:4.7.0")
+    // Calendar and File Upload
+    implementation("com.applandeo:material-calendar-view:1.9.2")
+    implementation("net.gotev:uploadservice:4.7.0")
 
+    // PDF Viewer
+    implementation("io.github.afreakyelf:Pdf-Viewer:2.3.4")
 
-
+    // Other AndroidX libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core)
-    implementation(libs.volley)
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.swiperefreshlayout)
-//    implementation(libs.firebase.messaging)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-
-    implementation("io.github.afreakyelf:Pdf-Viewer:2.3.4")
 }

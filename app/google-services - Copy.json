@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "276756301302",
-    "project_id": "testing-5cd2f",
-    "storage_bucket": "testing-5cd2f.firebasestorage.app"
+    "project_number": "457957223942",
+    "project_id": "tester-c330a",
+    "storage_bucket": "tester-c330a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:276756301302:android:9d43c59ef7c5ce096173d7",
+        "mobilesdk_app_id": "1:457957223942:android:a06416def0e9df94839d87",
         "android_client_info": {
           "package_name": "com.simats.univault"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDeObyuJzH5b9LDyl28fuJzGENznhlsyrk"
+          "current_key": "AIzaSyBUXGZ4TN9j92RNySvnq68mAIOt2KkZbAM"
         }
       ],
       "services": {

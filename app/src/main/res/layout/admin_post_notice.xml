@@ -95,42 +95,6 @@
             <!-- Schedule -->
 
             <!-- Attachment -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Attachment"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="16dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginTop="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_upload"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tap to upload attachment"
-                    android:textSize="14sp"
-                    android:textColor="#A9A9A9"
-                    android:layout_marginTop="4dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Supported: PDF, DOC, JPG, PNG"
-                    android:textSize="12sp"
-                    android:textColor="#A9A9A9"/>
-            </LinearLayout>
 
             <!-- High Priority -->
             <LinearLayout

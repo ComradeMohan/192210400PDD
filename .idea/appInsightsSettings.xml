@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.simats.univalut" />
-                  <option name="mobileSdkAppId" value="1:457957223942:android:a06416def0e9df94839d87" />
-                  <option name="projectId" value="tester-c330a" />
-                  <option name="projectNumber" value="457957223942" />
+                  <option name="appId" value="com.simats.univault" />
+                  <option name="mobileSdkAppId" value="1:276756301302:android:9d43c59ef7c5ce096173d7" />
+                  <option name="projectId" value="testing-5cd2f" />
+                  <option name="projectNumber" value="276756301302" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
