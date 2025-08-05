@@ -1,9 +1,11 @@
 package com.simats.univault
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.messaging.FirebaseMessaging
 import org.json.JSONException
 
 class AdminProfileFragment : Fragment() {
@@ -59,7 +62,9 @@ class AdminProfileFragment : Fragment() {
             }
 
             btnLogout.setOnClickListener {
+
                 dialog.dismiss()
+                unsubscribeFromUserTopics()
                 val sharedPreferences = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
                 sharedPreferences.edit().clear().apply()
                 val intent = Intent(requireContext(), LoginActivity::class.java)
@@ -108,6 +113,19 @@ class AdminProfileFragment : Fragment() {
                 .commit()
         }
         return view
+    }
+    private fun unsubscribeFromUserTopics() {
+        val sf = requireContext().getSharedPreferences("user_sf", MODE_PRIVATE)
+        val topics = sf.getStringSet("fcm_topics", emptySet()) ?: emptySet()
+
+        for (topic in topics) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnSuccessListener { Log.d("FCM_TOPIC", "Unsubscribed from $topic") }
+                .addOnFailureListener { Log.e("FCM_TOPIC", "Failed to unsubscribe from $topic") }
+        }
+
+        // Clear the stored topics
+        sf.edit().remove("fcm_topics").apply()
     }
 
     private fun fetchAdminDetails(adminId: String?, view: View) {

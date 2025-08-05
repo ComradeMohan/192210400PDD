@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 import kotlin.concurrent.thread
 
 class StudentGrades : Activity() {
@@ -72,7 +73,7 @@ class StudentGrades : Activity() {
                     val conn = url.openConnection() as HttpURLConnection
                     conn.requestMethod = "POST"
                     conn.doOutput = true
-                    val postData = "student_id=$SID&course_id=$courseId&grade=$grade"
+                    val postData = "student_id=$SID&course_id=$courseId&grade=${URLEncoder.encode(grade, "UTF-8")}"
                     conn.outputStream.write(postData.toByteArray())
                     val response = conn.inputStream.bufferedReader().readText()
                     val json = JSONObject(response)

@@ -1,16 +1,19 @@
 package com.simats.univault
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.firebase.messaging.FirebaseMessaging
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -179,6 +182,7 @@ class ProfileFragment : Fragment() {
 
 
         logoutButton.setOnClickListener {
+            unsubscribeFromUserTopics()
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout, null)
             val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
             val btnLogout = dialogView.findViewById<Button>(R.id.btnLogout)
@@ -204,6 +208,19 @@ class ProfileFragment : Fragment() {
             dialog.show()
         }
 
+    }
+    private fun unsubscribeFromUserTopics() {
+        val sf = requireContext().getSharedPreferences("user_sf", MODE_PRIVATE)
+        val topics = sf.getStringSet("fcm_topics", emptySet()) ?: emptySet()
+
+        for (topic in topics) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnSuccessListener { Log.d("FCM_TOPIC", "Unsubscribed from $topic") }
+                .addOnFailureListener { Log.e("FCM_TOPIC", "Failed to unsubscribe from $topic") }
+        }
+
+        // Clear the stored topics
+        sf.edit().remove("fcm_topics").apply()
     }
 
     private fun fetchStudentData(studentNumber: String) {

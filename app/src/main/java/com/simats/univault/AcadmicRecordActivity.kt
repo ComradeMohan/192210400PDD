@@ -15,22 +15,19 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.view.animation.DecelerateInterpolator
-
+import android.widget.LinearLayout
+import android.view.LayoutInflater
+import android.graphics.Color
 
 class AcadmicRecordActivity : AppCompatActivity() {
 
-    private lateinit var progressS: ProgressBar
-    private lateinit var progressA: ProgressBar
-    private lateinit var progressB: ProgressBar
-    private lateinit var progressC: ProgressBar
-    private lateinit var progressD: ProgressBar
-    private lateinit var progressE: ProgressBar
     private lateinit var downloadButton: Button
     private lateinit var backButton: ImageView
-
     private lateinit var pending: ConstraintLayout
     private lateinit var completed: ConstraintLayout
+    private lateinit var gradeDistributionLayout: LinearLayout
 
     private var SID: String? = null
     private var DID: String? = null
@@ -41,7 +38,9 @@ class AcadmicRecordActivity : AppCompatActivity() {
     private var allCourses: Int? = null
     private val courseNames = mutableListOf<String>()
     private val gradePoints = mutableMapOf<String, Int>() // Map to store grade -> points
+    private val availableGrades = mutableListOf<String>() // List to store available grades
     private var collegeName : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.academic_record)
@@ -54,24 +53,11 @@ class AcadmicRecordActivity : AppCompatActivity() {
         departmentName = department
 
         // Initialize views
-        progressS = findViewById(R.id.progressS)
-        progressA = findViewById(R.id.progressA)
-        progressB = findViewById(R.id.progressB)
-        progressC = findViewById(R.id.progressC)
-        progressD = findViewById(R.id.progressD)
-        progressE = findViewById(R.id.progressE)
         downloadButton = findViewById(R.id.downloadTranscriptButton)
         backButton = findViewById(R.id.backButton)
-
-        // Set dummy progress values for testing
-        progressS.progress = 0
-        progressA.progress = 0
-        progressB.progress = 0
-        progressC.progress = 0
-        progressD.progress = 0
-        progressE.progress = 0
         pending = findViewById(R.id.pendingCourses)
         completed = findViewById(R.id.completedCourses)
+        gradeDistributionLayout = findViewById(R.id.gradeDistributionLayout)
 
         pending.setOnClickListener {
             if (!SID.isNullOrEmpty() && !DID.isNullOrEmpty()) {
@@ -110,18 +96,20 @@ class AcadmicRecordActivity : AppCompatActivity() {
         }
 
         // Fetch the college ID
-
         loadAcademicData()
     }
+
     private fun loadAcademicData() {
         collegeName?.let {
             fetchCollegeId(it)
         }
     }
+
     override fun onResume() {
         super.onResume()
         loadAcademicData()  // Refresh everything when coming back
     }
+
     private fun fetchCollegeId(collegeName: String) {
         val url = "http://10.143.152.54/univault/get_college_id.php"
 
@@ -154,9 +142,6 @@ class AcadmicRecordActivity : AppCompatActivity() {
                             departmentName?.let {
                                 fetchDepartmentId(collegeId!!, it)
                             }
-
-                            // Fetch grade points after getting the college ID
-
                         }
                     } else {
                         val message = json.optString("message", "College not found")
@@ -173,6 +158,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun fetchDepartmentId(collegeId: String, departmentName: String) {
         val url = "http://10.143.152.54/univault/get_department_id.php"
 
@@ -223,6 +209,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun fetchCourses(departmentId: String) {
         val url = "http://10.143.152.54/univault/get_courses_by_department.php"
 
@@ -275,6 +262,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun fetchGradePoints(collegeId: String) {
         val url = "http://10.143.152.54/univault/get_grade_points.php?college_id=$collegeId"
 
@@ -295,23 +283,29 @@ class AcadmicRecordActivity : AppCompatActivity() {
                 try {
                     val jsonArray = JSONArray(responseBody)
 
+                    gradePoints.clear()
+                    availableGrades.clear()
+
                     for (i in 0 until jsonArray.length()) {
                         val gradePointObj = jsonArray.getJSONObject(i)
                         val grade = gradePointObj.getString("grade")
                         val points = gradePointObj.getInt("points")
                         gradePoints[grade] = points
+                        availableGrades.add(grade)
                     }
 
                     runOnUiThread {
                         Toast.makeText(this@AcadmicRecordActivity, "Grade points loaded", Toast.LENGTH_SHORT).show()
                         Log.d("GradePoints", gradePoints.toString())
+
+                        // Create dynamic grade distribution UI
+                        createDynamicGradeDistribution()
+
                         if (SID != null && DID != null) {
                             fetchCompletedCourses(SID!!, DID!!)
                         } else {
                             Toast.makeText(this@AcadmicRecordActivity, "Student or Department ID is null", Toast.LENGTH_SHORT).show()
                         }
-
-
                     }
                 } catch (e: Exception) {
                     runOnUiThread {
@@ -322,6 +316,48 @@ class AcadmicRecordActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun createDynamicGradeDistribution() {
+        // Clear existing views
+        gradeDistributionLayout.removeAllViews()
+
+        // Define colors for grades (you can customize these)
+        val gradeColors = listOf(
+            "#375E97", "#FB6542", "#FFBB00", "#CEE6F2",
+            "#E3867D", "#2C5F2D", "#8B4513", "#FF6347",
+            "#32CD32", "#9370DB"
+        )
+
+        availableGrades.forEachIndexed { index, grade ->
+            val color = gradeColors.getOrElse(index) { "#808080" } // Default gray if no color defined
+
+            // Inflate the grade item layout
+            val gradeItemView = LayoutInflater.from(this).inflate(R.layout.item_grade_progress, gradeDistributionLayout, false)
+
+            val gradeText = gradeItemView.findViewById<TextView>(R.id.gradeText)
+            val gradeProgressBar = gradeItemView.findViewById<ProgressBar>(R.id.gradeProgressBar)
+            val gradePercentText = gradeItemView.findViewById<TextView>(R.id.gradePercentText)
+
+            // Set grade text and color
+            gradeText.text = grade
+            gradeText.setTextColor(Color.parseColor(color))
+
+            // Set progress bar color
+            gradeProgressBar.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(color))
+            gradeProgressBar.progress = 0
+
+            // Set initial percent text
+            gradePercentText.text = "$grade: 0%"
+            gradePercentText.setTextColor(Color.parseColor(color))
+
+            // Set tags for easy retrieval later
+            gradeProgressBar.tag = "progress_$grade"
+            gradePercentText.tag = "percent_$grade"
+
+            gradeDistributionLayout.addView(gradeItemView)
+        }
+    }
+
     private fun fetchCompletedCourses(studentId: String, departmentId: String) {
         val url = "http://10.143.152.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
 
@@ -342,21 +378,16 @@ class AcadmicRecordActivity : AppCompatActivity() {
                     runOnUiThread {
                         if (jsonResponse.getBoolean("success")) {
                             val coursesArray: JSONArray = jsonResponse.getJSONArray("courses")
-                            var totalPoints = 0.0
-                            var totalCredits = 0.0
+
                             val gradeCount = mutableMapOf<String, Int>()
                             val totalCourses = coursesArray.length()
+
                             val completedCoursesCountTextView = findViewById<TextView>(R.id.completedCoursesCount)
                             completedCoursesCountTextView.text = coursesArray.length().toString()
 
                             val degreeProgress = findViewById<ProgressBar>(R.id.degreeProgressBar)
-
-
                             val degreeProgressPercentage = findViewById<TextView>(R.id.degreeProgressPercentage)
-
                             val pendingCoursesTextView = findViewById<TextView>(R.id.pendingCoursesCount)
-
-
 
                             if (allCourses != null && allCourses!! > 0) {
                                 degreeProgress.progress = coursesArray.length()*100/ allCourses!!
@@ -371,22 +402,28 @@ class AcadmicRecordActivity : AppCompatActivity() {
                                 Toast.makeText(this@AcadmicRecordActivity, "Total courses not loaded yet", Toast.LENGTH_SHORT).show()
                             }
 
-
-
                             // Iterate through courses to calculate total points, credits, and grade counts
+                            var totalPoints = 0.0
+
                             for (i in 0 until totalCourses) {
                                 val course = coursesArray.getJSONObject(i)
                                 val grade = course.getString("grade")
-                                val credits = course.getInt("credits")
                                 val gradePoint = gradePoints[grade] ?: 0
-                                totalPoints += gradePoint * credits
-                                totalCredits += credits
 
                                 // Increment grade count
                                 gradeCount[grade] = gradeCount.getOrDefault(grade, 0) + 1
                             }
 
-                            val cgpa = if (totalCredits > 0) totalPoints / totalCredits else 0.0
+// New CGPA formula: (sum of (count × gradePoint)) / totalCourses
+                            for ((grade, count) in gradeCount) {
+                                val points = gradePoints[grade] ?: 0
+                                totalPoints += count * points
+                            }
+
+                            val cgpa = if (totalCourses > 0) totalPoints / totalCourses else 0.0
+
+
+
                             val cgpaValueTextView = findViewById<TextView>(R.id.cgpaValue)
                             val animator = ValueAnimator.ofFloat(10.00f, cgpa.toFloat())
                             animator.duration = 1500  // 1.5 seconds
@@ -397,46 +434,40 @@ class AcadmicRecordActivity : AppCompatActivity() {
                             }
                             animator.start()
 
-// Store CGPA as Float in SharedPreferences
+                            // Store CGPA as Float in SharedPreferences
                             val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
                             sf.edit().putFloat("cgpaValue", cgpa.toFloat()).apply()
 
-                            // Update the Grade Distribution UI dynamically
-                            // Iterate through the grade counts map
-                            gradeCount.forEach { (grade, count) ->
-                                // Calculate percentage for each grade
-                                val gradePercentage = (count.toDouble() / totalCourses) * 100
-
-                                // Find the ProgressBar and TextView for each grade dynamically
-                                val progressBar = findViewById<ProgressBar>(
-                                    resources.getIdentifier("progress$grade", "id", packageName)
-                                )
-                                val gradePercentText = findViewById<TextView>(
-                                    resources.getIdentifier("${grade.lowercase()}GradePercentText", "id", packageName)
-
-                                )
-
-                                // Update the ProgressBar and TextView with the calculated values
-                                progressBar.progress = gradePercentage.toInt()
-                                gradePercentText.text = "$grade: %.2f%%".format(gradePercentage)
-                            }
+                            // Update the dynamic Grade Distribution UI
+                            updateDynamicGradeDistribution(gradeCount, totalCourses)
 
                             // Toast for CGPA
                             Toast.makeText(this@AcadmicRecordActivity, "CGPA: %.2f".format(cgpa), Toast.LENGTH_LONG).show()
                         } else {
                             Toast.makeText(this@AcadmicRecordActivity, "No completed courses found", Toast.LENGTH_SHORT).show()
-
-                            // upadte pending if 0
+                            // Update pending if 0
                             val pendingCoursesTextView = findViewById<TextView>(R.id.pendingCoursesCount)
                             pendingCoursesTextView.text = allCourses.toString()
                         }
                     }
-
-
                 }
             }
         })
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun updateDynamicGradeDistribution(gradeCount: Map<String, Int>, totalCourses: Int) {
+        // Update each grade's progress bar and percentage
+        availableGrades.forEach { grade ->
+            val count = gradeCount[grade] ?: 0
+            val percentage = if (totalCourses > 0) (count.toDouble() / totalCourses) * 100 else 0.0
 
+            // Find the progress bar and text view by tag
+            val progressBar = gradeDistributionLayout.findViewWithTag<ProgressBar>("progress_$grade")
+            val percentText = gradeDistributionLayout.findViewWithTag<TextView>("percent_$grade")
+
+            progressBar?.progress = percentage.toInt()
+            percentText?.text = "%.1f%%".format(percentage)
+        }
+    }
 }

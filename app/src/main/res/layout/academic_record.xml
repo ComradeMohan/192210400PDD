@@ -11,9 +11,6 @@
         android:paddingBottom="24dp">
 
         <!-- Toolbar -->
-
-        <!-- CGPA Card -->
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -42,9 +39,9 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-
         </androidx.appcompat.widget.Toolbar>
 
+        <!-- CGPA Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cgpaCard"
             android:layout_width="0dp"
@@ -84,22 +81,6 @@
                     android:textColor="@color/primary"
                     app:layout_constraintTop_toBottomOf="@id/currentCgpaLabel"
                     app:layout_constraintStart_toStartOf="parent" />
-
-
-                <!--                <ProgressBar-->
-<!--                    android:id="@+id/cgpaProgressBar"-->
-<!--                    style="@android:style/Widget.ProgressBar.Horizontal"-->
-<!--                    android:layout_width="60dp"-->
-<!--                    android:layout_height="60dp"-->
-<!--                    android:indeterminate="false"-->
-<!--                    android:max="100"-->
-<!--                    android:progress="82"-->
-<!--                    android:progressDrawable="@drawable/circular_progress_bar"-->
-<!--                    android:rotation="270"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,9 +175,9 @@
                     android:id="@+id/completedCoursesLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Completed Courses"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:text="Completed"
+                    android:textSize="12sp"
+                    android:textColor="?attr/app_name_color"
                     app:layout_constraintTop_toBottomOf="@id/completedCoursesCount"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -249,9 +230,9 @@
                     android:id="@+id/pendingCoursesLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pending Courses"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:text="Pending"
+                    android:textSize="12sp"
+                    android:textColor="?attr/app_name_color"
                     app:layout_constraintTop_toBottomOf="@id/pendingCoursesCount"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -259,7 +240,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Grade Distribution Label -->
+        <!-- Grade Distribution Section -->
         <TextView
             android:id="@+id/gradeDistributionLabel"
             android:layout_width="wrap_content"
@@ -267,300 +248,48 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:text="Grade Distribution"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="?attr/app_name_color"
+            android:textColor="@color/blue_focus"
             app:layout_constraintTop_toBottomOf="@id/completedCoursesCard"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Grade Distribution Bars -->
-        <LinearLayout
-            android:id="@+id/gradeDistributionLayout"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/gradeDistributionCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
             app:layout_constraintTop_toBottomOf="@id/gradeDistributionLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Grade S -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="S"
-                android:textStyle="bold"
-                android:textColor="#375E97"
-                android:layout_marginBottom="4dp" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/progressS"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:progress="0"
-                android:max="100"
-                android:progressTint="#375E97"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Grade A -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:textStyle="bold"
-                android:textColor="#FB6542"
-                android:layout_marginBottom="4dp" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/progressA"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:progress="0"
-                android:max="100"
-                android:progressTint="#FB6542"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Grade B -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="B"
-                android:textStyle="bold"
-                android:textColor="#FFBB00"
-                android:layout_marginBottom="4dp" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/progressB"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:progress="0"
-                android:max="100"
-                android:progressTint="#FFBB00"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Grade C -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="C"
-                android:textStyle="bold"
-                android:textColor="#CEE6F2"
-                android:layout_marginBottom="4dp" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/progressC"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:progress="0"
-                android:max="100"
-                android:progressTint="#CEE6F2"
-                android:layout_marginBottom="12dp" />
-            <!-- Grade D -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="D"
-                android:textStyle="bold"
-                android:textColor="#E3867D"
-                android:layout_marginBottom="4dp" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/progressD"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:progress="0"
-                android:max="100"
-                android:progressTint="#E3867D"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Grade E -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E"
-                android:textStyle="bold"
-                android:textColor="#2C5F2D"
-                android:layout_marginBottom="4dp" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/progressE"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:progress="0"
-                android:max="100"
-                android:progressTint="#2C5F2D"
-                android:layout_marginBottom="12dp" />
-
-        </LinearLayout>
-
-        <!-- Legend -->
-        <LinearLayout
-            android:id="@+id/gradeLegendLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/gradeDistributionLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/gradeDistributionLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:padding="16dp" />
 
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="#375E97" />
+        </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/sGradePercentText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="S: 0%"
-                    android:textSize="12sp"
-                    android:textColor="#375E97"
-                    android:layout_marginStart="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="#FB6542" />
-
-                <TextView
-                    android:id="@+id/aGradePercentText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="A: 0%"
-                    android:textSize="12sp"
-                    android:textColor="#FB6542"
-                    android:layout_marginStart="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="#FFBB00" />
-
-                <TextView
-
-                    android:id="@+id/bGradePercentText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="B: 0%"
-                    android:textSize="12sp"
-                    android:textColor="#FFBB00"
-                    android:layout_marginStart="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="#CEE6F2" />
-
-                <TextView
-                    android:id="@+id/cGradePercentText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="C: 0%"
-                    android:textSize="12sp"
-                    android:textColor="#CEE6F2"
-                    android:layout_marginStart="4dp" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="#E3867D" />
-
-                <TextView
-                    android:id="@+id/dGradePercentText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="D: 0%"
-                    android:textSize="12sp"
-                    android:textColor="#E3867D"
-                    android:layout_marginStart="4dp" />
-
-            </LinearLayout>  <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
-
-            <View
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:background="#2C5F2D" />
-
-            <TextView
-                android:id="@+id/eGradePercentText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E: 0%"
-                android:textSize="12sp"
-                android:textColor="#2C5F2D"
-                android:layout_marginStart="4dp" />
-
-        </LinearLayout>
-        </LinearLayout>
-        <com.google.android.material.button.MaterialButton
+        <!-- Download Transcript Button -->
+        <Button
             android:id="@+id/downloadTranscriptButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/buttonBlue"
-            app:icon="@drawable/ic_download"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            android:padding="16dp"
+            android:background="@drawable/input_button"
             android:text="Download Transcript"
             android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@+id/gradeLegendLayout"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/gradeDistributionCard"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
