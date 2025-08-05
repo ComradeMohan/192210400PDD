@@ -120,7 +120,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- ADD THIS -->
+            <intent-filter>
+                <action android:name="OPEN_SPLASH_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
 
         <activity android:name=".MainActivity" android:exported="false"/>
        <!--firebase-->

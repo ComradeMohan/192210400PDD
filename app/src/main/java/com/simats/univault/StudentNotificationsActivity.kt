@@ -12,6 +12,9 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import org.json.JSONArray
+import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class StudentNotificationsActivity : AppCompatActivity() {
 
@@ -44,12 +47,10 @@ class StudentNotificationsActivity : AppCompatActivity() {
 
         Thread {
             try {
-                // Make HTTP request
                 val urlConnection = URL(url).openConnection() as HttpURLConnection
                 urlConnection.requestMethod = "GET"
                 urlConnection.connect()
 
-                // Read the response
                 val inputStream = urlConnection.inputStream
                 val reader = BufferedReader(InputStreamReader(inputStream))
                 val response = StringBuilder()
@@ -58,33 +59,40 @@ class StudentNotificationsActivity : AppCompatActivity() {
                     response.append(line)
                 }
 
-                // Parse the JSON response
                 val jsonResponse = JSONArray(response.toString().trim())
+
+                // Step 1: Convert JSONArray to a MutableList of JSONObject
+                val noticeList = mutableListOf<JSONObject>()
+                for (i in 0 until jsonResponse.length()) {
+                    noticeList.add(jsonResponse.getJSONObject(i))
+                }
+
+                // Step 2: Sort the list based on schedule_date + schedule_time (latest first)
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                noticeList.sortByDescending {
+                    val dateTimeStr = it.getString("schedule_date") + " " + it.getString("schedule_time")
+                    LocalDateTime.parse(dateTimeStr, formatter)
+                }
+
                 runOnUiThread {
-                    // Clear previous notifications
                     notificationsContainer.removeAllViews()
 
-                    // If there are notices, display them
-                    if (jsonResponse.length() > 0) {
-                        for (i in 0 until jsonResponse.length()) {
-                            val notice = jsonResponse.getJSONObject(i)
+                    if (noticeList.isNotEmpty()) {
+                        for (notice in noticeList) {
                             val title = notice.getString("title")
                             val description = notice.getString("description")
                             val date = notice.getString("schedule_date")
                             val time = notice.getString("schedule_time")
 
-                            // Inflate the notification layout
                             val notificationView = LayoutInflater.from(this)
                                 .inflate(R.layout.notification_item, notificationsContainer, false)
 
-                            // Set the notification content
                             val tvNoticeTitle: TextView = notificationView.findViewById(R.id.tvNoticeTitle)
                             val tvNoticeDescription: TextView = notificationView.findViewById(R.id.tvNoticeDescription)
 
                             tvNoticeTitle.text = title
                             tvNoticeDescription.text = "$description\n$date $time"
 
-                            // Add the notification to the container
                             notificationsContainer.addView(notificationView)
                         }
                     } else {

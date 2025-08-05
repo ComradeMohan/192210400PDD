@@ -127,6 +127,27 @@ class HomeFragment1 : Fragment() {
         }
         subjectAdapter.updateData(filteredList)
     }
+
+    private fun animateTyping(text: String, textView: TextView, delay: Long = 100L) {
+        val handler = android.os.Handler()
+        var index = 0
+
+        handler.post(object : Runnable {
+            override fun run() {
+                if (index <= text.length) {
+                    // Show partial text with a cursor
+                    textView.text = text.substring(0, index) + "|"
+                    index++
+                    handler.postDelayed(this, delay)
+                } else {
+                    // When done typing, remove the cursor
+                    textView.text = text
+                }
+            }
+        })
+    }
+
+
     private fun fetchStudentName(studentID: String) {
         val url = "http://10.143.152.54/univault/fetch_student_name.php?studentID=$studentID"
         val queue = Volley.newRequestQueue(requireContext())
@@ -162,7 +183,7 @@ class HomeFragment1 : Fragment() {
                             }
                         }
                     }
-                    tvStudentName.text = name
+                    animateTyping(name, tvStudentName)
                     collegeName?.let { fetchLatestNotice(it) }
                 } else {
                     tvStudentName.text = "Student not found"

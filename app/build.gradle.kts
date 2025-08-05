@@ -61,7 +61,7 @@ dependencies {
     // Calendar and File Upload
     implementation("com.applandeo:material-calendar-view:1.9.2")
     implementation("net.gotev:uploadservice:4.7.0")
-
+    implementation ("com.airbnb.android:lottie:6.4.0")
     // PDF Viewer
     implementation("io.github.afreakyelf:Pdf-Viewer:2.3.4")
     // aniamtions

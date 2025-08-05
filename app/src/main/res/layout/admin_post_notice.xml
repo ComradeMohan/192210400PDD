@@ -59,14 +59,15 @@
                 android:id="@+id/etNoticeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter notice title"
-                android:textSize="16sp"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:background="@drawable/rounded_border"
                 android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_border"
+                android:hint="Enter notice title"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:textColor="?app_name_color"
                 android:textColorHint="#A9A9A9"
-                android:inputType="text"/>
+                android:textSize="16sp" />
 
             <!-- Target Audience -->
 
@@ -122,7 +123,8 @@
                 <Switch
                     android:id="@+id/switchHighPriority"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:ignore="TouchTargetSizeCheck" />
 
 
             </LinearLayout>
