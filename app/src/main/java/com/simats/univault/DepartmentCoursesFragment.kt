@@ -3,6 +3,7 @@ package com.simats.univault
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -63,6 +64,12 @@ class DepartmentCoursesFragment : Fragment() {
         binding.rvCourses.layoutManager = LinearLayoutManager(requireContext())
         binding.rvCourses.adapter = courseAdapter
 
+        val animationController = AnimationUtils.loadLayoutAnimation(
+            requireContext(),
+            R.anim.layout_animation_fall_down
+        )
+        binding.rvCourses.layoutAnimation = animationController
+
         departmentId?.let { fetchCourses(it) }
     }
 
@@ -88,7 +95,12 @@ class DepartmentCoursesFragment : Fragment() {
                                 )
                             )
                         }
+
+                        // ✅ Sort alphabetically
+                        courses.sortBy { it.name.lowercase() }
+
                         courseAdapter.notifyDataSetChanged()
+                        binding.rvCourses.scheduleLayoutAnimation()
                     } else {
                         Toast.makeText(requireContext(), "No courses found", Toast.LENGTH_SHORT).show()
                     }
@@ -112,11 +124,8 @@ class DepartmentCoursesFragment : Fragment() {
         dialog.setContentView(dialogView)
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        // ✅ Show the dialog first
         dialog.show()
 
-        // ✅ Then set width to MATCH_PARENT
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -135,13 +144,12 @@ class DepartmentCoursesFragment : Fragment() {
         }
     }
 
-
     private fun addCourse(departmentId: String, name: String) {
         val url = "http://10.143.152.54/univault/add_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
-            { response ->
+            {
                 Toast.makeText(requireContext(), "Course added successfully", Toast.LENGTH_SHORT).show()
                 fetchCourses(departmentId)
             },
@@ -160,27 +168,35 @@ class DepartmentCoursesFragment : Fragment() {
             .setTitle("Delete Course")
             .setMessage("Are you sure you want to delete '${course.name}'?")
             .setPositiveButton("Yes") { dialog, _ ->
-                deleteCourse(course.id)
+                deleteCourse(course)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
             .show()
     }
 
-    private fun deleteCourse(courseId: String) {
+    // ✅ Deletes course both backend & frontend directly
+    private fun deleteCourse(course: DeptCourse) {
         val url = "http://10.143.152.54/univault/delete_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
             {
                 Toast.makeText(requireContext(), "Course deleted", Toast.LENGTH_SHORT).show()
-                departmentId?.let { fetchCourses(it) }
+
+                // ✅ Remove from list and notify adapter
+                val index = courses.indexOfFirst { it.id == course.id }
+                if (index != -1) {
+                    courses.removeAt(index)
+                    courseAdapter.notifyItemRemoved(index)
+                }
+
             },
             { error ->
                 Toast.makeText(requireContext(), "Failed to delete course: ${error.message}", Toast.LENGTH_SHORT).show()
             }) {
             override fun getParams(): Map<String, String> {
-                return mapOf("course_id" to courseId)
+                return mapOf("course_id" to course.id)
             }
         }
         queue.add(request)

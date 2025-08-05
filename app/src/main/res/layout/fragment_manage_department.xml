@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/mode"
-    android:padding="20dp">
+    android:padding="10dp">
 
     <!-- Header and RecyclerView section -->
     <LinearLayout
@@ -24,69 +24,43 @@
             android:textColor="?attr/app_name_color"
             android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Modern Department Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Manage departments and courses"
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="16dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
 
-        <!-- CardView with RecyclerView -->
-        <androidx.cardview.widget.CardView
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_department"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/accent_primary" />
+
+            <TextView
+                android:id="@+id/tvDeptTitle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Departments"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="?attr/app_name_color" />
+        </LinearLayout>
+
+        <!-- Modern RecyclerView without CardView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDepartments"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="?attr/recycleviewbox">
+            android:nestedScrollingEnabled="true"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <!-- Department Header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_department"
-                        android:layout_marginEnd="12dp"
-                        app:tint="@color/accent_primary" />
-
-                    <TextView
-                        android:id="@+id/tvDeptTitle"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="Departments"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/app_name_color" />
-                </LinearLayout>
-
-                <!-- RecyclerView -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvDepartments"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:nestedScrollingEnabled="true"
-                    android:background="@drawable/recycler_background"
-                    android:backgroundTint="?attr/recycleviewbox"
-                    android:padding="8dp" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
     <!-- Add Department Button fixed at bottom -->
@@ -96,8 +70,10 @@
         android:layout_height="56dp"
         android:text="Add Department"
         android:textSize="16sp"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         app:icon="@drawable/ic_add"
+        app:iconTint="@color/white"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
         app:cornerRadius="28dp"

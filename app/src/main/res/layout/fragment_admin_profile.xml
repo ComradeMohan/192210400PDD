@@ -9,8 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,6 +167,7 @@
                         android:src="@android:drawable/ic_menu_edit"
                         android:background="@android:color/transparent"
                         android:textColor="#111827"
+                        android:visibility="gone"
                         android:layout_alignParentEnd="true"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -209,6 +209,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_edit"
+                        android:visibility="gone"
                         android:background="@android:color/transparent"
                         android:layout_alignParentEnd="true"/>
                 </RelativeLayout>
@@ -260,7 +261,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employee ID"
+                    android:text="Admin ID"
                     android:textColor="?attr/courseCode"
                     android:textSize="12sp"/>
 
@@ -290,69 +291,65 @@
                 android:id="@+id/changePasswordButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/input_button"
+                android:backgroundTint="#000000"
                 android:clickable="true"
                 android:focusable="true"
-                android:gravity="center_vertical"
+                android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp"
+                android:padding="10dp"
                 android:layout_marginTop="16dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_lock_lock"
-                    android:contentDescription="Change Password Icon"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_lock_lock"
+                android:contentDescription="Change Password Icon"
+                app:tint="@android:color/white" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="Change Password"
-                    android:textSize="16sp"
-                    android:textColor="?attr/app_name_color"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_right"
-                    android:contentDescription="Arrow Icon"/>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Change Password"
+                android:textSize="16sp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_logout_ripple"
                 android:clickable="true"
                 android:focusable="true"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="10dp">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="Logout Icon"
                     android:src="@drawable/ic_logout"
-                    android:contentDescription="Logout Icon"/>
+                    app:tint="#D32F2F" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="Logout"
-                    android:textSize="16sp"
-                    android:textColor="?attr/app_name_color"/>
-
-                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_right"
-                    android:contentDescription="Arrow Icon"/>
+                    android:layout_marginStart="12dp"
+                    android:text="Logout"
+                    android:textColor="#D32F2F"
+                    android:textSize="16sp" />
             </LinearLayout>
 
+
+
         </LinearLayout>
+
+
 
     </LinearLayout>
 </ScrollView>

@@ -45,7 +45,7 @@ class StudentCalenderFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerViewEvents)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        eventAdapter = EventAdapter(filteredEventList)
+        eventAdapter = EventAdapter(filteredEventList, requireContext())
         recyclerView.adapter = eventAdapter
         swipeRefresh = view.findViewById(R.id.swipeRefresh)
         swipeRefresh.setOnRefreshListener {

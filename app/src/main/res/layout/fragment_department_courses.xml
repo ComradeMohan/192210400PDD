@@ -1,127 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/departmentCoursesRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background_light">
+    android:background="?attr/mode"
+    android:padding="10dp">
 
-    <!-- Header Section with Shadow -->
-    <androidx.cardview.widget.CardView
+    <!-- Header and RecyclerView section -->
+    <LinearLayout
+        android:id="@+id/layoutContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
-        android:background="?attr/recycleviewbox"
-        android:layout_marginBottom="4dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/btnAddCourse">
 
+        <!-- Header Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Academic Management"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="?attr/app_name_color"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Back Button and Course Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="4dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/primary_color">
+            android:layout_marginBottom="16dp">
 
             <!-- Back Button with Icon Style -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnBack"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:text="← Back"
-                android:textColor="@color/white"
+                android:textColor="@color/accent_primary"
                 android:textSize="14sp"
                 android:fontFamily="@font/alata_regular"
                 android:paddingStart="8dp"
                 android:paddingEnd="16dp"
                 android:minWidth="0dp"
-                app:rippleColor="@color/white_20" />
+                app:rippleColor="@color/accent_primary" />
 
-            <!-- Title with Better Typography -->
+            <!-- Course Icon and Title -->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_department"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/accent_primary" />
+
             <TextView
                 android:id="@+id/tvCourseTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Courses"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
-                android:fontFamily="@font/alata_regular"
-                android:paddingStart="16dp"
+                android:textColor="?attr/app_name_color"
                 android:gravity="start|center_vertical" />
 
-            <!-- Add Button with FAB Style -->
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnAddCourse"
+        </LinearLayout>
+
+        <!-- Modern RecyclerView without CardView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCourses"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:nestedScrollingEnabled="true"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <!-- Empty State (Hidden by default) -->
+        <LinearLayout
+            android:id="@+id/llEmptyState"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="32dp">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_empty_courses"
+                android:alpha="0.6"
+                android:layout_marginBottom="16dp"
+                app:tint="?attr/app_name_color" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:contentDescription="Add Course"
-                android:src="@drawable/ic_add"
-                app:backgroundTint="@color/accent_color"
-                app:tint="@color/white"
-                app:fabSize="normal"
-                app:elevation="6dp" />
+                android:text="No courses found"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?attr/app_name_color"
+                android:layout_marginBottom="8dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start by adding your first course"
+                android:textSize="14sp"
+                android:textColor="?attr/app_name_color"
+                android:alpha="0.7"
+                android:textAlignment="center" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Search Bar (Optional Enhancement) -->
-
-    <!-- RecyclerView with Better Spacing -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCourses"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="16dp"
-        android:background="?attr/recycleviewbox"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
-        android:scrollbarStyle="outsideOverlay"
-        android:overScrollMode="ifContentScrolls" />
-
-    <!-- Empty State (Hidden by default) -->
-    <LinearLayout
-        android:id="@+id/llEmptyState"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        android:padding="32dp">
-
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_empty_courses"
-            android:alpha="0.6"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No courses found"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start by adding your first course"
-            android:textSize="14sp"
-            android:textColor="@color/text_tertiary"
-            android:textAlignment="center" />
 
     </LinearLayout>
 
-</LinearLayout>
+    <!-- Add Course Button fixed at bottom -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddCourse"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Add Course"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/white"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:cornerRadius="28dp"
+        app:backgroundTint="@color/accent_primary"
+        android:paddingHorizontal="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="12dp" />
+
+</RelativeLayout>

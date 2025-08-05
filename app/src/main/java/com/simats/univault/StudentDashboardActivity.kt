@@ -2,6 +2,7 @@ package com.simats.univault
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -22,6 +23,11 @@ class StudentDashboardActivity : AppCompatActivity() {
         setContentView(binding.root)
         val ID = intent.getStringExtra("ID")
         Log.d("StudentDashboardActivity", "Received ID: $ID")
+        val rootView = findViewById<View>(android.R.id.content)
+
+        rootView.setKeyboardVisibilityListener { isKeyboardVisible ->
+            binding.bottomNavigationView.visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
+        }
 
         // Default fragment on initial load
         if (savedInstanceState == null) {
@@ -65,6 +71,20 @@ class StudentDashboardActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+    }
+    private fun View.setKeyboardVisibilityListener(onKeyboardVisibilityChanged: (Boolean) -> Unit) {
+        val rootView = this
+        var wasKeyboardVisible = false
+
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val heightDiff = rootView.rootView.height - rootView.height
+            val isKeyboardVisible = heightDiff > rootView.rootView.height * 0.15
+
+            if (isKeyboardVisible != wasKeyboardVisible) {
+                wasKeyboardVisible = isKeyboardVisible
+                onKeyboardVisibilityChanged(isKeyboardVisible)
+            }
         }
     }
 

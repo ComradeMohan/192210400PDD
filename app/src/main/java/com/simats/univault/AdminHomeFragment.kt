@@ -177,14 +177,17 @@ class AdminHomeFragment : Fragment() {
         val url = "http://10.143.152.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
+                if (!isAdded || _binding == null) return@JsonObjectRequest
+                val safeBinding = _binding!!
                 try {
+
                     val name = response.getString("name")
                     collegeName = response.getString("college")
                     val studentCount = response.getInt("student_count")
-
-                    binding.tvTitle.text = "$name - $collegeName"
-                    binding.tvTotalStudents.text = studentCount.toString()
-
+                    val facultyCount = response.getInt("faculty_count")
+                    safeBinding.tvTitle.text = "$name - $collegeName"
+                    safeBinding.tvTotalStudents.text = studentCount.toString()
+                    safeBinding.tvTotalFaculty.text = facultyCount.toString()
                     collegeName?.let {
                         fetchLatestNotice(it)
                         fetchFeedbacks()
@@ -201,7 +204,7 @@ class AdminHomeFragment : Fragment() {
                     Toast.makeText(context, "Error parsing admin details", Toast.LENGTH_SHORT).show()
                 }
             },
-            {
+            { if (!isAdded || _binding == null) return@JsonObjectRequest
                 Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT).show()
             })
 
@@ -212,17 +215,21 @@ class AdminHomeFragment : Fragment() {
         val url = "http://10.143.152.54/univault/get_latest_notice.php?college=$college"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
+                if (!isAdded || _binding == null) return@JsonObjectRequest
+                val safeBinding = _binding!!
                 if (response.getBoolean("success")) {
-                    binding.tvNoticeTitle.text = response.getString("title")
-                    binding.tvNoticeDescription.text = response.getString("description")
+                    safeBinding.tvNoticeTitle.text = response.getString("title")
+                    safeBinding.tvNoticeDescription.text = response.getString("description")
                 } else {
-                    binding.tvNoticeTitle.text = "No Notices"
-                    binding.tvNoticeDescription.text = ""
+                    safeBinding.tvNoticeTitle.text = "No Notices"
+                    safeBinding.tvNoticeDescription.text = ""
                 }
             },
             {
-                binding.tvNoticeTitle.text = "Error"
-                binding.tvNoticeDescription.text = "Failed to fetch notice."
+                if (!isAdded || _binding == null) return@JsonObjectRequest
+                val safeBinding = _binding!!
+                safeBinding.tvNoticeTitle.text = "Error"
+                safeBinding.tvNoticeDescription.text = "Failed to fetch notice."
             })
 
         Volley.newRequestQueue(requireContext()).add(request)
@@ -234,6 +241,9 @@ class AdminHomeFragment : Fragment() {
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
+                if (!isAdded || _binding == null) return@JsonObjectRequest
+                val safeBinding = _binding!!
+
                 if (response.getBoolean("success")) {
                     val feedbackList = mutableListOf<Feedback>()
                     val dataArray = response.getJSONArray("data")
@@ -247,12 +257,13 @@ class AdminHomeFragment : Fragment() {
                             )
                         )
                     }
-                    binding.rvRecentActivity.adapter = FeedbackAdapter(feedbackList)
+                    safeBinding.rvRecentActivity.adapter = FeedbackAdapter(feedbackList)
                 } else {
                     Toast.makeText(requireContext(), "No feedbacks found", Toast.LENGTH_SHORT).show()
                 }
             },
             {
+                if (!isAdded || _binding == null) return@JsonObjectRequest
                 Toast.makeText(requireContext(), "Error loading feedbacks", Toast.LENGTH_SHORT).show()
             })
 

@@ -14,6 +14,9 @@ import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import android.animation.ValueAnimator
+import android.view.animation.DecelerateInterpolator
+
 
 class AcadmicRecordActivity : AppCompatActivity() {
 
@@ -38,14 +41,14 @@ class AcadmicRecordActivity : AppCompatActivity() {
     private var allCourses: Int? = null
     private val courseNames = mutableListOf<String>()
     private val gradePoints = mutableMapOf<String, Int>() // Map to store grade -> points
-
+    private var collegeName : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.academic_record)
 
         val studentID = intent.getStringExtra("studentID")
         val department = intent.getStringExtra("department")
-        val collegeName = intent.getStringExtra("collegeName")
+        collegeName = intent.getStringExtra("collegeName")
 
         SID = studentID
         departmentName = department
@@ -107,9 +110,17 @@ class AcadmicRecordActivity : AppCompatActivity() {
         }
 
         // Fetch the college ID
+
+        loadAcademicData()
+    }
+    private fun loadAcademicData() {
         collegeName?.let {
             fetchCollegeId(it)
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        loadAcademicData()  // Refresh everything when coming back
     }
     private fun fetchCollegeId(collegeName: String) {
         val url = "http://10.143.152.54/univault/get_college_id.php"
@@ -377,7 +388,14 @@ class AcadmicRecordActivity : AppCompatActivity() {
 
                             val cgpa = if (totalCredits > 0) totalPoints / totalCredits else 0.0
                             val cgpaValueTextView = findViewById<TextView>(R.id.cgpaValue)
-                            cgpaValueTextView.text = "%.2f".format(cgpa)
+                            val animator = ValueAnimator.ofFloat(10.00f, cgpa.toFloat())
+                            animator.duration = 1500  // 1.5 seconds
+                            animator.interpolator = DecelerateInterpolator()
+                            animator.addUpdateListener { animation ->
+                                val animatedValue = animation.animatedValue as Float
+                                cgpaValueTextView.text = String.format("%.2f", animatedValue)
+                            }
+                            animator.start()
 
 // Store CGPA as Float in SharedPreferences
                             val sf = getSharedPreferences("user_sf", MODE_PRIVATE)

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.messaging.FirebaseMessaging
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -108,6 +110,7 @@ class FacultyProfileFragment : Fragment() {
                     val requestBody = FormBody.Builder()
                         .add("user_id", userId)
                         .add("feedback", feedback)
+                        .add("college", collegeName ?: "")
                         .build()
 
                     val request = okhttp3.Request.Builder()
@@ -121,7 +124,6 @@ class FacultyProfileFragment : Fragment() {
                                 Toast.makeText(requireContext(), "Failed to submit feedback", Toast.LENGTH_SHORT).show()
                             }
                         }
-
                         override fun onResponse(call: Call, response: Response) {
                             val responseBody = response.body?.string()
                             activity?.runOnUiThread {
@@ -154,8 +156,12 @@ class FacultyProfileFragment : Fragment() {
 
             btnLogout.setOnClickListener {
                 dialog.dismiss()
-                val sharedPreferences = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
-                sharedPreferences.edit().clear().apply()
+                unsubscribeFromAllTopics()
+
+                val prefs = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+                prefs.edit().clear().apply()
+
+
                 val intent = Intent(requireContext(), LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
@@ -170,6 +176,22 @@ class FacultyProfileFragment : Fragment() {
         }
 
         return view
+    }
+    private fun unsubscribeFromAllTopics() {
+        val prefs = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+
+        val topics = prefs.getStringSet("fcm_topics", emptySet()) ?: emptySet()
+
+        for (topic in topics) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnSuccessListener { Log.d("FCM_TOPIC", "Unsubscribed from $topic") }
+                .addOnFailureListener { Log.e("FCM_TOPIC", "Failed to unsubscribe from $topic") }
+        }
+
+        // Optionally, clear the token entirely (removes all server-side topics too)
+        Thread {
+            FirebaseMessaging.getInstance().deleteToken()
+        }.start()
     }
 
     private fun fetchFacultyDetails(facultyId: String) {

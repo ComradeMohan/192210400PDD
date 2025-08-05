@@ -2,6 +2,7 @@ package com.simats.univault
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDate
@@ -17,29 +18,12 @@ class CalendarActivity : AppCompatActivity() {
         setContentView(R.layout.admin_calender) // Your main layout
 
         recyclerView = findViewById(R.id.rvEvents)
-        adapter = EventAdapter(mutableListOf()) // Using mutable list for dynamic updates
+        adapter = EventAdapter(mutableListOf(), this)
+        // Using mutable list for dynamic updates
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
         // Example: Add some sample events
-        allEvents.add(
-            Event(
-                "Math Exam",
-                "Exam",
-                LocalDate.of(2023, 9, 15),
-                LocalDate.of(2023, 9, 15),
-                "Final math exam"
-            )
-        )
-        allEvents.add(
-            Event(
-                "Project Meeting",
-                "Meeting",
-                LocalDate.of(2023, 9, 18),
-                LocalDate.of(2023, 9, 18),
-                "Discuss project progress"
-            )
-        )
 
         // Set default events for today
         val today = LocalDate.now()

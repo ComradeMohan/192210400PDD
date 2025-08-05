@@ -42,53 +42,99 @@
 
         </LinearLayout>
 
+        <!-- Total Students & Total Faculty Cards Row -->
         <LinearLayout
-            android:layout_width="374dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginRight="100dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rounded_bg_light_blue"
-            android:backgroundTint="?attr/adminHomeBox"
-            android:backgroundTintMode="src_in"
-            android:clipToOutline="true"
-            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:weightSum="2">
 
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_graduation_hat" />
-
+            <!-- Total Students Card -->
             <LinearLayout
-                android:layout_width="109dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="12dp"
-                android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_bg_light_blue"
+                android:backgroundTint="?attr/pendingSubject"
+                android:padding="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="8dp">
 
-                <TextView
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_graduation_hat" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Students"
-                    android:textColor="?attr/courseCode"
-                    android:textSize="14sp" />
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
 
-                <TextView
-                    android:id="@+id/tvTotalStudents"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Students"
+                        android:textColor="?attr/courseCode"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalStudents"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="?attr/app_name_color"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Total Faculty Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_bg_light_green"
+                android:padding="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginStart="8dp">
+
+                <ImageView
+                    android:layout_width="35dp"
                     android:layout_height="40dp"
-                    android:text="2450"
-                    android:textColor="?attr/app_name_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    app:tint="@color/blue_focus"
+                    android:src="@drawable/ic_teacher_group" /> <!-- Replace with your actual faculty icon -->
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Faculty"
+                        android:textColor="?attr/courseCode"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalFaculty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="?attr/app_name_color"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
+
 
         <!-- Tabs -->
 

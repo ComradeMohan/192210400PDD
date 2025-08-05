@@ -74,6 +74,17 @@
                 android:textStyle="bold"
                 android:textColor="?attr/app_name_color"
                 android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/noEventsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No events found"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:textColor="?attr/app_name_color"
+                android:layout_marginTop="16dp"/>
 
             <!-- 📋 RecyclerView for Events -->
             <androidx.recyclerview.widget.RecyclerView

@@ -63,8 +63,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:background="#FAFAFA"
                 android:visibility="gone"
+                android:background="@drawable/rounded_corners"
                 android:elevation="4dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@android:color/white">
@@ -75,35 +75,49 @@
                     android:text="Add New Course"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:layout_marginBottom="16dp" />
 
                 <EditText
                     android:id="@+id/etCourseCode"
-                    android:hint="Course Code (e.g. CS101)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:hint="Course Code (e.g. CS101)"
+                    android:minHeight="48dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <EditText
                     android:id="@+id/etSubjectName"
-                    android:hint="Subject Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:hint="Subject Name"
+                    android:minHeight="48dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <Spinner
                     android:id="@+id/spinnerFaculty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:minHeight="48dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <EditText
                     android:id="@+id/etStrength"
-                    android:hint="Credits"
-                    android:inputType="number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="16dp"
+                    android:hint="Credits"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <Button
                     android:id="@+id/btnSaveCourse"

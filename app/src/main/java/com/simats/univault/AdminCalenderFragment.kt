@@ -23,23 +23,33 @@ class AdminCalenderFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var eventAdapter: EventAdapter
-    private val eventList = mutableListOf<Event>()
+    private val eventList = mutableListOf<Event>() // visible list
+    private val fullEventList = mutableListOf<Event>() // full copy for filtering
+
     private lateinit var startDateTextView: TextView
     private lateinit var endDateTextView: TextView
     private var adminId: String? = null
     private var collegeName: String? = null
     private var isAddingEvent = false
+    private lateinit var noEventsTextView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_admin_calender, container, false)
+        noEventsTextView = view.findViewById(R.id.noEventsTextView)
 
         recyclerView = view.findViewById(R.id.recyclerViewEvents)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        eventAdapter = EventAdapter(eventList)
+        eventAdapter = EventAdapter(eventList, requireContext())
         recyclerView.adapter = eventAdapter
+
+        val calendarView = view.findViewById<CalendarView>(R.id.calendarView)
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+            filterEventsByDate(selectedDate)
+        }
 
         adminId = arguments?.getString("admin_id")
         adminId?.let {
@@ -52,6 +62,23 @@ class AdminCalenderFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun filterEventsByDate(date: LocalDate) {
+        Log.d("CalendarLog", "Filtering events for date: $date")
+        val filteredList = fullEventList.filter { event ->
+            !date.isBefore(event.startDate) && !date.isAfter(event.endDate)
+        }
+        Log.d("CalendarLog", "Filtered list size: ${filteredList.size}")
+        eventAdapter.updateData(filteredList)
+
+        if (filteredList.isEmpty()) {
+            noEventsTextView.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            noEventsTextView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
     }
 
     private fun fetchAdminDetails(adminId: String) {
@@ -82,19 +109,21 @@ class AdminCalenderFragment : Fragment() {
                 try {
                     Log.d("CalendarLog", "Event fetch response: $response")
                     eventList.clear()
-                    val eventsArray = response.getJSONArray("data")
+                    fullEventList.clear()
 
+                    val eventsArray = response.getJSONArray("data")
                     for (i in 0 until eventsArray.length()) {
                         val eventObj = eventsArray.getJSONObject(i)
-                        val title = eventObj.getString("title")
-                        val type = eventObj.getString("type")
-                        val startDate = LocalDate.parse(eventObj.getString("start_date"))
-                        val endDate = LocalDate.parse(eventObj.getString("end_date"))
-                        val description = eventObj.getString("description")
-
-                        val event = Event(title, type, startDate, endDate, description)
-                        Log.d("CalendarLog", "Fetched event: $event")
+                        val event = Event(
+                            eventObj.getString("title"),
+                            eventObj.getString("type"),
+                            LocalDate.parse(eventObj.getString("start_date")),
+                            LocalDate.parse(eventObj.getString("end_date")),
+                            eventObj.getString("description")
+                        )
                         eventList.add(event)
+                        fullEventList.add(event)
+                        Log.d("CalendarLog", "Fetched event: $event")
                     }
 
                     eventAdapter.notifyDataSetChanged()
@@ -178,14 +207,14 @@ class AdminCalenderFragment : Fragment() {
     private fun addEventToBackend(event: Event, callback: () -> Unit) {
         val url = "http://10.143.152.54/univault/addEvent.php"
 
-        val params = HashMap<String, String>().apply {
-            put("title", event.title)
-            put("type", event.type)
-            put("description", event.description)
-            put("start_date", event.startDate.toString())
-            put("end_date", event.endDate.toString())
-            put("college_name", collegeName ?: "")
-        }
+        val params = hashMapOf(
+            "title" to event.title,
+            "type" to event.type,
+            "description" to event.description,
+            "start_date" to event.startDate.toString(),
+            "end_date" to event.endDate.toString(),
+            "college_name" to (collegeName ?: "")
+        )
 
         val jsonObject = JSONObject(params as Map<*, *>)
         Log.d("CalendarLog", "Sending event POST data: $jsonObject")
@@ -197,7 +226,7 @@ class AdminCalenderFragment : Fragment() {
                 val message = response.optString("message")
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-                if (status == "success") {
+                if (status == "success" || message == "Event exists") {
                     fetchEvents()
                 }
 
@@ -208,6 +237,37 @@ class AdminCalenderFragment : Fragment() {
                 callback()
             }
         )
+
+        Volley.newRequestQueue(requireContext()).add(request)
+    }
+
+    fun deleteEvent(event: Event, callback: () -> Unit) {
+        val url = "http://10.143.152.54/univault/delete_event.php"
+        val params = hashMapOf(
+            "title" to event.title,
+            "college_name" to (collegeName ?: "")
+        )
+
+        val jsonObject = JSONObject(params as Map<*, *>)
+
+        val request = JsonObjectRequest(Request.Method.POST, url, jsonObject,
+            { response ->
+                Log.d("CalendarLog", "Delete event response: $response")
+                val status = response.optString("status")
+                val message = response.optString("message")
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+                if (status == "success") {
+                    fetchEvents()
+                }
+
+                callback()
+            },
+            { error ->
+                Log.e("CalendarLog", "Error deleting event: ${error.message}")
+                Toast.makeText(requireContext(), "Error deleting event", Toast.LENGTH_SHORT).show()
+                callback()
+            })
 
         Volley.newRequestQueue(requireContext()).add(request)
     }

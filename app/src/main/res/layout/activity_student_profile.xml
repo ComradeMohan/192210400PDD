@@ -229,7 +229,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right"
+                app:tint="?attr/app_name_color" />
         </LinearLayout>
 
         <View
@@ -274,7 +275,10 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right"
+
+                app:tint="?attr/app_name_color"
+                />
         </LinearLayout>
 
         <View
@@ -319,7 +323,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right"
+
+                app:tint="?attr/app_name_color"/>
         </LinearLayout>
 
         <View
@@ -350,6 +356,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+                app:tint="#D32F2F"
                 android:src="@drawable/ic_logout" />
 
             <TextView
@@ -364,7 +372,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right"
+                app:tint="?attr/app_name_color"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

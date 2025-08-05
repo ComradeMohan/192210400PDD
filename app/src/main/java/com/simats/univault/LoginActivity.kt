@@ -196,8 +196,8 @@ class LoginActivity : AppCompatActivity() {
                                     }
                                 }
 
-                                val topic = college.lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "_")
-                                FirebaseMessaging.getInstance().subscribeToTopic("${topic}_${userType.lowercase()}")
+                                subscribeToUserTopics(studentNumber, userType, college)
+
                                 when (userType.lowercase(Locale.getDefault())) {
                                     "student" -> startActivity(Intent(this@LoginActivity, StudentDashboardActivity::class.java).putExtra("ID", studentNumber))
                                     "faculty" -> startActivity(Intent(this@LoginActivity, FacultyDashboardActivity::class.java).putExtra("ID", studentNumber))
@@ -210,7 +210,7 @@ class LoginActivity : AppCompatActivity() {
                                 resetButtonState()
                             }
                         } catch (e: Exception) {
-                            generalErrorText.text = "Invalid response from server"
+                            generalErrorText.text = "Invalid response  from server"
                             generalErrorText.visibility = View.VISIBLE
                             resetButtonState()
                         }
@@ -222,6 +222,25 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+    private fun subscribeToUserTopics(userId: String, userType: String, college: String) {
+        val normalizedCollege = college.trim().lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "_")
+        val normalizedRole = userType.trim().lowercase(Locale.getDefault())
+
+        val topics = listOf(
+            "all_users",
+            normalizedCollege,
+            "${normalizedCollege}_${normalizedRole}",
+            "${normalizedRole}_${userId}",
+            "${normalizedCollege}_${normalizedRole}s" // plural version
+        )
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        sf.edit().putStringSet("fcm_topics", topics.toSet()).apply()
+        for (topic in topics) {
+            FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnSuccessListener { Log.d("FCM_TOPIC", "Subscribed to $topic") }
+                .addOnFailureListener { Log.e("FCM_TOPIC", "Failed to subscribe to $topic") }
+        }
     }
 
     private fun sendTokenToServer(token: String, userId: String, college: String) {
@@ -279,8 +298,8 @@ class LoginActivity : AppCompatActivity() {
                             }
                         }
 
-                        val topic = college.lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "_")
-                        FirebaseMessaging.getInstance().subscribeToTopic("${topic}_student")
+
+                        subscribeToUserTopics(studentNumber, userType, college)
 
                         val intent = Intent(this@LoginActivity, StudentDashboardActivity::class.java)
                         intent.putExtra("ID", studentNumber)

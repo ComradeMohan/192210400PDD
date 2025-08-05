@@ -1,6 +1,7 @@
 package com.simats.univault
 
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +16,14 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import java.util.*
 
-class EventAdapter(private val eventList: MutableList<Event>) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+class EventAdapter(private val eventList: MutableList<Event>,
+                   private val context: Context) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     // ViewHolder for Event items
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,7 +33,10 @@ class EventAdapter(private val eventList: MutableList<Event>) : RecyclerView.Ada
         val endDate: TextView = itemView.findViewById(R.id.textViewEventEndDate)
         val description: TextView = itemView.findViewById(R.id.textViewEventDescription)
         val notifyButton: Button = itemView.findViewById(R.id.buttonNotify)
+        val deleteFrame : FrameLayout = itemView.findViewById(R.id.deleteFrame)
+        val deleteButton: ImageView = itemView.findViewById(R.id.buttonDelete) // <-- fix
     }
+
 
     // Inflate the layout for the event
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -44,10 +52,27 @@ class EventAdapter(private val eventList: MutableList<Event>) : RecyclerView.Ada
         holder.startDate.text = event.startDate.toString()
         holder.endDate.text = event.endDate.toString()
         holder.description.text = event.description
-
+        val sf = context.getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+        val userType = sf.getString("userType", "student") ?: "student"
+        holder.deleteFrame.visibility = if (userType == "admin") View.VISIBLE else View.GONE
         holder.notifyButton.setOnClickListener {
             // Start date picker for notification
             showDatePicker(holder.itemView.context, event)
+        }
+        holder.deleteButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Delete Event")
+                .setMessage("Are you sure you want to delete this event?")
+                .setPositiveButton("Yes") { _, _ ->
+                    (context as? FragmentActivity)?.supportFragmentManager?.fragments
+                        ?.filterIsInstance<AdminCalenderFragment>()
+                        ?.firstOrNull()
+                        ?.deleteEvent(eventList[position]) {
+                            // callback
+                        }
+                }
+                .setNegativeButton("No", null)
+                .show()
         }
     }
 

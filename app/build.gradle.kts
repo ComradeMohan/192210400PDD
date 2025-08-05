@@ -64,6 +64,8 @@ dependencies {
 
     // PDF Viewer
     implementation("io.github.afreakyelf:Pdf-Viewer:2.3.4")
+    // aniamtions
+    implementation ("jp.wasabeef:recyclerview-animators:4.0.2")
 
     // Other AndroidX libraries
     implementation(libs.androidx.core.ktx)

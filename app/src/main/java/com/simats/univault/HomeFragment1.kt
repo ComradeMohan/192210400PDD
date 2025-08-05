@@ -268,6 +268,7 @@ class HomeFragment1 : Fragment() {
         val requestQueue = Volley.newRequestQueue(context)
         requestQueue.add(stringRequest)
     }
+
     private fun fetchPendingSubjects(studentId: String, departmentId: String) {
         val urlStr = "http://10.143.152.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
 

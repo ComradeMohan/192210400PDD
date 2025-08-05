@@ -2,10 +2,13 @@ package com.simats.univault
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.*
+import com.google.android.gms.common.api.ApiException
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONArray
@@ -20,18 +23,29 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var yearOfStudyAutoCompleteTextView: AutoCompleteTextView
 
     private var selectedCollegeId: String? = null
-    private val collegeMap = mutableMapOf<String, String>()  // Maps college name → ID
+    private val collegeMap = mutableMapOf<String, String>()
 
-    //update
     private lateinit var createAccountButton1: Button
     private lateinit var progressBar: ProgressBar
 
+    private val RC_GOOGLE_REGISTER = 9001
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     private val collegeDomainMap = mapOf(
-        "Saveetha School of Engineering" to "saveetha.com"
-        // Add other colleges and their domains here
+        "Saveetha School of Engineering" to "saveetha",
+        "Panmialar Engineering College" to "panimalar",
+        "Saveetha Engineering College" to "sec"
     )
-
+    override fun onResume() {
+        super.onResume()
+        googleSignInClient.signOut()
+    }
+    private fun generateStrongPassword(length: Int = 12): String {
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&*()_-+=<>?"
+        return (1..length)
+            .map { chars.random() }
+            .joinToString("")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,22 +59,29 @@ class RegisterActivity : AppCompatActivity() {
         departmentAutoCompleteTextView = findViewById(R.id.departmentAutoCompleteTextView)
         yearOfStudyAutoCompleteTextView = findViewById(R.id.yearOfStudyAutoCompleteTextView)
         collegeAutoCompleteTextView = findViewById(R.id.collegeAutoCompleteTextView)
-
         val createAccountButton = findViewById<Button>(R.id.createAccountButton)
         val alreadyHaveAccountTextView = findViewById<TextView>(R.id.alreadyHaveAccountTextView)
 
-
-        //update
-
-        createAccountButton1 = findViewById(R.id.createAccountButton)
+        createAccountButton1 = createAccountButton
         progressBar = findViewById(R.id.progressBar)
 
+        // Google Sign-In setup
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestProfile()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
+        findViewById<LinearLayout>(R.id.googleLoginButton).setOnClickListener {
+            val intent = googleSignInClient.signInIntent
+            googleSignInClient.signOut().addOnCompleteListener {
+                startActivityForResult(intent, RC_GOOGLE_REGISTER)
+            }
+        }
 
         val years = arrayOf("First Year", "Second Year", "Third Year", "Fourth Year")
         yearOfStudyAutoCompleteTextView.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, years))
 
-        // Fetch college list
         fetchCollegeList()
 
         createAccountButton.setOnClickListener {
@@ -96,6 +117,69 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_GOOGLE_REGISTER) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val email = account?.email ?: ""
+                val name = account?.displayName ?: ""
+
+                if (email.endsWith("@gmail.com", ignoreCase = true)) {
+                    Toast.makeText(this, "Please use your college email, not Gmail.", Toast.LENGTH_LONG).show()
+                    return
+                }
+
+                val password = generateStrongPassword()
+
+                val emailInput = findViewById<EditText>(R.id.emailInput)
+                val fullNameInput = findViewById<EditText>(R.id.fullNameInput)
+                val passwordInput = findViewById<EditText>(R.id.passwordInput)
+                val confirmPasswordInput = findViewById<EditText>(R.id.confirmPasswordInput)
+
+
+
+
+                passwordInput.setText(password)
+                confirmPasswordInput.setText(password)
+
+// Make both fields visible (unmasked)
+                passwordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                confirmPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+
+// Move cursor to the end
+                passwordInput.setSelection(password.length)
+                confirmPasswordInput.setSelection(password.length)
+
+                // Focus on student number field and show keyboard
+                val studentNumberInput = findViewById<EditText>(R.id.studentNumberInput)
+                studentNumberInput.requestFocus()
+
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                imm.showSoftInput(studentNumberInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+
+
+                emailInput.setText(email)
+                fullNameInput.setText(name)
+                passwordInput.setText(password)
+                confirmPasswordInput.setText(password)
+
+                // Copy to clipboard
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("Password", password)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(this, "Password copied to clipboard", Toast.LENGTH_SHORT).show()
+
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show()
+                Log.e("GOOGLE_REGISTER", "Error code: ${e.statusCode}", e)
+            }
+        }
+    }
+
+
     private fun fetchCollegeList() {
         val url = "http://10.143.152.54/univault/get_colleges.php"
 
@@ -129,11 +213,10 @@ class RegisterActivity : AppCompatActivity() {
                             val adapter = ArrayAdapter(this@RegisterActivity, android.R.layout.simple_dropdown_item_1line, colleges)
                             collegeAutoCompleteTextView.setAdapter(adapter)
 
-                            // When user selects a college, fetch its departments
                             collegeAutoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
                                 val selectedCollege = colleges[position]
                                 selectedCollegeId = collegeMap[selectedCollege]
-                                departmentAutoCompleteTextView.setText("") // Clear previous department
+                                departmentAutoCompleteTextView.setText("")
                                 selectedCollegeId?.let { fetchDepartments(it) }
                             }
                         }
@@ -209,12 +292,12 @@ class RegisterActivity : AppCompatActivity() {
             put("year_of_study", yearOfStudy)
             put("college", college)
         }
+
         createAccountButton1.text = ""
         progressBar.visibility = View.VISIBLE
         createAccountButton1.isEnabled = false
 
         val requestBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json.toString())
-
         val request = Request.Builder().url(url).post(requestBody).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -233,10 +316,9 @@ class RegisterActivity : AppCompatActivity() {
                             val jsonResponse = JSONObject(responseBody)
                             if (jsonResponse.getBoolean("success")) {
                                 resetButtonState()
-                                Toast.makeText(this@RegisterActivity, "Registration successful Verify your gmail!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@RegisterActivity, "Registration successful! Verify your college mail.", Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                                 finish()
-
                             } else {
                                 val message = jsonResponse.optString("message", "Registration failed")
                                 resetButtonState()
