@@ -71,6 +71,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+
                 <TextView
                     android:id="@+id/cgpaValue"
                     android:layout_width="wrap_content"
@@ -284,7 +285,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/input_button"
+            android:backgroundTint="@color/primary"
             android:text="Download Transcript"
             android:textColor="@android:color/white"
             android:textSize="16sp"

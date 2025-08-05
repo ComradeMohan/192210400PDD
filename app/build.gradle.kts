@@ -67,6 +67,10 @@ dependencies {
     // aniamtions
     implementation ("jp.wasabeef:recyclerview-animators:4.0.2")
 
+
+
+    //downlaod as pdf
+    implementation ("com.itextpdf:itext7-core:7.2.5")
     // Other AndroidX libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
