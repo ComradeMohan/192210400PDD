@@ -1,6 +1,6 @@
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,13 +11,66 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/facultyBottomNav"
-        app:menu="@menu/faculty_bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_selector"
-        app:itemTextColor="@color/bottom_nav_selector"
-        app:labelVisibilityMode="labeled"/>
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabIndicatorGravity="top"
+        app:tabSelectedTextColor="@color/bottom_nav_selector"
+        app:tabTextColor="@color/bottom_nav_selector">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_home"
+            android:text="Home" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_student"
+            android:text="Students" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_material"
+            android:text="Materials" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_profile"
+            android:text="Profile" />
+
+    </com.google.android.material.tabs.TabLayout>
+
 </LinearLayout>
+
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/root_layout"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical">-->
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/fragment_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1" />-->
+
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottomNavigationView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?attr/facultyBottomNav"-->
+<!--        app:menu="@menu/faculty_bottom_nav_menu"-->
+<!--        app:itemIconTint="@color/bottom_nav_selector"-->
+<!--        app:itemTextColor="@color/bottom_nav_selector"-->
+<!--        app:labelVisibilityMode="labeled"/>-->
+<!--</LinearLayout>-->

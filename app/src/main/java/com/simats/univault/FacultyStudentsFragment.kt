@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.android.volley.Request
@@ -30,7 +31,9 @@ class FacultyStudentsFragment : Fragment() {
 
     private lateinit var searchEditText: EditText
     private lateinit var studentsListLayout: LinearLayout
-    private var allStudents = mutableListOf<Pair<String, String>>() // name, number
+    private var allStudents = mutableListOf<Triple<String, String, String>>() // name, number, department
+    // name, number, department
+    // name, number
     private var collegeName: String? = null // To store the college name
 
     override fun onCreateView(
@@ -46,19 +49,25 @@ class FacultyStudentsFragment : Fragment() {
         searchEditText = view.findViewById(R.id.searchEditText)
         studentsListLayout = view.findViewById(R.id.studentsList)
 
-        val facultyId = arguments?.getString("ID")
-        if (facultyId != null) {
-            Log.d("DEBUG", "Faculty ID: $facultyId")
-            // Fetch the college name of the faculty first
-            fetchCollegeName(facultyId)
+        val sf = requireContext().getSharedPreferences("user_sf", AppCompatActivity.MODE_PRIVATE)
+        val facultyId = sf.getString("userID", null)
+        collegeName = sf.getString("college", null)
+
+        if (!facultyId.isNullOrEmpty() && !collegeName.isNullOrEmpty()) {
+            Log.d("DEBUG", "Faculty ID from SharedPreferences: $facultyId")
+            Log.d("DEBUG", "College name from SharedPreferences: $collegeName")
+
+            // Fetch students directly using stored college name
+            fetchStudentsByCollege(collegeName!!)
         } else {
-            Log.e("DEBUG", "No faculty ID passed in arguments")
+            Log.e("DEBUG", "Faculty ID or College name missing in SharedPreferences")
+            Toast.makeText(requireContext(), "Login details missing. Please re-login.", Toast.LENGTH_SHORT).show()
         }
     }
 
     // Function to fetch the college name from the server
     private fun fetchCollegeName(facultyId: String) {
-        val url = "http://10.143.152.54/univault/get_faculty_name.php?facultyId=$facultyId"
+        val url = "http://10.169.48.54/univault/get_faculty_name.php?facultyId=$facultyId"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -80,7 +89,7 @@ class FacultyStudentsFragment : Fragment() {
 
     // Function to fetch the list of students from the college
     private fun fetchStudentsByCollege(college: String) {
-        val url = "http://10.143.152.54/univault/fetch_students_by_college.php?college=$college"
+        val url = "http://10.169.48.54/univault/fetch_students_by_college.php?college=$college"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -92,7 +101,9 @@ class FacultyStudentsFragment : Fragment() {
                         val student = students.getJSONObject(i)
                         val name = student.getString("full_name")
                         val number = student.getString("student_number")
-                        allStudents.add(Pair(name, number))
+                        val department = student.getString("department")
+                        allStudents.add(Triple(name, number, department))
+
                     }
 
                     Log.d("DEBUG", "Fetched students: $allStudents")
@@ -119,56 +130,49 @@ class FacultyStudentsFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString()
                 val filtered = allStudents.filter {
-                    it.second.contains(query, ignoreCase = true)
+                    it.second.contains(query, ignoreCase = true) ||
+                            it.first.contains(query, ignoreCase = true) ||
+                            it.third.contains(query, ignoreCase = true)
                 }
+
                 displayStudents(filtered)
             }
         })
     }
 
     // Displaying the list of students in the UI
-    private fun displayStudents(students: List<Pair<String, String>>) {
+    private fun displayStudents(students: List<Triple<String, String, String>>) {
         studentsListLayout.removeAllViews()
-        for ((name, number) in students) {
+        for ((name, number, department) in students) {
             val view = layoutInflater.inflate(R.layout.student_item_layout, studentsListLayout, false)
 
             view.findViewById<TextView>(R.id.studentName).text = name
             view.findViewById<TextView>(R.id.studentId).text = number
+            view.findViewById<TextView>(R.id.studentDepartment).text = department
 
             val studentImageView = view.findViewById<ImageView>(R.id.studentImage)
-
             if (name.isNotEmpty()) {
                 val firstLetter = name[0].uppercaseChar()
                 studentImageView.setImageDrawable(getLetterDrawable(firstLetter))
-            } else {
-                studentImageView.setImageDrawable(null)
             }
 
-            // Add this block to handle click
             view.setOnClickListener {
-                fetchStudentDepartment(number) { departmentId ->
-                    if (departmentId != null) {
-                        val intent = Intent(requireContext(), AcadmicRecordActivity::class.java)
-                        intent.putExtra("studentID", number)
-                        intent.putExtra("department", departmentId)
-                        intent.putExtra("collegeName", collegeName)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(requireContext(), "Could not fetch department", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                val intent = Intent(requireContext(), AcadmicRecordActivity::class.java)
+                intent.putExtra("studentID", number)
+                intent.putExtra("department", department)
+                intent.putExtra("collegeName", collegeName)
+                startActivity(intent)
             }
-
-
 
             studentsListLayout.addView(view)
         }
     }
+
     private fun fetchStudentDepartment(studentNumber: String, callback: (String?) -> Unit) {
         Thread {
             var department: String? = null
             try {
-                val url = URL("http://10.143.152.54/univault/get_student.php?student_number=$studentNumber")
+                val url = URL("http://10.169.48.54/univault/get_student.php?student_number=$studentNumber")
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.connectTimeout = 5000

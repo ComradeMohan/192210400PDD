@@ -13,6 +13,10 @@
         android:textSize="12sp"
         android:textColor="#888888"
     </style>
+    <style name="CustomTabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <!-- Put indicator at the top -->
+        <item name="tabIndicatorGravity">top</item>
+    </style>
 
     <style name="CalendarDay">
         android:layout_width="0dp"

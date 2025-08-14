@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -19,12 +20,15 @@ import android.annotation.SuppressLint
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import android.view.LayoutInflater
-import android.graphics.Color
+import android.graphics.*
 import java.io.File
 import java.io.FileOutputStream
 import android.provider.MediaStore
 import android.content.ContentValues
-
+import androidx.core.content.FileProvider
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AcadmicRecordActivity : AppCompatActivity() {
 
@@ -33,7 +37,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
     private lateinit var pending: ConstraintLayout
     private lateinit var completed: ConstraintLayout
     private lateinit var gradeDistributionLayout: LinearLayout
-    private val completedCourses = mutableListOf<Pair<String, String>>() // Pair(courseName, grade)
+    private val completedCourses = mutableListOf<Pair<String, String>>()
     private var SID: String? = null
     private var DID: String? = null
 
@@ -42,9 +46,9 @@ class AcadmicRecordActivity : AppCompatActivity() {
     private var departmentName: String? = null
     private var allCourses: Int? = null
     private val courseNames = mutableListOf<String>()
-    private val gradePoints = mutableMapOf<String, Int>() // Map to store grade -> points
-    private val availableGrades = mutableListOf<String>() // List to store available grades
-    private var collegeName : String? = null
+    private val gradePoints = mutableMapOf<String, Int>()
+    private val availableGrades = mutableListOf<String>()
+    private var collegeName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +61,6 @@ class AcadmicRecordActivity : AppCompatActivity() {
         SID = studentID
         departmentName = department
 
-        // Initialize views
         downloadButton = findViewById(R.id.downloadTranscriptButton)
         backButton = findViewById(R.id.backButton)
         pending = findViewById(R.id.pendingCourses)
@@ -91,7 +94,6 @@ class AcadmicRecordActivity : AppCompatActivity() {
             }
         }
 
-        // Handle button clicks
         downloadButton.setOnClickListener {
             generateTranscriptPDF()
         }
@@ -100,7 +102,6 @@ class AcadmicRecordActivity : AppCompatActivity() {
             finish()
         }
 
-        // Fetch the college ID
         loadAcademicData()
     }
 
@@ -112,94 +113,285 @@ class AcadmicRecordActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadAcademicData()  // Refresh everything when coming back
+        loadAcademicData()
     }
+
     private fun generateTranscriptPDF() {
         val pdfDocument = android.graphics.pdf.PdfDocument()
         var pageNumber = 1
-        var pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
+        val pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
         var page = pdfDocument.startPage(pageInfo)
         var canvas = page.canvas
         val paint = android.graphics.Paint()
         var y = 50
 
-        paint.textSize = 18f
+        // Define professional colors
+        val primaryColor = Color.parseColor("#1A3C6E")
+        val accentColor = Color.parseColor("#4A90E2")
+        val textColor = Color.BLACK
+        val backgroundColor = Color.WHITE
+        val borderColor = Color.parseColor("#E0E0E0")
+
+        // Set up page background
+        paint.color = backgroundColor
+        canvas.drawRect(0f, 0f, 595f, 842f, paint)
+
+        // Header with logo
+        paint.color = primaryColor
+        canvas.drawRect(0f, 0f, 595f, 100f, paint)
+
+        // Draw the provided logo
+        val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_splash_logo)
+        val scaledLogo = Bitmap.createScaledBitmap(logoBitmap, 80, 80, true)
+        canvas.drawBitmap(scaledLogo, 20f, 10f, paint)
+
+        // Title
+        paint.color = Color.WHITE
+        paint.textSize = 24f
         paint.isFakeBoldText = true
-        canvas.drawText("Academic Transcript", 200f, y.toFloat(), paint)
-        y += 30
+        paint.textAlign = Paint.Align.CENTER
+        canvas.drawText("Official Academic Transcript", 297.5f, 70f, paint)
 
-        paint.textSize = 14f
+        // Date
+        paint.textSize = 12f
         paint.isFakeBoldText = false
-        canvas.drawText("Name: ${SID ?: "N/A"}", 50f, y.toFloat(), paint)
-        y += 20
-        canvas.drawText("Department: ${departmentName ?: "N/A"}", 50f, y.toFloat(), paint)
-        y += 20
-        canvas.drawText("College: ${collegeName ?: "N/A"}", 50f, y.toFloat(), paint)
-        y += 30
+        val date = SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(Date())
+        canvas.drawText("Date of Issue: $date", 297.5f, 90f, paint)
 
+        // Student Information Section
+        y = 120
+        paint.color = borderColor
+        canvas.drawRect(40f, y.toFloat() - 10, 555f, y + 100f, paint) // Increased height to include CGPA
+        paint.color = backgroundColor
+        canvas.drawRect(45f, y.toFloat() - 5, 550f, y + 95f, paint)
+        y += 20
+        paint.color = textColor
+        paint.textSize = 14f
+        paint.textAlign = Paint.Align.LEFT
+        canvas.drawText("Student ID: ${SID ?: "N/A"}", 55f, y.toFloat(), paint)
+        y += 20
+        canvas.drawText("Department: ${departmentName ?: "N/A"}", 55f, y.toFloat(), paint)
+        y += 20
+        canvas.drawText("College: ${collegeName ?: "N/A"}", 55f, y.toFloat(), paint)
+        y += 20
+        // CGPA inside the box
         val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
         val cgpaValue = sf.getFloat("cgpaValue", 0f)
+        paint.textSize = 16f
         paint.isFakeBoldText = true
-        canvas.drawText("CGPA: %.2f".format(cgpaValue), 50f, y.toFloat(), paint)
+        canvas.drawText("Cumulative GPA: ${"%.2f".format(cgpaValue)}", 55f, y.toFloat(), paint)
         y += 30
         paint.isFakeBoldText = false
 
-        // Completed Courses Section
-        canvas.drawText("Completed Courses:", 50f, y.toFloat(), paint)
+        // Horizontal Divider
+        paint.color = accentColor
+        paint.strokeWidth = 2f
+        canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
         y += 20
 
+        // Completed Courses Section
+        paint.color = primaryColor
+        paint.textSize = 18f
+        canvas.drawText("Completed Courses", 55f, y.toFloat(), paint)
+        y += 25
+        paint.color = borderColor
+        canvas.drawRect(45f, y.toFloat(), 550f, y + (20 + completedCourses.size * 25).toFloat(), paint)
+        paint.color = backgroundColor
+        canvas.drawRect(50f, y.toFloat() + 5, 545f, y + (15 + completedCourses.size * 25).toFloat(), paint)
+        y += 20
+        paint.color = textColor
+        paint.textSize = 14f
+        canvas.drawText("No.", 60f, y.toFloat(), paint)
+        canvas.drawText("Course Title", 100f, y.toFloat(), paint)
+        canvas.drawText("Grade", 500f, y.toFloat(), paint)
+        y += 15
+        paint.color = accentColor
+        canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+        y += 15
+
         completedCourses.forEachIndexed { index, (course, grade) ->
-            if (y > 800) {
+            if (y > 750) {
                 pdfDocument.finishPage(page)
                 pageNumber++
-                pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
-                page = pdfDocument.startPage(pageInfo)
+                val newPageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
+                page = pdfDocument.startPage(newPageInfo)
                 canvas = page.canvas
-                y = 50
+                y = 120 // Start below header
+                paint.color = borderColor
+                canvas.drawRect(40f, y.toFloat() - 10, 555f, y + 100f, paint)
+                paint.color = backgroundColor
+                canvas.drawRect(45f, y.toFloat() - 5, 550f, y + 95f, paint)
+                y += 20
+                paint.color = textColor
+                paint.textSize = 14f
+                paint.textAlign = Paint.Align.LEFT
+                canvas.drawText("Student ID: ${SID ?: "N/A"}", 55f, y.toFloat(), paint)
+                y += 20
+                canvas.drawText("Department: ${departmentName ?: "N/A"}", 55f, y.toFloat(), paint)
+                y += 20
+                canvas.drawText("College: ${collegeName ?: "N/A"}", 55f, y.toFloat(), paint)
+                y += 20
+                val cgpaValue = sf.getFloat("cgpaValue", 0f)
+                paint.textSize = 16f
+                paint.isFakeBoldText = true
+                canvas.drawText("Cumulative GPA: ${"%.2f".format(cgpaValue)}", 55f, y.toFloat(), paint)
+                y += 30
+                paint.isFakeBoldText = false
+                paint.color = accentColor
+                canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+                y += 20
+                paint.color = primaryColor
+                canvas.drawText("Completed Courses", 55f, y.toFloat(), paint)
+                y += 25
+                paint.color = borderColor
+                canvas.drawRect(45f, y.toFloat(), 550f, y + (20 + (index + 1) * 25).toFloat(), paint)
+                paint.color = backgroundColor
+                canvas.drawRect(50f, y.toFloat() + 5, 545f, y + (15 + (index + 1) * 25).toFloat(), paint)
+                y += 20
+                paint.color = textColor
+                paint.textSize = 14f
+                canvas.drawText("No.", 60f, y.toFloat(), paint)
+                canvas.drawText("Course Title", 100f, y.toFloat(), paint)
+                canvas.drawText("Grade", 500f, y.toFloat(), paint)
+                y += 15
+                paint.color = accentColor
+                canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+                y += 15
             }
 
-            canvas.drawText("${index + 1}. $course - Grade: $grade", 70f, y.toFloat(), paint)
-            y += 20
+            paint.color = if (index % 2 == 0) Color.parseColor("#F5F7FA") else backgroundColor
+            paint.style = Paint.Style.FILL
+            canvas.drawRect(50f, y - 10f, 545f, y + 15f, paint)
+            paint.color = textColor
+            paint.textSize = 12f
+            canvas.drawText("${index + 1}.", 60f, y.toFloat(), paint)
+            val truncatedCourse = if (course.length > 40) course.substring(0, 37) + "..." else course
+            canvas.drawText(truncatedCourse, 100f, y.toFloat(), paint)
+            canvas.drawText(grade, 500f, y.toFloat(), paint)
+            y += 25
         }
 
         // Pending Courses Section
         y += 20
-        if (y > 800) {
+        if (y > 750) {
             pdfDocument.finishPage(page)
             pageNumber++
-            pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
-            page = pdfDocument.startPage(pageInfo)
+            val newPageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
+            page = pdfDocument.startPage(newPageInfo)
             canvas = page.canvas
-            y = 50
+            y = 120 // Start below header
+            paint.color = borderColor
+            canvas.drawRect(40f, y.toFloat() - 10, 555f, y + 100f, paint)
+            paint.color = backgroundColor
+            canvas.drawRect(45f, y.toFloat() - 5, 550f, y + 95f, paint)
+            y += 20
+            paint.color = textColor
+            paint.textSize = 14f
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText("Student ID: ${SID ?: "N/A"}", 55f, y.toFloat(), paint)
+            y += 20
+            canvas.drawText("Department: ${departmentName ?: "N/A"}", 55f, y.toFloat(), paint)
+            y += 20
+            canvas.drawText("College: ${collegeName ?: "N/A"}", 55f, y.toFloat(), paint)
+            y += 20
+            val cgpaValue = sf.getFloat("cgpaValue", 0f)
+            paint.textSize = 16f
+            paint.isFakeBoldText = true
+            canvas.drawText("Cumulative GPA: ${"%.2f".format(cgpaValue)}", 55f, y.toFloat(), paint)
+            y += 30
+            paint.isFakeBoldText = false
+            paint.color = accentColor
+            canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+            y += 20
+            paint.color = primaryColor
+            canvas.drawText("Pending Courses", 55f, y.toFloat(), paint)
+            y += 25
+            paint.color = borderColor
+            val pendingCourses = courseNames.filter { course -> completedCourses.none { it.first == course } }
+            canvas.drawRect(45f, y.toFloat(), 550f, y + (20 + pendingCourses.size * 25).toFloat(), paint)
+
+            paint.color = 0xFFFFFFFF.toInt()
+            canvas.drawRect(50f, y.toFloat() + 5, 545f, y + (15 + pendingCourses.size * 25).toFloat(), paint)
+            y += 20
+            paint.color = textColor
+            paint.textSize = 14f
+            canvas.drawText("No.", 60f, y.toFloat(), paint)
+            canvas.drawText("Course Title", 100f, y.toFloat(), paint)
+            y += 15
+            paint.color = accentColor
+            canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+            y += 15
         }
 
-        canvas.drawText("Pending Courses:", 50f, y.toFloat(), paint)
-        y += 20
-
-        // Find pending courses (those in courseNames but not in completedCourses)
-        val pendingCourses = courseNames.filter { course ->
-            completedCourses.none { it.first == course }
-        }
-
+        val pendingCourses = courseNames.filter { course -> completedCourses.none { it.first == course } }
         pendingCourses.forEachIndexed { index, course ->
-            if (y > 800) {
+            if (y > 750) {
                 pdfDocument.finishPage(page)
                 pageNumber++
-                pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
-                page = pdfDocument.startPage(pageInfo)
+                val newPageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNumber).create()
+                page = pdfDocument.startPage(newPageInfo)
                 canvas = page.canvas
-                y = 50
+                y = 120 // Start below header
+                paint.color = borderColor
+                canvas.drawRect(40f, y.toFloat() - 10, 555f, y + 100f, paint)
+                paint.color = backgroundColor
+                canvas.drawRect(45f, y.toFloat() - 5, 550f, y + 95f, paint)
+                y += 20
+                paint.color = textColor
+                paint.textSize = 14f
+                paint.textAlign = Paint.Align.LEFT
+                canvas.drawText("Student ID: ${SID ?: "N/A"}", 55f, y.toFloat(), paint)
+                y += 20
+                canvas.drawText("Department: ${departmentName ?: "N/A"}", 55f, y.toFloat(), paint)
+                y += 20
+                canvas.drawText("College: ${collegeName ?: "N/A"}", 55f, y.toFloat(), paint)
+                y += 20
+                val cgpaValue = sf.getFloat("cgpaValue", 0f)
+                paint.textSize = 16f
+                paint.isFakeBoldText = true
+                canvas.drawText("Cumulative GPA: ${"%.2f".format(cgpaValue)}", 55f, y.toFloat(), paint)
+                y += 30
+                paint.isFakeBoldText = false
+                paint.color = accentColor
+                canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+                y += 20
+                paint.color = primaryColor
+                canvas.drawText("Pending Courses", 55f, y.toFloat(), paint)
+                y += 25
+                paint.color = borderColor
+                canvas.drawRect(45f, y.toFloat(), 550f, y + (20 + (index + 1) * 25).toFloat(), paint)
+                paint.color = backgroundColor
+                canvas.drawRect(50f, y.toFloat() + 5, 545f, y + (15 + (index + 1) * 25).toFloat(), paint)
+                y += 20
+                paint.color = textColor
+                paint.textSize = 14f
+                canvas.drawText("No.", 60f, y.toFloat(), paint)
+                canvas.drawText("Course Title", 100f, y.toFloat(), paint)
+                y += 15
+                paint.color = accentColor
+                canvas.drawLine(50f, y.toFloat(), 545f, y.toFloat(), paint)
+                y += 15
             }
 
-            canvas.drawText("${index + 1}. $course", 70f, y.toFloat(), paint)
-            y += 20
+            paint.color = if (index % 2 == 0) Color.parseColor("#F5F7FA") else backgroundColor
+            paint.style = Paint.Style.FILL
+            canvas.drawRect(50f, y - 10f, 545f, y + 15f, paint)
+            paint.color = textColor
+            paint.textSize = 12f
+            canvas.drawText("${index + 1}.", 60f, y.toFloat(), paint)
+            val truncatedCourse = if (course.length > 40) course.substring(0, 37) + "..." else course
+            canvas.drawText(truncatedCourse, 100f, y.toFloat(), paint)
+            y += 25
         }
 
         // Footer
-        y = if (y > 800) 820 else y + 30
-        paint.textSize = 12f
-        paint.textAlign = android.graphics.Paint.Align.CENTER
-        canvas.drawText("Generated by UniVault © 2025", 297.5f, 820f, paint)
+        y = if (y > 750) 780 else y + 20
+        paint.color = primaryColor
+        paint.textSize = 10f
+        paint.textAlign = Paint.Align.CENTER
+        canvas.drawText("UniVault © 2025 | Page $pageNumber", 297.5f, y.toFloat(), paint)
+        paint.textSize = 8f
+        canvas.drawText("Contact: registrar@univault.edu | www.univault.edu", 297.5f, y + 15f, paint)
 
         pdfDocument.finishPage(page)
 
@@ -209,6 +401,24 @@ class AcadmicRecordActivity : AppCompatActivity() {
             Toast.makeText(this, "PDF saved to ${filePath.absolutePath}", Toast.LENGTH_LONG).show()
             savePdfToDownloads(pdfDocument, "Transcript_${SID}.pdf")
             Log.d("PDFDownload", "PDF successfully saved at: ${filePath.absolutePath}")
+            val uri = FileProvider.getUriForFile(
+                this,
+                "${applicationContext.packageName}.provider",
+                filePath
+            )
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "No app found to open PDF", Toast.LENGTH_LONG).show()
+                Log.e("PDFOpen", "Error opening PDF: ${e.message}", e)
+            }
+
         } catch (e: IOException) {
             Toast.makeText(this, "Failed to save PDF: ${e.message}", Toast.LENGTH_LONG).show()
         } finally {
@@ -221,7 +431,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
         val contentValues = ContentValues().apply {
             put(MediaStore.Downloads.DISPLAY_NAME, filename)
             put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
-            put(MediaStore.Downloads.RELATIVE_PATH, "Download/")  // Saves to Downloads folder
+            put(MediaStore.Downloads.RELATIVE_PATH, "Download/")
         }
 
         val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
@@ -242,7 +452,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
     }
 
     private fun fetchCollegeId(collegeName: String) {
-        val url = "http://10.143.152.54/univault/get_college_id.php"
+        val url = "http://10.169.48.54/univault/get_college_id.php"
 
         val formBody = FormBody.Builder()
             .add("college_name", collegeName)
@@ -269,7 +479,6 @@ class AcadmicRecordActivity : AppCompatActivity() {
                         collegeId = json.getString("college_id")
                         runOnUiThread {
                             Toast.makeText(this@AcadmicRecordActivity, "College ID: $collegeId", Toast.LENGTH_SHORT).show()
-
                             departmentName?.let {
                                 fetchDepartmentId(collegeId!!, it)
                             }
@@ -291,7 +500,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
     }
 
     private fun fetchDepartmentId(collegeId: String, departmentName: String) {
-        val url = "http://10.143.152.54/univault/get_department_id.php"
+        val url = "http://10.169.48.54/univault/get_department_id.php"
 
         val formBody = FormBody.Builder()
             .add("college_id", collegeId)
@@ -342,7 +551,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
     }
 
     private fun fetchCourses(departmentId: String) {
-        val url = "http://10.143.152.54/univault/get_courses_by_department.php"
+        val url = "http://10.169.48.54/univault/get_courses_by_department.php"
 
         val formBody = FormBody.Builder()
             .add("department_id", departmentId)
@@ -395,7 +604,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
     }
 
     private fun fetchGradePoints(collegeId: String) {
-        val url = "http://10.143.152.54/univault/get_grade_points.php?college_id=$collegeId"
+        val url = "http://10.169.48.54/univault/get_grade_points.php?college_id=$collegeId"
 
         val request = Request.Builder()
             .url(url)
@@ -413,7 +622,6 @@ class AcadmicRecordActivity : AppCompatActivity() {
                 val responseBody = response.body?.string()
                 try {
                     val jsonArray = JSONArray(responseBody)
-
                     gradePoints.clear()
                     availableGrades.clear()
 
@@ -428,10 +636,7 @@ class AcadmicRecordActivity : AppCompatActivity() {
                     runOnUiThread {
                         Toast.makeText(this@AcadmicRecordActivity, "Grade points loaded", Toast.LENGTH_SHORT).show()
                         Log.d("GradePoints", gradePoints.toString())
-
-                        // Create dynamic grade distribution UI
                         createDynamicGradeDistribution()
-
                         if (SID != null && DID != null) {
                             fetchCompletedCourses(SID!!, DID!!)
                         } else {
@@ -457,37 +662,29 @@ class AcadmicRecordActivity : AppCompatActivity() {
             "#32CD32", "#9370DB"
         )
 
-        // ✅ Make a copy to avoid ConcurrentModificationException
         val gradesSnapshot = availableGrades.toList()
 
         gradesSnapshot.forEachIndexed { index, grade ->
             val color = gradeColors.getOrElse(index) { "#808080" }
-
             val gradeItemView = LayoutInflater.from(this).inflate(R.layout.item_grade_progress, gradeDistributionLayout, false)
-
             val gradeText = gradeItemView.findViewById<TextView>(R.id.gradeText)
             val gradeProgressBar = gradeItemView.findViewById<ProgressBar>(R.id.gradeProgressBar)
             val gradePercentText = gradeItemView.findViewById<TextView>(R.id.gradePercentText)
 
             gradeText.text = grade
             gradeText.setTextColor(Color.parseColor(color))
-
             gradeProgressBar.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(color))
             gradeProgressBar.progress = 0
-
             gradePercentText.text = "$grade: 0%"
             gradePercentText.setTextColor(Color.parseColor(color))
-
             gradeProgressBar.tag = "progress_$grade"
             gradePercentText.tag = "percent_$grade"
-
             gradeDistributionLayout.addView(gradeItemView)
         }
     }
 
-
     private fun fetchCompletedCourses(studentId: String, departmentId: String) {
-        val url = "http://10.143.152.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
+        val url = "http://10.169.48.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
 
         val request = Request.Builder().url(url).build()
 
@@ -506,13 +703,10 @@ class AcadmicRecordActivity : AppCompatActivity() {
                     runOnUiThread {
                         if (jsonResponse.getBoolean("success")) {
                             val coursesArray: JSONArray = jsonResponse.getJSONArray("courses")
-
                             val gradeCount = mutableMapOf<String, Int>()
                             val totalCourses = coursesArray.length()
 
-                            // Clear previous completed courses
                             completedCourses.clear()
-
                             val completedCoursesCountTextView = findViewById<TextView>(R.id.completedCoursesCount)
                             completedCoursesCountTextView.text = coursesArray.length().toString()
 
@@ -524,41 +718,31 @@ class AcadmicRecordActivity : AppCompatActivity() {
                                 degreeProgress.progress = coursesArray.length() * 100 / allCourses!!
                                 val percentage = (coursesArray.length() * 100 / allCourses!!)
                                 degreeProgressPercentage.text = "$percentage%"
-
                                 val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
                                 sf.edit().putInt("degreeProgress", percentage).apply()
-
                                 pendingCoursesTextView.text = (allCourses?.minus(totalCourses)).toString()
                             } else {
                                 Toast.makeText(this@AcadmicRecordActivity, "Total courses not loaded yet", Toast.LENGTH_SHORT).show()
                             }
 
-                            // Iterate through courses to calculate total points, credits, and grade counts
                             var totalPoints = 0.0
-
                             for (i in 0 until totalCourses) {
                                 val course = coursesArray.getJSONObject(i)
-                                val courseName = course.getString("name").trim() // Ensure course name is available
+                                val courseName = course.getString("name").trim()
                                 val grade = course.getString("grade")
                                 val gradePoint = gradePoints[grade] ?: 0
-
-                                // Store completed course and grade
                                 completedCourses.add(Pair(courseName, grade))
-
-                                // Increment grade count
                                 gradeCount[grade] = gradeCount.getOrDefault(grade, 0) + 1
                             }
 
-                            // New CGPA formula: (sum of (count × gradePoint)) / totalCourses
                             for ((grade, count) in gradeCount) {
                                 val points = gradePoints[grade] ?: 0
                                 totalPoints += count * points
                             }
 
                             val cgpa = if (totalCourses > 0) totalPoints / totalCourses else 0.0
-
                             val cgpaValueTextView = findViewById<TextView>(R.id.cgpaValue)
-                            val animator = ValueAnimator.ofFloat(10.00f, cgpa.toFloat())
+                            val animator = ValueAnimator.ofFloat(0f, cgpa.toFloat())
                             animator.duration = 1500
                             animator.interpolator = DecelerateInterpolator()
                             animator.addUpdateListener { animation ->
@@ -567,18 +751,12 @@ class AcadmicRecordActivity : AppCompatActivity() {
                             }
                             animator.start()
 
-                            // Store CGPA as Float in SharedPreferences
                             val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
                             sf.edit().putFloat("cgpaValue", cgpa.toFloat()).apply()
-
-                            // Update the dynamic Grade Distribution UI
                             updateDynamicGradeDistribution(gradeCount, totalCourses)
-
-                            // Toast for CGPA
                             Toast.makeText(this@AcadmicRecordActivity, "CGPA: %.2f".format(cgpa), Toast.LENGTH_LONG).show()
                         } else {
                             Toast.makeText(this@AcadmicRecordActivity, "No completed courses found", Toast.LENGTH_SHORT).show()
-                            // Update pending if 0
                             val pendingCoursesTextView = findViewById<TextView>(R.id.pendingCoursesCount)
                             pendingCoursesTextView.text = allCourses.toString()
                         }
@@ -590,15 +768,11 @@ class AcadmicRecordActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateDynamicGradeDistribution(gradeCount: Map<String, Int>, totalCourses: Int) {
-        // Update each grade's progress bar and percentage
         availableGrades.forEach { grade ->
             val count = gradeCount[grade] ?: 0
             val percentage = if (totalCourses > 0) (count.toDouble() / totalCourses) * 100 else 0.0
-
-            // Find the progress bar and text view by tag
             val progressBar = gradeDistributionLayout.findViewWithTag<ProgressBar>("progress_$grade")
             val percentText = gradeDistributionLayout.findViewWithTag<TextView>("percent_$grade")
-
             progressBar?.progress = percentage.toInt()
             percentText?.text = "%.1f%%".format(percentage)
         }

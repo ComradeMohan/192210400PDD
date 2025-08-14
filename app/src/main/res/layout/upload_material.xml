@@ -38,6 +38,7 @@
 
 
                 <TextView
+                    android:id="@+id/course_code"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -49,43 +50,125 @@
             </LinearLayout>
 
             <!-- Course Code Label -->
-            <TextView
-                android:id="@+id/course_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Course Code"
-                android:textSize="16sp"
-                android:textColor="?attr/courseCode"
-                android:layout_marginTop="8dp"/>
+<!--            <TextView-->
+<!--                android:id="@+id/course_code"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Course Code"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="?attr/courseCode"-->
+<!--                android:layout_marginTop="8dp"/>-->
 
             <!-- Upload Area (HTML Drag & Drop zone equivalent) -->
             <LinearLayout
                 android:id="@+id/uploadArea"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="180dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/rounded_corners"
-                android:backgroundTint="?attr/pendingSubject"
+                android:background="@drawable/upload_area_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:elevation="2dp"
+                android:translationZ="2dp">
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_upload_cloud"
-                    android:layout_marginBottom="8dp"/>
+                <!-- PDF Icon with circular background -->
+                <FrameLayout
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginBottom="12dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/circular_icon_background"/>
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_pdf"/>
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tap to Upload"
-                    android:textSize="16sp"
-                    android:textColor="#888888"/>
+                    android:text="Upload PDF Document"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tap to browse or drag files here"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- File format indicator -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/format_indicator_background"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_pdf"
+                        android:layout_marginEnd="6dp"
+                        android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PDF files only"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
             </LinearLayout>
+
+            <!-- Required drawable resources -->
+
+            <!-- upload_area_background.xml -->
+            <!--
+            <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                <solid android:color="?attr/colorSurfaceVariant"/>
+                <corners android:radius="16dp"/>
+                <stroke
+                    android:width="2dp"
+                    android:color="?attr/colorOutline"
+                    android:dashWidth="8dp"
+                    android:dashGap="4dp"/>
+            </shape>
+            -->
+
+            <!-- circular_icon_background.xml -->
+            <!--
+            <shape xmlns:android="http://schemas.android.com/apk/res/android"
+                android:shape="oval">
+                <solid android:color="?attr/colorPrimaryContainer"/>
+                <size android:width="72dp" android:height="72dp"/>
+            </shape>
+            -->
+
+            <!-- format_indicator_background.xml -->
+            <!--
+            <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                <solid android:color="?attr/colorPrimaryContainer"/>
+                <corners android:radius="20dp"/>
+            </shape>
+            -->
 
             <!-- Dropdown Label -->
             <TextView
@@ -114,15 +197,60 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginBottom="24dp"/>
 
+
+            <!-- Selected File Label -->
             <!-- Selected File Label -->
             <TextView
-                android:id="@+id/tvSelectedFile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No file selected"
+                android:text="Selected Files"
                 android:textSize="20sp"
                 android:textColor="?attr/app_name_color"
                 android:layout_marginTop="16dp"/>
+
+            <LinearLayout
+                android:id="@+id/selectedFilesContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"/>
+            <!-- Add this to your upload_material.xml layout, preferably afte the selectedFilesContainer -->
+            <LinearLayout
+                android:id="@+id/progressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/round_bg"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/uploadStatusText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Uploading files..."
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+                <ProgressBar
+                    android:id="@+id/uploadProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="Please wait, do not close the app"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
 
             <!-- Submit Button (HTML <button>) -->
             <Button
