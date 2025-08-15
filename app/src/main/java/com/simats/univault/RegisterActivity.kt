@@ -55,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
         val studentNumberInput = findViewById<EditText>(R.id.studentNumberInput)
         val emailInput = findViewById<EditText>(R.id.emailInput)
         val passwordInput = findViewById<EditText>(R.id.passwordInput)
-        val confirmPasswordInput = findViewById<EditText>(R.id.confirmPasswordInput)
         departmentAutoCompleteTextView = findViewById(R.id.departmentAutoCompleteTextView)
         yearOfStudyAutoCompleteTextView = findViewById(R.id.yearOfStudyAutoCompleteTextView)
         collegeAutoCompleteTextView = findViewById(R.id.collegeAutoCompleteTextView)
@@ -89,16 +88,13 @@ class RegisterActivity : AppCompatActivity() {
             val studentNumber = studentNumberInput.text.toString().trim()
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString()
-            val confirmPassword = confirmPasswordInput.text.toString()
             val department = departmentAutoCompleteTextView.text.toString().trim()
             val yearOfStudy = yearOfStudyAutoCompleteTextView.text.toString().trim()
             val college = collegeAutoCompleteTextView.text.toString().trim()
 
             if (fullName.isEmpty() || studentNumber.isEmpty() || email.isEmpty() || password.isEmpty() ||
-                confirmPassword.isEmpty() || department.isEmpty() || yearOfStudy.isEmpty() || college.isEmpty()) {
+                 department.isEmpty() || yearOfStudy.isEmpty() || college.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            } else if (password != confirmPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
             } else {
                 val requiredDomain = collegeDomainMap[college]
                 if (requiredDomain != null && !email.contains(requiredDomain, ignoreCase = true)) {
@@ -137,21 +133,21 @@ class RegisterActivity : AppCompatActivity() {
                 val emailInput = findViewById<EditText>(R.id.emailInput)
                 val fullNameInput = findViewById<EditText>(R.id.fullNameInput)
                 val passwordInput = findViewById<EditText>(R.id.passwordInput)
-                val confirmPasswordInput = findViewById<EditText>(R.id.confirmPasswordInput)
+
 
 
 
 
                 passwordInput.setText(password)
-                confirmPasswordInput.setText(password)
+
 
 // Make both fields visible (unmasked)
                 passwordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                confirmPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+
 
 // Move cursor to the end
                 passwordInput.setSelection(password.length)
-                confirmPasswordInput.setSelection(password.length)
+
 
                 // Focus on student number field and show keyboard
                 val studentNumberInput = findViewById<EditText>(R.id.studentNumberInput)
@@ -164,7 +160,6 @@ class RegisterActivity : AppCompatActivity() {
                 emailInput.setText(email)
                 fullNameInput.setText(name)
                 passwordInput.setText(password)
-                confirmPasswordInput.setText(password)
 
                 // Copy to clipboard
                 val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
@@ -181,7 +176,7 @@ class RegisterActivity : AppCompatActivity() {
 
 
     private fun fetchCollegeList() {
-        val url = "http://10.169.48.54/univault/get_colleges.php"
+        val url = "http://192.168.43.209/univault/get_colleges.php"
 
         val request = Request.Builder().url(url).get().build()
 
@@ -236,7 +231,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun fetchDepartments(collegeId: String) {
-        val url = "http://10.169.48.54/univault/fetch_departments_by_college.php?college_id=$collegeId"
+        val url = "http://192.168.43.209/univault/fetch_departments_by_college.php?college_id=$collegeId"
 
         val request = Request.Builder().url(url).get().build()
 
@@ -281,7 +276,7 @@ class RegisterActivity : AppCompatActivity() {
         yearOfStudy: String,
         college: String
     ) {
-        val url = "http://10.169.48.54/univault/register-smtp.php"
+        val url = "http://192.168.43.209/univault/register-smtp.php"
 
         val json = JSONObject().apply {
             put("full_name", fullName)

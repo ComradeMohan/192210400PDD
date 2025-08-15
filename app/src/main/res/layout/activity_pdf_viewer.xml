@@ -20,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loadingAnimation"
         android:layout_width="150dp"
@@ -46,6 +47,7 @@
 <!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <!-- PDF Viewer -->
+
     <com.rajat.pdfviewer.PdfRendererView
         android:id="@+id/pdfView"
         android:layout_width="0dp"
@@ -57,4 +59,11 @@
         app:pdfView_divider="@drawable/pdf_viewer_divider"
         app:pdfView_showDivider="false" />
 
+    <Button
+        android:id="@+id/downloadBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download for Offline"
+        android:layout_margin="8dp"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

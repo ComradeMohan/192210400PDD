@@ -131,7 +131,7 @@ class AdminProfileFragment : Fragment() {
     private fun fetchAdminDetails(adminId: String?, view: View) {
         if (adminId == null) return
 
-        val url = "http://10.169.48.54/univault/get_admin_details.php?admin_id=$adminId"
+        val url = "http://192.168.43.209/univault/get_admin_details.php?admin_id=$adminId"
         val requestQueue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(

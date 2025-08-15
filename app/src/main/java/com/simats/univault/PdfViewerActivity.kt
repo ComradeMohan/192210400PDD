@@ -15,6 +15,8 @@ class PdfViewerActivity : AppCompatActivity() {
     lateinit var binding: ActivityPdfViewerBinding
     lateinit var url: String
     var hasRendered = false
+    private var animationStartTime = 0L
+    private val minAnimationDuration = 2000L // Show animation for at least 2 seconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class PdfViewerActivity : AppCompatActivity() {
         binding.loadingAnimation.setAnimation(R.raw.loading)
         binding.loadingAnimation.playAnimation()
         binding.loadingAnimation.visibility = View.VISIBLE
+        animationStartTime = System.currentTimeMillis()
 
         url = intent.getStringExtra("pdf_url") ?: ""
 
@@ -48,9 +51,23 @@ class PdfViewerActivity : AppCompatActivity() {
             val handler = Handler(Looper.getMainLooper())
             val checkRenderRunnable = object : Runnable {
                 override fun run() {
-                    if (binding.pdfView.height > 0) {
-                        hideLoading()
-                        hasRendered = true
+                    val currentTime = System.currentTimeMillis()
+                    val animationElapsed = currentTime - animationStartTime
+
+                    // Check if PDF view has reasonable dimensions (indicating content is loaded)
+                    if (binding.pdfView.height > 100 && binding.pdfView.width > 100) {
+                        // PDF is rendered, but check if minimum animation time has passed
+                        if (animationElapsed >= minAnimationDuration) {
+                            hideLoading()
+                            hasRendered = true
+                        } else {
+                            // Wait for remaining animation time
+                            val remainingTime = minAnimationDuration - animationElapsed
+                            handler.postDelayed({
+                                hideLoading()
+                                hasRendered = true
+                            }, remainingTime)
+                        }
                     } else if (elapsed < maxTimeout) {
                         elapsed += checkInterval
                         handler.postDelayed(this, checkInterval)
@@ -60,7 +77,8 @@ class PdfViewerActivity : AppCompatActivity() {
                     }
                 }
             }
-            handler.postDelayed(checkRenderRunnable, checkInterval)
+            // Start checking after a small delay to let animation show
+            handler.postDelayed(checkRenderRunnable, 2000L) // Wait 2 seconds before first check
         } else {
             hideLoading()
             Toast.makeText(this, "No PDF URL provided.", Toast.LENGTH_LONG).show()

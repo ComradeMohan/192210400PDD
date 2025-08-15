@@ -11,7 +11,7 @@ if (is_dir($dir)) {
         $filePath = $dir . $file;
         $response[] = [
             "name" => $file,
-            "url" => "http://10.169.48.54/UniValut/uploads/$college/$course/$file"
+            "url" => "http://192.168.43.209/UniValut/uploads/$college/$course/$file"
 ,
             "date" => date("m/d/Y", filemtime($filePath))
         ];

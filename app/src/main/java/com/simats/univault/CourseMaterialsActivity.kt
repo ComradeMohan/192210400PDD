@@ -43,7 +43,7 @@ class CourseMaterialsActivity : AppCompatActivity() {
     private fun fetchPDFs(college: String, course: String) {
         val encodedCollege = URLEncoder.encode(college.trim(), "UTF-8")
         val encodedCourse = URLEncoder.encode(course.trim(), "UTF-8")
-        val url = "http://10.169.48.54/univault/list_pdfs.php?college=$encodedCollege&course=$encodedCourse"
+        val url = "http://192.168.43.209/univault/list_pdfs.php?college=$encodedCollege&course=$encodedCourse"
 
         val request = JsonObjectRequest(url, null,
             { response ->

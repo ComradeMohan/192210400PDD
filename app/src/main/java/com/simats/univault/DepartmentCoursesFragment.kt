@@ -74,7 +74,7 @@ class DepartmentCoursesFragment : Fragment() {
     }
 
     private fun fetchCourses(departmentId: String) {
-        val url = "http://10.169.48.54/univault/get_courses.php?department_id=$departmentId"
+        val url = "http://192.168.43.209/univault/get_courses.php?department_id=$departmentId"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = StringRequest(Request.Method.GET, url,
@@ -145,7 +145,7 @@ class DepartmentCoursesFragment : Fragment() {
     }
 
     private fun addCourse(departmentId: String, name: String) {
-        val url = "http://10.169.48.54/univault/add_course.php"
+        val url = "http://192.168.43.209/univault/add_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -177,7 +177,7 @@ class DepartmentCoursesFragment : Fragment() {
 
     // ✅ Deletes course both backend & frontend directly
     private fun deleteCourse(course: DeptCourse) {
-        val url = "http://10.169.48.54/univault/delete_course.php"
+        val url = "http://192.168.43.209/univault/delete_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,

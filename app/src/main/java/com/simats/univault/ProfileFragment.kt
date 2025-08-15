@@ -151,7 +151,7 @@ class ProfileFragment : Fragment() {
                         .build()
 
                     val request = Request.Builder()
-                        .url("http://10.169.48.54/univault/submit_feedback.php") // Replace with your actual URL
+                        .url("http://192.168.43.209/univault/submit_feedback.php") // Replace with your actual URL
                         .post(requestBody)
                         .build()
 
@@ -225,7 +225,7 @@ class ProfileFragment : Fragment() {
 
     private fun fetchStudentData(studentNumber: String) {
         val client = OkHttpClient()
-        val url = "http://10.169.48.54/univault/get_student.php?student_number=$studentNumber"
+        val url = "http://192.168.43.209/univault/get_student.php?student_number=$studentNumber"
 
         val request = Request.Builder()
             .url(url)

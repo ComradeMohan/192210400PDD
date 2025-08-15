@@ -50,7 +50,7 @@ class AdminFacultiesFragment : Fragment() {
     }
 
     private fun fetchFacultiesByCollege() {
-        val url = "http://10.169.48.54/univault/getFacultyByCollege.php?college=${collegeName}"
+        val url = "http://192.168.43.209/univault/getFacultyByCollege.php?college=${collegeName}"
 
         val request = StringRequest(
             Request.Method.GET, url,
@@ -109,7 +109,7 @@ class AdminFacultiesFragment : Fragment() {
     }
 
     private fun deleteFaculty(loginId: String) {
-        val url = "http://10.169.48.54/univault/deleteFaculty.php?login_id=$loginId"
+        val url = "http://192.168.43.209/univault/deleteFaculty.php?login_id=$loginId"
         val request = StringRequest(
             Request.Method.GET, url,
             { response ->
