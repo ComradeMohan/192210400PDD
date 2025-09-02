@@ -43,7 +43,8 @@
             android:name=".NotificationReceiver"
             android:exported="true" />
 
-
+        <activity android:name=".ReadingActivity"
+            android:exported="false"/>
         <!-- Login screen -->
         <activity
             android:name=".LoginActivity"
@@ -51,7 +52,8 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-
+        <activity android:name=".PrepActivity"
+            android:exported="false"/>
 
         <activity android:name=".StudentDashboardActivity"
             android:exported="false"/>

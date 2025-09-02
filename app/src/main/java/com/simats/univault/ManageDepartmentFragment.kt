@@ -93,7 +93,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun fetchDepartments(collegeId: String) {
-        val url = "http://192.168.43.209/univault/get_departments.php?college_id=$collegeId"
+        val url = "http://10.137.118.54/univault/get_departments.php?college_id=$collegeId"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = StringRequest(Request.Method.GET, url,
@@ -157,7 +157,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun addDepartment(name: String) {
-        val url = "http://192.168.43.209/univault/add_department.php"
+        val url = "http://10.137.118.54/univault/add_department.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -188,7 +188,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun deleteDepartment(deptId: String) {
-        val url = "http://192.168.43.209/univault/delete_department.php"
+        val url = "http://10.137.118.54/univault/delete_department.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -219,7 +219,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun deleteCourse(courseId: String) {
-        val url = "http://192.168.43.209/univault/delete_course.php"
+        val url = "http://10.137.118.54/univault/delete_course.php"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = object : StringRequest(Method.POST, url,
@@ -238,7 +238,7 @@ class ManageDepartmentFragment : Fragment() {
     }
 
     private fun fetchCourses(departmentId: String) {
-        val url = "http://192.168.43.209/univault/get_courses.php?department_id=$departmentId"
+        val url = "http://10.137.118.54/univault/get_courses.php?department_id=$departmentId"
         val queue = Volley.newRequestQueue(requireContext())
 
         val request = StringRequest(Request.Method.GET, url,

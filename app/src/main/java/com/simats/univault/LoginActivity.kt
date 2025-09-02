@@ -131,7 +131,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendForgotPasswordRequest(userId: String) {
-        val url = "http://192.168.43.209/univault/forgot_password.php"
+        val url = "http://10.137.118.54/univault/forgot_password.php"
         val json = JSONObject().put("student_number", userId)
         val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val request = Request.Builder().url(url).post(body).build()
@@ -155,7 +155,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(studentNumber: String, password: String) {
-        val url = "http://192.168.43.209/univault/login.php"
+        val url = "http://10.137.118.54/univault/login.php"
         val json = JSONObject().put("student_number", studentNumber).put("password", password)
 
         submitLoginButton.text = ""
@@ -244,7 +244,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendTokenToServer(token: String, userId: String, college: String) {
-        val url = "http://192.168.43.209/univault/save_fcm_token.php"
+        val url = "http://10.137.118.54/univault/save_fcm_token.php"
         val json = JSONObject().put("user_id", userId).put("fcm_token", token).put("college", college)
         val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val request = Request.Builder().url(url).post(body).build()
@@ -261,7 +261,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendGoogleEmailToBackend(email: String) {
-        val url = "http://192.168.43.209/univault/google_login.php"
+        val url = "http://10.137.118.54/univault/google_login.php"
         val json = JSONObject().apply {
             put("email", email)
         }

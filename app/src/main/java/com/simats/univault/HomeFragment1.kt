@@ -44,6 +44,11 @@ class HomeFragment1 : Fragment() {
     private lateinit var subjectAdapter: SubjectAdapter
     private var allSubjects: List<Subject> = emptyList()
 
+    private lateinit var continueStudyingSection: View
+    private lateinit var continueStudyingCard: View
+    private lateinit var tvContinueCourseName: TextView
+    private lateinit var tvContinueProgress: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +79,36 @@ class HomeFragment1 : Fragment() {
 
         // ✅ Display predicted final CGPA
         predictionText.text = "Predicted CGPA: %.2f".format(predictedCgpa)
+        
+        // Debug: Check saved course data
+        debugCheckSavedCourseData()
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        // Refresh continue learning section when returning to dashboard
+        loadLastStudiedCourse()
+    }
+    
+    private fun debugCheckSavedCourseData() {
+        val sharedPrefs = requireContext().getSharedPreferences("LastStudied", Context.MODE_PRIVATE)
+        val courseCode = sharedPrefs.getString("last_course_code", "")
+        val courseName = sharedPrefs.getString("last_course_name", "")
+        val mode = sharedPrefs.getString("last_mode", "PASS")
+        val studyTime = sharedPrefs.getLong("last_study_time", 0)
+        
+        Log.d("Debug", "=== SAVED COURSE DATA ===")
+        Log.d("Debug", "Course Code: $courseCode")
+        Log.d("Debug", "Course Name: $courseName")
+        Log.d("Debug", "Mode: $mode")
+        Log.d("Debug", "Study Time: $studyTime")
+        Log.d("Debug", "========================")
+        
+        if (!courseCode.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Found saved course: $courseName", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), "No saved course found", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -97,6 +132,31 @@ class HomeFragment1 : Fragment() {
         tvStudentName = view.findViewById(R.id.tvStudentName)
         tvNoticeTitle = view.findViewById(R.id.tvNoticeTitle)
         tvNoticeDescription = view.findViewById(R.id.tvNoticeDescription)
+
+        // Initialize Continue Studying Views
+        continueStudyingSection = view.findViewById(R.id.continueStudyingSection)
+        continueStudyingCard = view.findViewById(R.id.continueStudyingCard)
+        tvContinueCourseName = view.findViewById(R.id.tvContinueCourseName)
+        tvContinueProgress = view.findViewById(R.id.tvContinueProgress)
+
+        // Set up Continue Studying click listener
+        continueStudyingCard.setOnClickListener {
+            val sharedPrefs = requireContext().getSharedPreferences("LastStudied", Context.MODE_PRIVATE)
+            val courseCode = sharedPrefs.getString("last_course_code", "")
+            val courseName = sharedPrefs.getString("last_course_name", "")
+            val mode = sharedPrefs.getString("last_mode", "PASS")
+            
+            if (!courseCode.isNullOrEmpty()) {
+                val intent = Intent(requireContext(), ReadingActivity::class.java)
+                intent.putExtra("courseCode", courseCode)
+                intent.putExtra("courseName", courseName)
+                intent.putExtra("collegeName", collegeName)
+                intent.putExtra("mode", mode)
+                startActivity(intent)
+            } else {
+                Toast.makeText(requireContext(), "No recent study session found", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         val notificationIcon: View = view.findViewById(R.id.notificationIcon)
         notificationIcon.setOnClickListener {
@@ -149,7 +209,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchStudentName(studentID: String) {
-        val url = "http://192.168.43.209/univault/fetch_student_name.php?studentID=$studentID"
+        val url = "http://10.137.118.54/univault/fetch_student_name.php?studentID=$studentID"
         val queue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -200,7 +260,7 @@ class HomeFragment1 : Fragment() {
     }
 
     fun fetchCollegeIdByName(collegeName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.43.209/univault/get_college_id.php" // Replace with your actual URL
+        val url = "http://10.137.118.54/univault/get_college_id.php" // Replace with your actual URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -235,7 +295,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     fun fetchDepartmentId(collegeId: Int, departmentName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.43.209/univault/get_department_id.php" // Replace with your PHP file URL
+        val url = "http://10.137.118.54/univault/get_department_id.php" // Replace with your PHP file URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -291,7 +351,7 @@ class HomeFragment1 : Fragment() {
     }
 
     private fun fetchPendingSubjects(studentId: String, departmentId: String) {
-        val urlStr = "http://192.168.43.209/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
+        val urlStr = "http://10.137.118.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
 
         Thread {
             try {
@@ -348,7 +408,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://192.168.43.209/univault/get_latest_notice.php?college=$college"
+        val url = "http://10.137.118.54/univault/get_latest_notice.php?college=$college"
         val ctx = context ?: return  // Safely get context or return if fragment is not attached
         val queue = Volley.newRequestQueue(ctx)
 
@@ -384,6 +444,47 @@ class HomeFragment1 : Fragment() {
             in 12..16 -> "Good Afternoon,"
             in 17..20 -> "Good Evening,"
             else -> "Good Night,"
+        }
+    }
+
+    private fun loadLastStudiedCourse() {
+        val sharedPrefs = requireContext().getSharedPreferences("LastStudied", Context.MODE_PRIVATE)
+        val courseCode = sharedPrefs.getString("last_course_code", "")
+        val courseName = sharedPrefs.getString("last_course_name", "")
+        val mode = sharedPrefs.getString("last_mode", "PASS")
+        
+        Log.d("ContinueLearning", "Checking saved course - Code: $courseCode, Name: $courseName, Mode: $mode")
+        
+        if (!courseCode.isNullOrEmpty() && !courseName.isNullOrEmpty()) {
+            // Get progress for this course
+            val topicProgressPrefs = requireContext().getSharedPreferences("TopicProgress", Context.MODE_PRIVATE)
+            val modeSuffix = when (mode) {
+                "PASS" -> "PASS"
+                "MASTER" -> "MASTER"
+                else -> "ALL"
+            }
+            
+            // Count completed topics
+            val allKeys = topicProgressPrefs.all.keys.filter { 
+                it.startsWith("topic_${courseCode}_${modeSuffix}_") 
+            }
+            
+            val totalTopics = allKeys.size
+            val completedTopics = allKeys.count { topicProgressPrefs.getBoolean(it, false) }
+            
+            Log.d("ContinueLearning", "Found $totalTopics total topics, $completedTopics completed")
+            
+            // Update UI
+            tvContinueCourseName.text = "$courseName - $mode Mode"
+            tvContinueProgress.text = "Progress: $completedTopics/$totalTopics topics"
+            
+            // Show the section
+            continueStudyingSection.visibility = View.VISIBLE
+            Log.d("ContinueLearning", "Showing continue studying section")
+        } else {
+            // Hide the section if no last studied course
+            continueStudyingSection.visibility = View.GONE
+            Log.d("ContinueLearning", "No saved course found, hiding section")
         }
     }
 

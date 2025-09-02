@@ -15,7 +15,6 @@ class CourseAdapter(
         fun bind(course: Course) {
             itemView.findViewById<TextView>(R.id.textCourseCode).text = course.Code
             itemView.findViewById<TextView>(R.id.textCourseTitle).text = course.Title
-            itemView.findViewById<TextView>(R.id.textCredits).text = "Credits: ${course.credits}"
 
             itemView.setOnClickListener {
                 onCourseClick(course)

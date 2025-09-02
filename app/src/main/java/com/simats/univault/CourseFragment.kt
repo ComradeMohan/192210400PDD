@@ -16,30 +16,24 @@ import android.content.Intent
     import com.simats.univault.Course
     import com.simats.univault.CourseAdapter
     import com.simats.univault.CourseMaterialsActivity
-    import com.simats.univault.R
+import com.simats.univault.PrepActivity
+import com.simats.univault.R
     import org.json.JSONException
 
     class CourseFragment : Fragment() {
-
         private var studentID: String? = null
         private var collegeName: String? = null
-
-
         private val allCourses = mutableListOf<Course>()
-
         private lateinit var adapter: CourseAdapter
         private lateinit var editTextSearch: EditText
-
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
             return inflater.inflate(R.layout.fragment_course, container, false)
         }
-
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-
             // Retrieve arguments
             studentID = arguments?.getString("studentID")
             collegeName = arguments?.getString("collegeName")
@@ -56,8 +50,9 @@ import android.content.Intent
 
             val courseList = mutableListOf<Course>()
             adapter = CourseAdapter(courseList) { course ->
-                val intent = Intent(requireContext(), CourseMaterialsActivity::class.java)
+                val intent = Intent(requireContext(), PrepActivity::class.java)
                 intent.putExtra("courseCode", course.Code)
+                intent.putExtra("courseName", course.Title)
                 intent.putExtra("collegeName", collegeName)
                 startActivity(intent)
             }
@@ -98,7 +93,7 @@ import android.content.Intent
             }
         }
         private fun fetchCollegeName(studentID: String, adapter: CourseAdapter) {
-            val url = "http://192.168.43.209/univault/fetch_student_name.php?studentID=$studentID"
+            val url = "http://10.137.118.54/univault/fetch_student_name.php?studentID=$studentID"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(
@@ -128,7 +123,8 @@ import android.content.Intent
         }
 
         private fun fetchCourses(collegeName: String, adapter: CourseAdapter) {
-            val url = "http://192.168.43.209/univault/fetch_courses.php?college=$collegeName"
+//            val url = "http://10.137.118.54/univault/fetch_courses.php?college=$collegeName"
+            val url = "http://10.137.118.54/univault/get_prep_courses.php"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(
