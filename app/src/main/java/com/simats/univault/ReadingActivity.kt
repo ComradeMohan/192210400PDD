@@ -88,8 +88,8 @@ class ReadingActivity : AppCompatActivity() {
         topicContent.settings.domStorageEnabled = true
         topicContent.settings.builtInZoomControls = true
         topicContent.settings.displayZoomControls = false
-        topicContent.settings.useWideViewPort = false
-        topicContent.settings.loadWithOverviewMode = false
+        topicContent.settings.useWideViewPort = true
+        topicContent.settings.loadWithOverviewMode = true
         topicContent.settings.textZoom = 110
         topicContent.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         topicContent.webViewClient = object : WebViewClient() {
@@ -256,7 +256,7 @@ class ReadingActivity : AppCompatActivity() {
                           <meta charset=\"UTF-8\" />
                           <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
                           <style>
-                            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 90%; margin: 0 auto; padding: 20px; }
+                            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 100%; margin: 0 auto; padding: 8px; }
                             h2 { color: #4CAF50; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-top: 30px; }
                             ul { list-style-type: disc; padding-left: 20px; }
                             li b { color: #555; }
@@ -264,9 +264,12 @@ class ReadingActivity : AppCompatActivity() {
                             hr { border: 0; height: 1px; background: #ddd; margin: 20px 0; }
                             .image-container { text-align: center; margin: 20px 0; }
                             .image-container img { max-width: 100%; height: auto; }
+                            pre { white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: #f5f5f5; padding: 15px; border-radius: 5px; border: 1px solid #ddd; width: 100%; margin: 10px 0; font-size: 14px; }
+                            /* Improved plain text styling */
+                            .plain-text { font-family: monospace; white-space: pre-wrap; word-wrap: break-word; background-color: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.5; font-size: 14px; }
                           </style>
                         </head>
-                        <body>${topic.content}</body>
+                        <body>${wrapPlainTextIfNeeded(topic.content)}</body>
                         </html>
                     """.trimIndent()
                     topicContent.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
@@ -614,6 +617,23 @@ class ReadingActivity : AppCompatActivity() {
         previousButton.isEnabled = false
         nextButton.visibility = android.view.View.GONE
         completeTopicButton.visibility = android.view.View.GONE
+    }
+    
+    /**
+     * Wraps plain text content in appropriate HTML formatting for better visibility
+     * Detects if content appears to be plain text and applies special styling
+     */
+    private fun wrapPlainTextIfNeeded(content: String): String {
+        // Check if content appears to be plain text (no HTML tags)
+        val containsHtmlTags = content.contains(Regex("<[^>]*>"))
+        
+        return if (!containsHtmlTags) {
+            // This is likely plain text, wrap it in our special styling
+            "<div class='plain-text'>$content</div>"
+        } else {
+            // This is already HTML content, return as is
+            content
+        }
     }
 
     // WebView handles images and CSS; ImageGetter no longer required
