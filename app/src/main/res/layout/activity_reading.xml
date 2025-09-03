@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -73,6 +74,16 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/studyTimeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Study time: 0 min"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="4dp"
+                android:gravity="end"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -90,7 +101,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/rounded_card_background"
-            android:padding="20dp">
+            tools:ignore="WebViewLayout">
 
             <!-- Loading Spinner -->
             <LinearLayout

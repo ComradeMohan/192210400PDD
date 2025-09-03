@@ -30,10 +30,6 @@ class HomeFragment1 : Fragment() {
 
     private lateinit var tvGreeting: TextView
     private lateinit var tvStudentName: TextView
-    private lateinit var etSearch: EditText
-    private lateinit var courseCode1: TextView
-    private lateinit var courseCode2: TextView
-
     private lateinit var tvNoticeTitle: TextView
     private lateinit var tvNoticeDescription: TextView
 
@@ -41,8 +37,10 @@ class HomeFragment1 : Fragment() {
     private var studentID: String? = null
 
 
-    private lateinit var subjectAdapter: SubjectAdapter
-    private var allSubjects: List<Subject> = emptyList()
+    private lateinit var tvTotalTimeValue: TextView
+    private lateinit var tvTotalCoursesValue: TextView
+    private lateinit var totalTimeCard: View
+    private lateinit var totalCoursesCard: View
 
     private lateinit var continueStudyingSection: View
     private lateinit var continueStudyingCard: View
@@ -82,12 +80,17 @@ class HomeFragment1 : Fragment() {
         
         // Debug: Check saved course data
         debugCheckSavedCourseData()
+        
+        // Load study statistics
+        loadStudyStatistics()
     }
     
     override fun onResume() {
         super.onResume()
         // Refresh continue learning section when returning to dashboard
         loadLastStudiedCourse()
+        // Refresh study statistics
+        loadStudyStatistics()
     }
     
     private fun debugCheckSavedCourseData() {
@@ -117,21 +120,35 @@ class HomeFragment1 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home1, container, false)
-        etSearch = view.findViewById(R.id.etSearch)
-        etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterSubjects(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
+        
         // Initialize Views
         tvGreeting = view.findViewById(R.id.tvGreeting)
         tvStudentName = view.findViewById(R.id.tvStudentName)
         tvNoticeTitle = view.findViewById(R.id.tvNoticeTitle)
         tvNoticeDescription = view.findViewById(R.id.tvNoticeDescription)
+        
+        // Initialize Statistics Views
+        tvTotalTimeValue = view.findViewById(R.id.tvTotalTimeValue)
+        tvTotalCoursesValue = view.findViewById(R.id.tvTotalCoursesValue)
+        totalTimeCard = view.findViewById(R.id.totalTimeCard)
+        totalCoursesCard = view.findViewById(R.id.totalCoursesCard)
+        
+        // Set up Statistics card click listeners (after views are initialized)
+        totalTimeCard.setOnClickListener {
+            val totalTime = getTotalReadingTimeFromCache()
+            val hours = (totalTime / (1000 * 60 * 60)).toInt()
+            val minutes = ((totalTime % (1000 * 60 * 60)) / (1000 * 60)).toInt()
+            val message = if (hours > 0) {
+                "Total reading time: ${hours}h ${minutes}m"
+            } else {
+                "Total reading time: ${minutes}m"
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
+        
+        totalCoursesCard.setOnClickListener {
+            Toast.makeText(requireContext(), "Total courses available (from server)", Toast.LENGTH_SHORT).show()
+        }
 
         // Initialize Continue Studying Views
         continueStudyingSection = view.findViewById(R.id.continueStudyingSection)
@@ -177,15 +194,212 @@ class HomeFragment1 : Fragment() {
 
         return view
     }
-    private fun filterSubjects(query: String) {
-        val filteredList = if (query.isEmpty()) {
-            allSubjects
+    /**
+     * Load and display study statistics
+     */
+    private fun loadStudyStatistics() {
+        loadTotalStudyTime()
+        loadTotalCoursesCount()
+    }
+    
+    /**
+     * Calculate and display total study time across all reading sessions from cache
+     */
+    private fun loadTotalStudyTime() {
+        // Get total reading time from cache (not grouped by courses)
+        val totalReadingTime = getTotalReadingTimeFromCache()
+        
+        // Convert to hours and minutes
+        val totalHours = (totalReadingTime / (1000 * 60 * 60)).toInt()
+        val totalMinutes = ((totalReadingTime % (1000 * 60 * 60)) / (1000 * 60)).toInt()
+        
+        // Update UI
+        val timeText = if (totalReadingTime == 0L) {
+            "0m"
+        } else if (totalHours > 0) {
+            "${totalHours}h ${totalMinutes}m"
         } else {
-            allSubjects.filter {
-                it.name.contains(query, ignoreCase = true)
+            "${totalMinutes}m"
+        }
+        
+        tvTotalTimeValue.text = timeText
+        
+        Log.d("StudyStats", "Total reading time from cache: $timeText (${totalReadingTime}ms)")
+    }
+    
+    /**
+     * Get total reading time from cache/session data across all reading activities
+     */
+    private fun getTotalReadingTimeFromCache(): Long {
+        val context = requireContext()
+        var totalTime = 0L
+        
+        // Method 1: Get from study_time_prefs (individual course times)
+        val studyTimePrefs = context.getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
+        val studyTimeEntries = studyTimePrefs.all
+        for ((key, value) in studyTimeEntries) {
+            if (key.startsWith("total_study_time_") && value is Long) {
+                totalTime += value
+                Log.d("StudyStats", "Found study time: $key = ${value}ms")
             }
         }
-        subjectAdapter.updateData(filteredList)
+        
+        // Method 2: Get from general reading session cache (if exists)
+        val sessionPrefs = context.getSharedPreferences("reading_sessions", Context.MODE_PRIVATE)
+        val globalReadingTime = sessionPrefs.getLong("total_reading_time_millis", 0L)
+        if (globalReadingTime > 0) {
+            totalTime = maxOf(totalTime, globalReadingTime) // Use the larger value
+            Log.d("StudyStats", "Found global reading time: ${globalReadingTime}ms")
+        }
+        
+        // Method 3: Check for any active/recent session data
+        val currentSessionPrefs = context.getSharedPreferences("current_session", Context.MODE_PRIVATE)
+        val activeSessionTime = currentSessionPrefs.getLong("active_session_time", 0L)
+        if (activeSessionTime > 0) {
+            totalTime += activeSessionTime
+            Log.d("StudyStats", "Found active session time: ${activeSessionTime}ms")
+        }
+        
+        // Method 4: Sum up all reading activities from cache
+        val readingActivitiesPrefs = context.getSharedPreferences("reading_activities", Context.MODE_PRIVATE)
+        val activitiesEntries = readingActivitiesPrefs.all
+        var activitiesTotal = 0L
+        for ((key, value) in activitiesEntries) {
+            if (key.contains("reading_time") && value is Long) {
+                activitiesTotal += value
+                Log.d("StudyStats", "Found reading activity: $key = ${value}ms")
+            }
+        }
+        
+        // Use the maximum of all methods to avoid double counting
+        val finalTotal = maxOf(totalTime, activitiesTotal)
+        
+        Log.d("StudyStats", "Cache summary - Study time: ${totalTime}ms, Activities: ${activitiesTotal}ms, Final: ${finalTotal}ms")
+        return finalTotal
+    }
+    
+    /**
+     * Save reading session time to cache (call this method when reading session ends)
+     */
+    private fun saveReadingSessionToCache(sessionDurationMillis: Long) {
+        val context = requireContext()
+        
+        // Save to global reading time cache
+        val sessionPrefs = context.getSharedPreferences("reading_sessions", Context.MODE_PRIVATE)
+        val currentTotal = sessionPrefs.getLong("total_reading_time_millis", 0L)
+        val newTotal = currentTotal + sessionDurationMillis
+        
+        sessionPrefs.edit()
+            .putLong("total_reading_time_millis", newTotal)
+            .putLong("last_session_time", sessionDurationMillis)
+            .putLong("last_session_timestamp", System.currentTimeMillis())
+            .apply()
+        
+        // Also save to reading activities cache with timestamp
+        val activitiesPrefs = context.getSharedPreferences("reading_activities", Context.MODE_PRIVATE)
+        val sessionKey = "reading_time_${System.currentTimeMillis()}"
+        activitiesPrefs.edit()
+            .putLong(sessionKey, sessionDurationMillis)
+            .apply()
+        
+        Log.d("StudyStats", "Saved reading session: ${sessionDurationMillis}ms, New total: ${newTotal}ms")
+        
+        // Refresh the UI after saving
+        loadTotalStudyTime()
+    }
+    
+    /**
+     * Clear reading session cache (for testing or reset purposes)
+     */
+    private fun clearReadingSessionCache() {
+        val context = requireContext()
+        
+        // Clear all reading session caches
+        context.getSharedPreferences("reading_sessions", Context.MODE_PRIVATE).edit().clear().apply()
+        context.getSharedPreferences("reading_activities", Context.MODE_PRIVATE).edit().clear().apply()
+        context.getSharedPreferences("current_session", Context.MODE_PRIVATE).edit().clear().apply()
+        
+        Log.d("StudyStats", "Cleared all reading session cache")
+        
+        // Refresh the UI after clearing
+        loadTotalStudyTime()
+    }
+    
+    /**
+     * Calculate and display total number of courses studied
+     */
+    private fun loadTotalCoursesCount() {
+        // First try to get count from backend API
+        fetchCourseCountFromAPI()
+        
+        // Fallback: Calculate from local storage
+        calculateLocalCourseCount()
+    }
+    
+    /**
+     * Fetch course count from backend API
+     */
+    private fun fetchCourseCountFromAPI() {
+        val url = "http://10.137.118.54/univault/get_course_count.php"
+        val queue = Volley.newRequestQueue(requireContext())
+        
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            { response ->
+                try {
+                    if (response.getBoolean("success")) {
+                        val totalCourses = response.getInt("total_courses")
+                        tvTotalCoursesValue.text = totalCourses.toString()
+                        Log.d("StudyStats", "Total courses from API: $totalCourses")
+                    } else {
+                        Log.w("StudyStats", "API response indicates failure, using local calculation")
+                        calculateLocalCourseCount()
+                    }
+                } catch (e: Exception) {
+                    Log.e("StudyStats", "Error parsing course count response: ${e.message}")
+                    calculateLocalCourseCount()
+                }
+            },
+            { error ->
+                Log.e("StudyStats", "Failed to fetch course count from API: ${error.message}")
+                // Fallback to local calculation
+                calculateLocalCourseCount()
+            }
+        )
+        
+        queue.add(jsonObjectRequest)
+    }
+    
+    /**
+     * Calculate course count from local storage (fallback method)
+     */
+    private fun calculateLocalCourseCount() {
+        val sharedPreferences = requireContext().getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
+        val lastStudiedPrefs = requireContext().getSharedPreferences("LastStudied", Context.MODE_PRIVATE)
+        
+        // Get unique course codes from study time preferences
+        val courseCodesFromStudyTime = mutableSetOf<String>()
+        val allEntries = sharedPreferences.all
+        for (key in allEntries.keys) {
+            if (key.startsWith("total_study_time_")) {
+                val courseCode = key.removePrefix("total_study_time_")
+                if (courseCode.isNotEmpty()) {
+                    courseCodesFromStudyTime.add(courseCode)
+                }
+            }
+        }
+        
+        // Also check if there's a last studied course not yet in study time
+        val lastCourseCode = lastStudiedPrefs.getString("last_course_code", "")
+        if (!lastCourseCode.isNullOrEmpty()) {
+            courseCodesFromStudyTime.add(lastCourseCode)
+        }
+        
+        val totalCourses = courseCodesFromStudyTime.size
+        tvTotalCoursesValue.text = totalCourses.toString()
+        
+        Log.d("StudyStats", "Total courses from local: $totalCourses")
+        Log.d("StudyStats", "Course codes: $courseCodesFromStudyTime")
     }
 
     private fun animateTyping(text: String, textView: TextView, delay: Long = 100L) {
@@ -310,8 +524,8 @@ class HomeFragment1 : Fragment() {
                         val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
                         sf.edit().putInt("collegeId", collegeId).apply()
                         sf.edit().putInt("departmentId", departmentId).apply()
-
-                        fetchPendingSubjects(studentID.toString(), departmentId.toString())
+                        
+                        // Note: Removed fetchPendingSubjects as we're now showing statistics
                         // Pass the department ID to the callback
                         callback(departmentId)
                     } else {
@@ -349,62 +563,6 @@ class HomeFragment1 : Fragment() {
         val requestQueue = Volley.newRequestQueue(context)
         requestQueue.add(stringRequest)
     }
-
-    private fun fetchPendingSubjects(studentId: String, departmentId: String) {
-        val urlStr = "http://10.137.118.54/univault/student_grades_pending.php?department_id=$departmentId&student_id=$studentId"
-
-        Thread {
-            try {
-                val conn = URL(urlStr).openConnection() as HttpURLConnection
-                conn.requestMethod = "GET"
-                conn.connect()
-
-                val response = conn.inputStream.bufferedReader().readText()
-                println("API Response: $response") // Debug log
-
-                val json = JSONObject(response)
-
-                if (json.getBoolean("success")) {
-                    val subjects = json.getJSONArray("courses")
-                    val subjectList = mutableListOf<Subject>()
-
-                    for (i in 0 until subjects.length()) {
-                        val subject = subjects.getJSONObject(i)
-                        val subjectId = subject.getString("id")
-                        val subjectName = subject.getString("name").trim()
-                        val subjectCredits = subject.getString("credits")
-                        subjectList.add(Subject(subjectId, subjectName, subjectCredits))
-                    }
-
-                    requireActivity().runOnUiThread {
-                        if (subjectList.isEmpty()) {
-                            Toast.makeText(requireActivity(), "No pending courses found.", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(requireActivity(), "Fetched ${subjectList.size} pending courses.", Toast.LENGTH_SHORT).show()
-                        }
-                        allSubjects = subjectList
-                        val recyclerView: RecyclerView = requireView().findViewById(R.id.rvPendingSubjects)
-
-                        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                        subjectAdapter = SubjectAdapter(allSubjects)
-                        recyclerView.adapter = subjectAdapter
-                    }
-                } else {
-                    val message = json.optString("message", "No data found")
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                requireActivity().runOnUiThread {
-                    Toast.makeText(requireActivity(), "Error fetching subjects", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }.start() // ✅ Don't forget to start the thread!
-    }
-
 
 
     private fun fetchLatestNotice(college: String) {
@@ -495,6 +653,41 @@ class HomeFragment1 : Fragment() {
             args.putString("studentID", studentID)
             fragment.arguments = args
             return fragment
+        }
+        
+        /**
+         * Call this method from ReadingActivity or other activities when a reading session ends
+         */
+        fun saveReadingSession(context: Context, sessionDurationMillis: Long, courseCode: String? = null) {
+            // Save to global reading time cache
+            val sessionPrefs = context.getSharedPreferences("reading_sessions", Context.MODE_PRIVATE)
+            val currentTotal = sessionPrefs.getLong("total_reading_time_millis", 0L)
+            val newTotal = currentTotal + sessionDurationMillis
+            
+            sessionPrefs.edit()
+                .putLong("total_reading_time_millis", newTotal)
+                .putLong("last_session_time", sessionDurationMillis)
+                .putLong("last_session_timestamp", System.currentTimeMillis())
+                .putString("last_course_code", courseCode ?: "unknown")
+                .apply()
+            
+            // Also save individual session
+            val activitiesPrefs = context.getSharedPreferences("reading_activities", Context.MODE_PRIVATE)
+            val sessionKey = "reading_time_${System.currentTimeMillis()}"
+            activitiesPrefs.edit()
+                .putLong(sessionKey, sessionDurationMillis)
+                .putString("${sessionKey}_course", courseCode ?: "unknown")
+                .apply()
+            
+            Log.d("StudyStats", "Static: Saved reading session: ${sessionDurationMillis}ms, New total: ${newTotal}ms, Course: $courseCode")
+        }
+        
+        /**
+         * Get current total reading time from cache (can be called from anywhere)
+         */
+        fun getTotalReadingTime(context: Context): Long {
+            val sessionPrefs = context.getSharedPreferences("reading_sessions", Context.MODE_PRIVATE)
+            return sessionPrefs.getLong("total_reading_time_millis", 0L)
         }
     }
 }

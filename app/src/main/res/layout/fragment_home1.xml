@@ -65,18 +65,6 @@
             android:orientation="vertical"
             android:paddingHorizontal="15dp">
         <!-- Announcement Card -->
-        <EditText
-            android:id="@+id/etSearch"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/search_background"
-            android:drawableStart="@drawable/ic_search"
-            android:hint="  search pending courses ..."
-            android:textColor="?attr/app_name_color"
-            android:imeOptions="actionSearch"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
 
         <LinearLayout
             android:id="@+id/notification_background"
@@ -256,24 +244,132 @@
 
             </LinearLayout>
 
-            <!-- Section Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your Pending Courses"
-            android:textColor="?attr/app_name_color"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginBottom="10dp" />
-    </LinearLayout>
+            <!-- Statistics Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Study Statistics"
+                android:textColor="?attr/app_name_color"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginBottom="16dp" />
 
-    <!-- RecyclerView (Full Height, Scrolls independently) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPendingSubjects"
+            <!-- Statistics Cards Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="20dp">
+
+                <!-- Total Time Spent Card -->
+                <LinearLayout
+                    android:id="@+id/totalTimeCard"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/card_background"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_timer"
+                        app:tint="@color/blue_focus"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalTimeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0h 0m"
+                        android:textColor="?attr/app_name_color"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Time Spent"
+                        android:textColor="@color/blue_focus"
+                        android:textSize="12sp"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Total Courses Count Card -->
+                <LinearLayout
+                    android:id="@+id/totalCoursesCard"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/card_background"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_book"
+                        app:tint="@color/blue_focus"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalCoursesValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="?attr/app_name_color"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Courses"
+                        android:textColor="@color/blue_focus"
+                        android:textSize="12sp"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    <!-- Additional Study Progress Section -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingHorizontal="10dp"
-        android:padding="8dp"
-        android:clipToPadding="false" />
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingTop="10dp">
+
+        <!-- Quick Actions or Additional Content -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Activity"
+            android:textColor="?attr/app_name_color"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Placeholder for future content -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No recent activity to show"
+            android:textColor="@color/blue_focus"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_gravity="center" />
+</LinearLayout>
 </LinearLayout>

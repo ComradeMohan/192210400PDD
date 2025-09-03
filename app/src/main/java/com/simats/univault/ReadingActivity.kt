@@ -1,5 +1,6 @@
 package com.simats.univault
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -43,6 +44,7 @@ class ReadingActivity : AppCompatActivity() {
     private lateinit var nextButton: Button
     private lateinit var completeTopicButton: Button
     private lateinit var loadingSpinnerLayout: LinearLayout
+    private lateinit var studyTimeText: TextView
     
     // Data
     private var courseCode: String = ""
@@ -52,6 +54,10 @@ class ReadingActivity : AppCompatActivity() {
     private var currentTopicIndex: Int = 0
     private var topics: List<Topic> = emptyList()
     private var currentTopic: Topic? = null
+    
+    // Time tracking variables
+    private var sessionStartTime: Long = 0
+    private var totalStudyTimeMillis: Long = 0
     
     // Data class for Topic
     data class Topic(
@@ -115,6 +121,7 @@ class ReadingActivity : AppCompatActivity() {
         nextButton = findViewById(R.id.nextButton)
         completeTopicButton = findViewById(R.id.completeTopicButton)
         loadingSpinnerLayout = findViewById(R.id.loadingSpinnerLayout)
+        studyTimeText = findViewById(R.id.studyTimeText)
         
         // Setup scroll listener for progress tracking
         setupScrollListener()
@@ -586,16 +593,106 @@ class ReadingActivity : AppCompatActivity() {
     
     override fun onResume() {
         super.onResume()
+        // Start time tracking
+        sessionStartTime = System.currentTimeMillis()
+        
         // Refresh topic read status
         currentTopic?.let { topic ->
             loadTopicReadStatus(topic.id)
         }
+        
+        // Load previously saved total study time
+        loadTotalStudyTime()
+        
+        // Update study time display
+        updateStudyTimeDisplay()
     }
     
+    override fun onPause() {
+        super.onPause()
+        // Calculate and save study time when activity is paused
+        updateStudyTime()
+        // Update the study time display
+        updateStudyTimeDisplay()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         // Save any final progress
         updateCourseProgress()
+        // Save final study time
+        updateStudyTime()
+    }
+    
+    /**
+     * Updates the total study time by calculating the time spent in the current session
+     * and saves it to SharedPreferences
+     */
+    private fun updateStudyTime() {
+        if (sessionStartTime > 0) {
+            val currentTime = System.currentTimeMillis()
+            val sessionDuration = currentTime - sessionStartTime
+            
+            // Only add positive durations to prevent errors
+            if (sessionDuration > 0) {
+                totalStudyTimeMillis += sessionDuration
+                saveStudyTime()
+                
+                // Save reading session to cache for HomeFragment statistics
+                HomeFragment1.saveReadingSession(this, sessionDuration, courseCode)
+            }
+            
+            // Reset session start time
+            sessionStartTime = 0
+        }
+    }
+    
+    /**
+     * Saves the total study time to SharedPreferences and backend
+     */
+    private fun saveStudyTime() {
+        val sharedPreferences = getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putLong("total_study_time_$courseCode", totalStudyTimeMillis)
+        editor.apply()
+        
+        // Also save to backend
+        saveStudyTimeToBackend()
+    }
+    
+    /**
+     * Loads the total study time from SharedPreferences and syncs with backend
+     */
+    private fun loadTotalStudyTime() {
+        val sharedPreferences = getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
+        totalStudyTimeMillis = sharedPreferences.getLong("total_study_time_$courseCode", 0)
+        
+        // Also load from backend to sync
+        loadStudyTimeFromBackend()
+    }
+    
+    /**
+     * Gets the total study time in hours
+     * @return Total study time in hours (with two decimal places)
+     */
+    private fun getTotalStudyTimeInHours(): Float {
+        return (totalStudyTimeMillis / (1000.0f * 60.0f * 60.0f)).toFloat()
+    }
+    
+    /**
+     * Updates the study time display in the UI
+     */
+    private fun updateStudyTimeDisplay() {
+        val hours = getTotalStudyTimeInHours()
+        val minutes = (hours * 60).toInt()
+        
+        if (minutes < 60) {
+            studyTimeText.text = "Study time: $minutes min"
+        } else {
+            val displayHours = minutes / 60
+            val displayMinutes = minutes % 60
+            studyTimeText.text = "Study time: $displayHours h $displayMinutes min"
+        }
     }
 
     private fun setCheckboxCheckedSilently(checked: Boolean) {
@@ -640,6 +737,104 @@ class ReadingActivity : AppCompatActivity() {
             // This is already HTML content, return as is
             content
         }
+    }
+
+    /**
+     * Saves the study time to the backend server
+     */
+    private fun saveStudyTimeToBackend() {
+        val url = "http://10.137.118.54/univault/save_study_time.php"
+        
+        val queue = Volley.newRequestQueue(this)
+        
+        val jsonObject = JSONObject().apply {
+            put("student_id", getStudentId())
+            put("course_code", courseCode)
+            put("study_time_millis", totalStudyTimeMillis)
+            put("mode", when (selectedMode) {
+                "PASS" -> "pass"
+                "MASTER" -> "master"
+                else -> "all"
+            })
+        }
+        
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            { response ->
+                if (response.optBoolean("success", false)) {
+                    Log.d("ReadingActivity", "Study time saved to backend: ${response.optString("message")}")
+                } else {
+                    Log.e("ReadingActivity", "Backend error saving study time: ${response.optString("error")}")
+                }
+            },
+            { error ->
+                Log.e("ReadingActivity", "Failed to save study time to backend: ${error.message}")
+                // Continue with local storage as fallback
+            }
+        )
+        
+        queue.add(jsonObjectRequest)
+    }
+    
+    /**
+     * Loads the study time from the backend server
+     */
+    private fun loadStudyTimeFromBackend() {
+        val studentId = getStudentId()
+        if (studentId <= 0) {
+            Log.w("ReadingActivity", "Invalid student ID, cannot load study time from backend")
+            return
+        }
+        
+        val apiMode = when (selectedMode) {
+            "PASS" -> "pass"
+            "MASTER" -> "master"
+            else -> "all"
+        }
+        
+        val url = "http://10.137.118.54/univault/get_study_time.php?student_id=$studentId&course_code=$courseCode&mode=$apiMode"
+        
+        val queue = Volley.newRequestQueue(this)
+        
+        val stringRequest = object : com.android.volley.toolbox.StringRequest(
+            Request.Method.GET, url,
+            { response ->
+                try {
+                    val jsonResponse = JSONObject(response)
+                    if (jsonResponse.optBoolean("success", false)) {
+                        val backendStudyTime = jsonResponse.optLong("total_study_time_millis", 0)
+                        
+                        // Use the maximum of local and backend time to avoid data loss
+                        if (backendStudyTime > totalStudyTimeMillis) {
+                            totalStudyTimeMillis = backendStudyTime
+                            
+                            // Update local storage with backend value
+                            val sharedPreferences = getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
+                            sharedPreferences.edit()
+                                .putLong("total_study_time_$courseCode", totalStudyTimeMillis)
+                                .apply()
+                            
+                            // Update display
+                            runOnUiThread {
+                                updateStudyTimeDisplay()
+                            }
+                        }
+                        
+                        Log.d("ReadingActivity", "Study time loaded from backend: ${jsonResponse.optString("formatted_time")}")
+                    } else {
+                        Log.w("ReadingActivity", "Backend response: ${jsonResponse.optString("error", "Unknown error")}")
+                    }
+                } catch (e: JSONException) {
+                    Log.e("ReadingActivity", "Error parsing study time response: ${e.message}")
+                }
+            },
+            { error ->
+                Log.e("ReadingActivity", "Failed to load study time from backend: ${error.message}")
+                // Continue with local storage as fallback
+            }
+        ) {}
+        
+        queue.add(stringRequest)
     }
 
     // WebView handles images and CSS; ImageGetter no longer required
