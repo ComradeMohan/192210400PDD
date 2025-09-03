@@ -90,7 +90,9 @@ class ReadingActivity : AppCompatActivity() {
         topicContent.settings.displayZoomControls = false
         topicContent.settings.useWideViewPort = true
         topicContent.settings.loadWithOverviewMode = true
-        topicContent.settings.textZoom = 110
+        topicContent.settings.setSupportZoom(true)
+        topicContent.settings.textZoom = 100
+        topicContent.setInitialScale(0)
         topicContent.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         topicContent.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -253,10 +255,10 @@ class ReadingActivity : AppCompatActivity() {
                     val html = """
                         <html>
                         <head>
-                          <meta charset=\"UTF-8\" />
-                          <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
+                          <meta charset="UTF-8" />
+                          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
                           <style>
-                            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 100%; margin: 0 auto; padding: 8px; }
+                            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; width: 100%; margin: 0 auto; padding: 8px; box-sizing: border-box; }
                             h2 { color: #4CAF50; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-top: 30px; }
                             ul { list-style-type: disc; padding-left: 20px; }
                             li b { color: #555; }
@@ -264,9 +266,13 @@ class ReadingActivity : AppCompatActivity() {
                             hr { border: 0; height: 1px; background: #ddd; margin: 20px 0; }
                             .image-container { text-align: center; margin: 20px 0; }
                             .image-container img { max-width: 100%; height: auto; }
-                            pre { white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: #f5f5f5; padding: 15px; border-radius: 5px; border: 1px solid #ddd; width: 100%; margin: 10px 0; font-size: 14px; }
+                            pre { white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: #f5f5f5; padding: 15px; border-radius: 5px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; margin: 10px 0; font-size: 14px; overflow-x: auto; }
                             /* Improved plain text styling */
-                            .plain-text { font-family: monospace; white-space: pre-wrap; word-wrap: break-word; background-color: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.5; font-size: 14px; }
+                            .plain-text { font-family: monospace; white-space: pre-wrap; word-wrap: break-word; background-color: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.5; font-size: 14px; width: 100%; box-sizing: border-box; overflow-x: auto; }
+                            table { border-collapse: collapse; width: 100%; overflow-x: auto; display: block; }
+                            table, th, td { border: 1px solid #ddd; padding: 8px; }
+                            img { max-width: 100%; height: auto; }
+                            code { background-color: #f5f5f5; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
                           </style>
                         </head>
                         <body>${wrapPlainTextIfNeeded(topic.content)}</body>
