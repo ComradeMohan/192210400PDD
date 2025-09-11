@@ -9,11 +9,15 @@ import com.simats.univault.R.*
 class AdminCourseUpload: AppCompatActivity() {
 
     // Sample data class for files
-    data class FileItem(val name: String, val size: String, val iconRes: Int)
+    data class FileItem(val name: String, val size: String) {
+        val iconRes: Int get() = FileUtils.getFileIconResource(name)
+    }
 
     // Sample file list
     private val files = mutableListOf(
-        FileItem("Lecture Notes.pdf", "2.4 MB", drawable.ic_file_pdf),
+        FileItem("Lecture Notes.pdf", "2.4 MB"),
+        FileItem("Assignment 1.txt", "1.2 KB"),
+        FileItem("Presentation.pptx", "5.8 MB"),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

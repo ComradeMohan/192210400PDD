@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputLayout
@@ -112,26 +113,46 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun showForgotPasswordDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Forgot Password")
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.layout_forgot_password_bottom_sheet, null)
+        dialog.setContentView(view)
 
-        val input = EditText(this)
-        input.hint = "Enter your Login ID"
-        builder.setView(input)
+        val inputLayout = view.findViewById<TextInputLayout>(R.id.forgotInputLayout)
+        val inputField = view.findViewById<EditText>(R.id.forgotInput)
+        val cancelBtn = view.findViewById<Button>(R.id.forgotCancel)
+        val submitBtn = view.findViewById<Button>(R.id.forgotSubmit)
+        val progress = view.findViewById<ProgressBar>(R.id.forgotProgress)
 
-        builder.setPositiveButton("Submit") { dialog, _ ->
-            val userId = input.text.toString().trim()
-            if (userId.isNotEmpty()) sendForgotPasswordRequest(userId)
-            else Toast.makeText(this, "Please enter your Login ID", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+        inputLayout.error = null
+
+        cancelBtn.setOnClickListener { dialog.dismiss() }
+
+        submitBtn.setOnClickListener {
+            val userId = inputField.text?.toString()?.trim().orEmpty()
+            inputLayout.error = null
+            if (userId.isEmpty()) {
+                inputLayout.error = "Login ID is required"
+                return@setOnClickListener
+            }
+            // Loading state
+            submitBtn.isEnabled = false
+            progress.visibility = View.VISIBLE
+            sendForgotPasswordRequest(userId)
+            // Re-enable after short delay to keep UI responsive even if network is slow
+            submitBtn.postDelayed({
+                if (dialog.isShowing) {
+                    submitBtn.isEnabled = true
+                    progress.visibility = View.GONE
+                    dialog.dismiss()
+                }
+            }, 600)
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-        builder.show()
+        dialog.show()
     }
 
     private fun sendForgotPasswordRequest(userId: String) {
-        val url = "http://10.137.118.54/univault/forgot_password.php"
+        val url = "http://10.235.18.54/univault/forgot_password.php"
         val json = JSONObject().put("student_number", userId)
         val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val request = Request.Builder().url(url).post(body).build()
@@ -155,7 +176,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(studentNumber: String, password: String) {
-        val url = "http://10.137.118.54/univault/login.php"
+        val url = "http://10.235.18.54/univault/login.php"
         val json = JSONObject().put("student_number", studentNumber).put("password", password)
 
         submitLoginButton.text = ""
@@ -244,7 +265,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendTokenToServer(token: String, userId: String, college: String) {
-        val url = "http://10.137.118.54/univault/save_fcm_token.php"
+        val url = "http://10.235.18.54/univault/save_fcm_token.php"
         val json = JSONObject().put("user_id", userId).put("fcm_token", token).put("college", college)
         val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val request = Request.Builder().url(url).post(body).build()
@@ -261,7 +282,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendGoogleEmailToBackend(email: String) {
-        val url = "http://10.137.118.54/univault/google_login.php"
+        val url = "http://10.235.18.54/univault/google_login.php"
         val json = JSONObject().apply {
             put("email", email)
         }

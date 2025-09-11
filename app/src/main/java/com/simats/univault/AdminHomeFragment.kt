@@ -161,7 +161,7 @@ class AdminHomeFragment : Fragment() {
 
 
     private fun fetchCollegeIdByName(collegeName: String, onResult: (String?) -> Unit) {
-        val url = "http://10.137.118.54/univault/get_college_id.php" // Replace IP if testing on device
+        val url = "http://10.235.18.54/univault/get_college_id.php" // Replace IP if testing on device
         val params = HashMap<String, String>()
         params["college_name"] = collegeName
 
@@ -196,7 +196,7 @@ class AdminHomeFragment : Fragment() {
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://10.137.118.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://10.235.18.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 if (!isAdded || _binding == null) return@JsonObjectRequest
@@ -234,7 +234,7 @@ class AdminHomeFragment : Fragment() {
     }
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://10.137.118.54/univault/get_latest_notice.php?college=$college"
+        val url = "http://10.235.18.54/univault/get_latest_notice.php?college=$college"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 if (!isAdded || _binding == null) return@JsonObjectRequest
@@ -259,7 +259,7 @@ class AdminHomeFragment : Fragment() {
 
     private fun fetchFeedbacks() {
         val college = collegeName ?: return  // Skip if college name is null
-        val url = "http://10.137.118.54/univault/get_feedbacks.php?college=$college"
+        val url = "http://10.235.18.54/univault/get_feedbacks.php?college=$college"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -343,7 +343,7 @@ class AdminHomeFragment : Fragment() {
             callback("FAC001")
             return
         }
-        val url = "http://10.137.118.54/univault/getNextFacultyId.php?college=${college.replace(" ", "%20")}"
+        val url = "http://10.235.18.54/univault/getNextFacultyId.php?college=${college.replace(" ", "%20")}"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -365,7 +365,7 @@ class AdminHomeFragment : Fragment() {
         name: String, email: String, phone: String,
         college: String, loginId: String, password: String
     ) {
-        val url = "http://10.137.118.54/univault/faculty_register.php"
+        val url = "http://10.235.18.54/univault/faculty_register.php"
         val params = JSONObject().apply {
             put("name", name)
             put("email", email)

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Title -->
+        <TextView
+            android:text="Title"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:hint="Enter announcement title"
+            android:background="@drawable/rounded_border"
+            android:padding="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Message -->
+        <TextView
+            android:text="Message"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:hint="Write your announcement..."
+            android:minLines="4"
+            android:gravity="top|start"
+            android:background="@drawable/rounded_border"
+            android:padding="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Send to -->
+        <TextView
+            android:text="Send to"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:background="#F8F8F8"
+            android:padding="12dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvSendTo"
+                android:text="All Students"
+                android:textColor="#333333"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:src="@android:drawable/arrow_down_float"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Schedule -->
+        <TextView
+            android:text="Schedule"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:background="#F8F8F8"
+            android:padding="12dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@android:drawable/ic_lock_idle_alarm"
+                android:layout_marginEnd="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvSchedule"
+                android:text="Send now"
+                android:textColor="#333333"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:src="@android:drawable/ic_menu_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Attachments -->
+        <TextView
+            android:text="Attachments"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/attachmentContainer"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/dashed_border"
+            android:padding="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_menu_attach"
+
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:text="  Add files"
+                android:textColor="#888888"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/btnSend"
+            android:text="Send"
+            android:textAllCaps="false"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#2962FF"
+            android:textColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:backgroundTint="#F2F2F2"
+            android:textColor="#444444"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>

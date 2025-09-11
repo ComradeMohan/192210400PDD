@@ -1,0 +1,8 @@
+<!-- res/drawable/ic_courses.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path
+        android:fillColor="#3B82F6"
+        android:pathData="M18 2H6a2 2 0 0 0-2 2v16a1 1 0 0 0 1.447.894L12 17.118l6.553 3.776A1 1 0 0 0 20 20V4a2 2 0 0 0-2-2zM12 15.382l-5 2.882V4h10v14.264l-5-2.882z"/>
+</vector>

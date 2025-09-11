@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.simats.univault"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="29"
+        android:targetSdkVersion="35" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="com.simats.univault.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.simats.univault.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
+    <application
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:debuggable="true"
+        android:extractNativeLibs="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:testOnly="true"
+        android:theme="@style/Theme.univault"
+        android:usesCleartextTraffic="true" >
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.simats.univault.provider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_splash_logo_update" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/blue_focus" />
+
+        <receiver
+            android:name="com.simats.univault.NotificationReceiver"
+            android:exported="true" />
+
+        <activity
+            android:name="com.simats.univault.ReadingActivity"
+            android:exported="false" />
+        <!-- Login screen -->
+        <activity
+            android:name="com.simats.univault.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.PrepActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.FacultyDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentNotificationsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.PdfViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentGradesCompleted"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AcadmicRecordActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentGrades"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentCourses"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.CourseMaterialsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.StudentCalender"
+            android:exported="false" />
+        <!-- FACULTY -->
+        <activity
+            android:name="com.simats.univault.FacultyDashboard"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.FacultyStudentsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.FacultyUploadMaterial"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.FacultyProfile"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.CourseSelectionActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.SendAnnouncementActivity"
+            android:exported="false" />
+
+        <!-- admin -->
+        <activity
+            android:name="com.simats.univault.AdminDashboard"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AdminPostNotice"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AdminCoursee"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AdminProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AdminCourseSelectionActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.simats.univault.AdminCourseUpload"
+            android:exported="false" />
+        <!-- Main (launch) screen -->
+        <activity
+            android:name="com.simats.univault.SplashActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- ADD THIS -->
+            <intent-filter>
+                <action android:name="OPEN_SPLASH_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.simats.univault.MainActivity"
+            android:exported="false" />
+        <!-- firebase -->
+        <service
+            android:name="com.simats.univault.MyFirebaseMessagingService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.rajat.pdfviewer.PdfViewerActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <service
+            android:name="net.gotev.uploadservice.UploadService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--
+            Service handling Google Sign-In user revocation. For apps that do not integrate with
+            Google Sign-In, this service will never be started.
+        -->
+        <service
+            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+            android:visibleToInstantApps="true" />
+
+        <receiver
+            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+                android:value="true" />
+        </receiver>
+        <!--
+             FirebaseMessagingService performs security checks at runtime,
+             but set to not exported to explicitly avoid allowing another app to call it.
+        -->
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:directBootAware="true"
+            android:exported="false" >
+            <intent-filter android:priority="-500" >
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.google.firebase.components.ComponentDiscoveryService"
+            android:directBootAware="true"
+            android:exported="false" >
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+        </service>
+
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="com.simats.univault.firebaseinitprovider"
+            android:directBootAware="true"
+            android:exported="false"
+            android:initOrder="100" />
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.simats.univault.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <receiver
+            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+            android:directBootAware="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.DUMP" >
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+            android:exported="false" >
+            <meta-data
+                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+                android:value="cct" />
+        </service>
+        <service
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" >
+        </service>
+
+        <receiver
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+            android:exported="false" />
+    </application>
+
+</manifest>

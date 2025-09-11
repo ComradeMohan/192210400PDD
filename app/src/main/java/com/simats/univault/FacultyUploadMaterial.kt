@@ -141,10 +141,12 @@ class FacultyUploadMaterial : AppCompatActivity() {
             val row = layoutInflater.inflate(R.layout.item_selected_file, selectedFilesContainer, false)
 
             val fileNameTv = row.findViewById<TextView>(R.id.fileNameTextView)
+            val fileIcon = row.findViewById<ImageView>(R.id.file_icon)
             val renameBtn = row.findViewById<ImageButton>(R.id.renameBtn)
             val removeBtn = row.findViewById<ImageButton>(R.id.removeBtn)
 
             fileNameTv.text = selectedFileNames[i]
+            fileIcon.setImageResource(FileUtils.getFileIconResource(selectedFileNames[i]))
 
             renameBtn.setOnClickListener {
                 val input = EditText(this)
@@ -355,7 +357,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
             return
         }
 
-        val url = "http://10.137.118.54/UniVault/upload_material.php"
+        val url = "http://10.235.18.54/UniVault/upload_material.php"
 
         // Create request with timeout for better network handling
         val request = VolleyFileUpload(
@@ -402,7 +404,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
 
     private fun fetchPDFs(college: String, course: String) {
         pdfContainer.removeAllViews()
-        val url = "http://10.137.118.54/univault/list_pdfs.php?college=$college&course=$course"
+        val url = "http://10.235.18.54/univault/list_pdfs.php?college=$college&course=$course"
 
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -477,7 +479,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
     }
 
     private fun deleteFileFromServer(fileName: String) {
-        val url = "http://10.137.118.54/UniVault/delete_material.php"
+        val url = "http://10.235.18.54/UniVault/delete_material.php"
 
         val request = object : StringRequest(
             Method.POST, url,

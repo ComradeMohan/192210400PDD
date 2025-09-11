@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.simats.univault.app-mergeDebugResources-66:/values-uk-rUA/values-uk-rUA.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\madhi\\.gradle\\caches\\8.13\\transforms\\d7aa3ac40e93c7b6d777daa2236d30b5\\transformed\\material-calendar-view-1.9.2\\res\\values-uk-rUA\\values-uk-rUA.xml",
+                    "from": {
+                        "startLines": "2,11,25,26,27,28,29,30,31,32,33,34",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,515,925,981,1037,1109,1174,1232,1288,1346,1414,1471",
+                        "endLines": "10,24,25,26,27,28,29,30,31,32,33,34",
+                        "endColumns": "12,12,55,55,71,64,57,55,57,67,56,58",
+                        "endOffsets": "510,920,976,1032,1104,1169,1227,1283,1341,1409,1466,1525"
+                    }
+                }
+            ]
+        }
+    ]
+}

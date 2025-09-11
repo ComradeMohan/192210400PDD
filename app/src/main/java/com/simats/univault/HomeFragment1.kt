@@ -340,7 +340,7 @@ class HomeFragment1 : Fragment() {
      * Fetch course count from backend API
      */
     private fun fetchCourseCountFromAPI() {
-        val url = "http://10.137.118.54/univault/get_course_count.php"
+        val url = "http://10.235.18.54/univault/get_course_count.php"
         val queue = Volley.newRequestQueue(requireContext())
         
         val jsonObjectRequest = JsonObjectRequest(
@@ -423,7 +423,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchStudentName(studentID: String) {
-        val url = "http://10.137.118.54/univault/fetch_student_name.php?studentID=$studentID"
+        val url = "http://10.235.18.54/univault/fetch_student_name.php?studentID=$studentID"
         val queue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -474,7 +474,7 @@ class HomeFragment1 : Fragment() {
     }
 
     fun fetchCollegeIdByName(collegeName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://10.137.118.54/univault/get_college_id.php" // Replace with your actual URL
+        val url = "http://10.235.18.54/univault/get_college_id.php" // Replace with your actual URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -509,7 +509,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     fun fetchDepartmentId(collegeId: Int, departmentName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://10.137.118.54/univault/get_department_id.php" // Replace with your PHP file URL
+        val url = "http://10.235.18.54/univault/get_department_id.php" // Replace with your PHP file URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -566,7 +566,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://10.137.118.54/univault/get_latest_notice.php?college=$college"
+        val url = "http://10.235.18.54/univault/get_latest_notice.php?college=$college"
         val ctx = context ?: return  // Safely get context or return if fragment is not attached
         val queue = Volley.newRequestQueue(ctx)
 
@@ -622,12 +622,16 @@ class HomeFragment1 : Fragment() {
                 else -> "ALL"
             }
             
-            // Count completed topics
-            val allKeys = topicProgressPrefs.all.keys.filter { 
-                it.startsWith("topic_${courseCode}_${modeSuffix}_") 
+            // Preferred: get total topics persisted by ReadingActivity
+            val totalsPrefs = requireContext().getSharedPreferences("TopicTotals", Context.MODE_PRIVATE)
+            val totalTopicsPersisted = totalsPrefs.getInt("total_${courseCode}_${modeSuffix}", -1)
+
+            // Fallback: infer totals from keys if persisted value not found
+            val allKeys = topicProgressPrefs.all.keys.filter {
+                it.startsWith("topic_${courseCode}_${modeSuffix}_")
             }
-            
-            val totalTopics = allKeys.size
+            val inferredTotal = allKeys.size
+            val totalTopics = if (totalTopicsPersisted >= 0) totalTopicsPersisted else inferredTotal
             val completedTopics = allKeys.count { topicProgressPrefs.getBoolean(it, false) }
             
             Log.d("ContinueLearning", "Found $totalTopics total topics, $completedTopics completed")

@@ -46,4 +46,23 @@ object FileUtils {
         }
         return result
     }
+    
+    /**
+     * Get the appropriate drawable resource ID for a file based on its extension
+     */
+    fun getFileIconResource(fileName: String): Int {
+        val extension = fileName.substringAfterLast('.', "").lowercase()
+        return when (extension) {
+            "pdf" -> R.drawable.ic_pdf
+            "txt" -> R.drawable.ic_txt
+            "doc", "docx" -> R.drawable.ic_doc
+            "ppt", "pptx" -> R.drawable.ic_file
+            "xls", "xlsx" -> R.drawable.ic_file
+            "jpg", "jpeg", "png", "gif", "bmp" -> R.drawable.ic_file
+            "mp4", "avi", "mov", "wmv" -> R.drawable.ic_file
+            "mp3", "wav", "flac" -> R.drawable.ic_file
+            "zip", "rar", "7z" -> R.drawable.ic_file
+            else -> R.drawable.ic_file // Default file icon
+        }
+    }
 }

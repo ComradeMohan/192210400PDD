@@ -72,7 +72,7 @@ class ChangePasswordFragment : Fragment() {
     }
 
     private fun changePassword(facultyId: String, oldPassword: String, newPassword: String, userType: String) {
-        val url = "http://10.137.118.54/UniVault/change_password.php"
+        val url = "http://10.235.18.54/UniVault/change_password.php"
 
         val requestQueue = Volley.newRequestQueue(requireContext())
         val stringRequest = object : StringRequest(Method.POST, url,

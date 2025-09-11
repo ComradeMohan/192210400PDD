@@ -13,6 +13,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import android.util.Log
 import android.util.TypedValue
+
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
@@ -366,7 +367,8 @@ class ReadingActivity : AppCompatActivity() {
     
     private fun loadTopicReadStatus(topicId: String) {
         // Also load from local storage as fallback
-        val sharedPrefs = getSharedPreferences("TopicProgress", MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences("" +
+                "TopicProgress", MODE_PRIVATE)
         val isRead = sharedPrefs.getBoolean("topic_${courseCode}_${getModeSuffix()}_${topicId}", false)
         
         // Only update UI if backend hasn't responded yet
@@ -470,7 +472,7 @@ class ReadingActivity : AppCompatActivity() {
             else -> "all"
         }
         
-        val url = "http://10.137.118.54/univault/get_topics.php?course_code=$courseId&mode=$apiMode"
+        val url = "http://10.235.18.54/univault/get_topics.php?course_code=$courseId&mode=$apiMode"
         Log.d("ReadingActivity", "Fetching topics from: $url")
         
         val queue = Volley.newRequestQueue(this)
@@ -494,6 +496,10 @@ class ReadingActivity : AppCompatActivity() {
                     }
                     if (fetchedTopics.isNotEmpty()) {
                         topics = fetchedTopics
+                        // Seed TopicProgress keys for all topics so HomeFragment can compute total correctly
+                        seedTopicProgressDefaults()
+                        // Persist total topic count for HomeFragment display
+                        saveTotalTopicCount(topics.size)
                         loadCurrentTopic()
                         Toast.makeText(this, "Loaded ${topics.size} topics", Toast.LENGTH_SHORT).show()
                     } else {
@@ -529,6 +535,26 @@ class ReadingActivity : AppCompatActivity() {
         queue.add(stringRequest)
  
     }
+
+    /**
+     * Ensure a boolean preference exists for each topic for the current course and mode.
+     * This lets HomeFragment1 compute total topics reliably (completed/total), even before any are marked.
+     */
+    private fun seedTopicProgressDefaults() {
+        if (topics.isEmpty()) return
+        val prefs = getSharedPreferences("TopicProgress", MODE_PRIVATE)
+        val editor = prefs.edit()
+        val modeSuffix = getModeSuffix()
+        var seededAny = false
+        topics.forEach { topic ->
+            val key = "topic_${'$'}{courseCode}_${'$'}{modeSuffix}_${'$'}{topic.id}"
+            if (!prefs.contains(key)) {
+                editor.putBoolean(key, false)
+                seededAny = true
+            }
+        }
+        if (seededAny) editor.apply()
+    }
     
     // Helper method to convert course code to course ID
     // You might need to adjust this based on your database structure
@@ -546,11 +572,22 @@ class ReadingActivity : AppCompatActivity() {
             else -> "ALL"
         }
     }
+    
+    /**
+     * Persist total number of topics for current course and mode so Home can display consistent totals.
+     */
+    private fun saveTotalTopicCount(total: Int) {
+        val totalsPrefs = getSharedPreferences("TopicTotals", MODE_PRIVATE)
+        val modeSuffix = getModeSuffix()
+        totalsPrefs.edit()
+            .putInt("total_${'$'}{courseCode}_${'$'}{modeSuffix}", total)
+            .apply()
+    }
  
     // Backend integration methods for progress tracking
     
     private fun updateTopicProgressToBackend(topicId: String, isRead: Boolean) {
-        val url = "http://10.137.118.54/univault/update_topic_progress.php"
+        val url = "http://10.235.18.54/univault/update_topic_progress.php"
         
         val queue = Volley.newRequestQueue(this)
         
@@ -743,7 +780,7 @@ class ReadingActivity : AppCompatActivity() {
      * Saves the study time to the backend server
      */
     private fun saveStudyTimeToBackend() {
-        val url = "http://10.137.118.54/univault/save_study_time.php"
+        val url = "http://10.235.18.54/univault/save_study_time.php"
         
         val queue = Volley.newRequestQueue(this)
         
@@ -792,7 +829,7 @@ class ReadingActivity : AppCompatActivity() {
             else -> "all"
         }
         
-        val url = "http://10.137.118.54/univault/get_study_time.php?student_id=$studentId&course_code=$courseCode&mode=$apiMode"
+        val url = "http://10.235.18.54/univault/get_study_time.php?student_id=$studentId&course_code=$courseCode&mode=$apiMode"
         
         val queue = Volley.newRequestQueue(this)
         

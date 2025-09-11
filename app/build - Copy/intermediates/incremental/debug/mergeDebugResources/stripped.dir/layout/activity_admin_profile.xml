@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F9FAFB"
+    android:padding="16dp">
+
+    <!-- Profile Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:clipToPadding="false"
+        android:layout_gravity="center"
+        android:backgroundTintMode="src_in"
+        android:layout_marginHorizontal="8dp"
+        android:shape="rectangle"
+        android:radius="16dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/profile_header_background"
+            android:background="@android:color/darker_gray"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="#E0E0E0"
+            android:contentDescription="Profile Picture" />
+
+        <TextView
+            android:id="@+id/tvAdminName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mohan Reddy"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#111827"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="College Administrator"
+            android:textColor="#6B7280"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mohan.reddy@college.edu"
+            android:textColor="#4B5563"
+            android:drawableLeft="@android:drawable/ic_dialog_email"
+            android:drawablePadding="6dp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+91 98765 43210"
+            android:textColor="#4B5563"
+            android:drawableLeft="@android:drawable/ic_menu_call"
+            android:drawablePadding="6dp"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- Account Details -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#F9FAFB">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account Details"
+            android:textStyle="bold"
+            android:textColor="#111827"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Name Field -->
+        <LinearLayout
+            android:id="@+id/rowName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="#6B7280"
+                android:textSize="12sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F3F4F6"
+                android:padding="10dp"
+                android:layout_marginTop="4dp">
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter name"
+                    android:background="@android:color/transparent"
+                    android:textColor="#111827"
+                    android:enabled="false"/>
+
+                <ImageButton
+                    android:id="@+id/btnEditName"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- Email Field -->
+        <LinearLayout
+            android:id="@+id/rowEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textColor="#6B7280"
+                android:textSize="12sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F3F4F6"
+                android:padding="10dp"
+                android:layout_marginTop="4dp">
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter email"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"/>
+
+                <ImageButton
+                    android:id="@+id/btnEditEmail"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- Phone Field -->
+        <LinearLayout
+            android:id="@+id/rowPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone"
+                android:textColor="#6B7280"
+                android:textSize="12sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F3F4F6"
+                android:padding="10dp"
+                android:layout_marginTop="4dp">
+
+                <EditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Phone Number"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"/>
+
+                <ImageButton
+                    android:id="@+id/btnEditPhone"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- Department Field -->
+        <LinearLayout
+            android:id="@+id/rowDepartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Department"
+                android:textColor="#6B7280"
+                android:textSize="12sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F3F4F6"
+                android:padding="10dp"
+                android:layout_marginTop="4dp">
+
+                <EditText
+                    android:id="@+id/etDepartment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Department"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"/>
+
+                <ImageButton
+                    android:id="@+id/btnEditDepartment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- Employee ID Field -->
+        <LinearLayout
+            android:id="@+id/rowEmployeeId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee ID"
+                android:textColor="#6B7280"
+                android:textSize="12sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F3F4F6"
+                android:padding="10dp"
+                android:layout_marginTop="4dp">
+
+                <EditText
+                    android:id="@+id/etEmployeeId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Employee ID"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"/>
+
+                <ImageButton
+                    android:id="@+id/btnEditEmployeeId"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:padding="16dp"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="?attr/pendingSubject"
+    android:elevation="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tvCourseCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CSA05"
+        android:textSize="12sp"
+        android:textColor="?attr/colorPrimary"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCourseName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Advanced Programming"
+        android:textSize="16sp"
+        android:textColor="?attr/app_name_color"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textStyle="normal"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/gradeContainer"
+        app:layout_constraintTop_toBottomOf="@id/tvCourseCode" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gradeContainer"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/grade_circle_background"
+        android:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintEnd_toStartOf="@id/btnDelete"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvCourseGrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:textSize="20sp"
+            android:textColor="?attr/app_name_color"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Delete"
+        android:padding="8dp"
+        android:src="@drawable/ic_delete"
+        app:tint="@color/delete_button_tint"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/dividerLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutline"
+        android:alpha="0.3"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCourseName"
+        android:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

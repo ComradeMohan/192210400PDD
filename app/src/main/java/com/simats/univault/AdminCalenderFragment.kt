@@ -82,7 +82,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://10.137.118.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://10.235.18.54/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
@@ -101,7 +101,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun fetchEvents() {
-        val url = "http://10.137.118.54/univault/getEvents.php?college_name=$collegeName"
+        val url = "http://10.235.18.54/univault/getEvents.php?college_name=$collegeName"
         Log.d("CalendarLog", "Fetching events from: $url")
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
@@ -205,7 +205,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     private fun addEventToBackend(event: Event, callback: () -> Unit) {
-        val url = "http://10.137.118.54/univault/addEvent.php"
+        val url = "http://10.235.18.54/univault/addEvent.php"
 
         val params = hashMapOf(
             "title" to event.title,
@@ -242,7 +242,7 @@ class AdminCalenderFragment : Fragment() {
     }
 
     fun deleteEvent(event: Event, callback: () -> Unit) {
-        val url = "http://10.137.118.54/univault/delete_event.php"
+        val url = "http://10.235.18.54/univault/delete_event.php"
         val params = hashMapOf(
             "title" to event.title,
             "college_name" to (collegeName ?: "")

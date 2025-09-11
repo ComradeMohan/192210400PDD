@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CoursesActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Top bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:text="Courses"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddCourse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/buttonBlue"
+                android:text="+ Add Course"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- Search Bar -->
+        <EditText
+            android:id="@+id/searchCourses"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Search courses..."
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:background="@drawable/search_background"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Course Cards -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/course_item_bg">
+
+                <TextView
+                    android:id="@+id/tvCourseCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CSA0123"
+                    android:textStyle="bold"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvSubjectName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subject name"
+                    android:textSize="15sp"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:id="@+id/tvFacultyName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sarah Johnson"
+                    android:layout_marginTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/btnEdit"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@android:drawable/ic_menu_edit" />
+
+                    <ImageView
+                        android:id="@+id/btnDelete"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_delete" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Repeat above card for other courses -->
+
+        <LinearLayout
+            android:id="@+id/layoutAddCourseForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#FAFAFA"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add New Course"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/etCourseCode"
+                android:hint="Course Code (e.g. CS101)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etSubjectName"
+                android:hint="Subject Name (e.g. Intro to Computer Science)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <Spinner
+                android:id="@+id/spinnerFaculty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etStrength"
+                android:hint="Credits"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btnSaveCourse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:backgroundTint="@color/buttonBlue"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Navigation -->
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

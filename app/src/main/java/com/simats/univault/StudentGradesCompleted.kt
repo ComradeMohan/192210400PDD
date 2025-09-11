@@ -63,7 +63,7 @@ class StudentGradesCompleted : AppCompatActivity() {
     }
 
     private fun deleteCourseFromServer(course: CompletedCourse, position: Int) {
-        val url = "http://10.137.118.54/univault/delete_stdudent_course.php"
+        val url = "http://10.235.18.54/univault/delete_stdudent_course.php"
         val client = OkHttpClient()
 
         val formBody = FormBody.Builder()
@@ -121,7 +121,7 @@ class StudentGradesCompleted : AppCompatActivity() {
     }
 
     private fun fetchCompletedCourses(studentId: String, departmentId: String) {
-        val url = "http://10.137.118.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
+        val url = "http://10.235.18.54/univault/student_grades_completed.php?student_id=$studentId&department_id=$departmentId"
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
 

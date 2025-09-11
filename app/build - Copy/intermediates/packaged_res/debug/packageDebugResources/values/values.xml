@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color" name="adminAddDeptBox"/>
+    <attr format="color" name="adminAddFacultyBox"/>
+    <attr format="color" name="adminBottomNav"/>
+    <attr format="color" name="adminHomeBox"/>
+    <attr format="color" name="adminUpload"/>
+    <attr format="color" name="app_name_color"/>
+    <attr format="color" name="bottomNavigation"/>
+    <attr format="color" name="colorStrokeDefault"/>
+    <attr format="color" name="completeCourse"/>
+    <attr format="color" name="courseCode"/>
+    <attr format="color" name="courseName"/>
+    <attr format="color" name="facultHomeBox"/>
+    <attr format="color" name="facultyBottomNav"/>
+    <attr format="color" name="inputBgBox"/>
+    <attr format="color" name="mode"/>
+    <attr format="color" name="notificationIcon"/>
+    <attr format="color" name="pendingCourse"/>
+    <attr format="color" name="pendingSubject"/>
+    <attr format="color" name="recycleviewbox"/>
+    <color name="accent_color">#FF5722</color>
+    <color name="accent_primary">#3B82F6</color>
+    <color name="accent_secondary">#10B981</color>
+    <color name="background_light">#F5F5F5</color>
+    <color name="background_primary">#F8FAFC</color>
+    <color name="black">#FF000000</color>
+    <color name="blue_focus">#1976D2</color>
+    <color name="bottom_nav_selector_color">#9CA3AF</color>
+    <color name="buttonBlue">#2563EB</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="colorPrimary">#1A232C</color>
+    <color name="course_icon_bg">#ECFDF5</color>
+    <color name="course_icon_tint">#10B981</color>
+    <color name="course_indicator">#10B981</color>
+    <color name="delete_button_bg">#FEF2F2</color>
+    <color name="delete_button_tint">#EF4444</color>
+    <color name="department_indicator">#3B82F6</color>
+    <color name="icon_tint">#9E9E9E</color>
+    <color name="item_background">#FFFFFF</color>
+    <color name="lightBackground">#EFF6FF</color>
+    <color name="lightGreen">#F0FDF4</color>
+    <color name="lightRed">#FFF7ED</color>
+    <color name="ligthText">#4B5563</color>
+    <color name="my_status_bar_color">#ffff</color>
+    <color name="primary">#0C70F2</color>
+    <color name="primary_color">#1976D2</color>
+    <color name="stroke_color">#E0E0E0</color>
+    <color name="teal_700">#018786</color>
+    <color name="text_primary">#1E293B</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_tertiary">#BDBDBD</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="your_day_color">#444444</color>
+    <color name="your_day_text_color">#FFFFFF</color>
+    <color name="your_disabled_day_color">#888888</color>
+    <color name="your_header_color">#1A1A1A</color>
+    <color name="your_highlighted_day_color">#FFC107</color>
+    <color name="your_selection_color">#2196F3</color>
+    <color name="your_today_color">#FF5722</color>
+    <item name="bottomNavigationView" type="id"/>
+    <item name="cancel_button" type="id"/>
+    <item name="file_list_layout" type="id"/>
+    <item name="frame_layout" type="id"/>
+    <item name="textViewCourseTitle" type="id"/>
+    <item name="titleStudents" type="id"/>
+    <item name="tvSelectType" type="id"/>
+    <item name="uploadArea" type="id"/>
+    <item name="upload_box" type="id"/>
+    <item name="upload_button" type="id"/>
+    <string name="app_name">UniVault</string>
+    <string name="black">000</string>
+    <string name="gcm_defaultSenderId" translatable="false">276756301302</string>
+    <string name="google_api_key" translatable="false">AIzaSyDeObyuJzH5b9LDyl28fuJzGENznhlsyrk</string>
+    <string name="google_app_id" translatable="false">1:276756301302:android:9d43c59ef7c5ce096173d7</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDeObyuJzH5b9LDyl28fuJzGENznhlsyrk</string>
+    <string name="google_storage_bucket" translatable="false">testing-5cd2f.firebasestorage.app</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logo_desc">UniVault Logo</string>
+    <string name="project_id" translatable="false">testing-5cd2f</string>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:statusBarColor">@color/my_status_bar_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <style name="Base.Theme.univault" parent="Theme.Material3.DayNight.NoActionBar">
+        
+
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+
+        <item name="notificationIcon">#1976D2</item>  
+        
+        <item name="android:statusBarColor">@color/my_status_bar_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+
+
+
+
+        <item name="app_name_color">#002B5C</item>
+        <item name="colorStrokeDefault">#E3F2FD </item>
+        <item name="inputBgBox">#F8FAFC</item>
+        <item name="pendingSubject">@color/lightBackground</item>
+        <item name="bottomNavigation">#ffff</item>
+        <item name="courseCode">#6e6e73</item>
+        <item name="courseName">#1C1C1E</item>
+        <item name="completeCourse">@color/lightGreen</item>
+        <item name="pendingCourse">@color/lightRed</item>
+
+
+
+
+        <item name="facultyBottomNav">#ffff</item>
+        <item name="facultHomeBox">#F1F7FE</item>
+
+
+        <item name="adminBottomNav">#0000</item>
+        <item name="adminHomeBox">#fff</item>
+        <item name="adminAddDeptBox">#2563EB</item>
+        <item name="adminAddFacultyBox">#2563EB</item>
+        <item name="adminUpload">#16A34A</item>
+
+<item name="mode">#fff</item>
+<item name="recycleviewbox">#fff</item>
+
+    </style>
+    <style name="CalendarDateText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/app_name_color</item>
+    </style>
+    <style name="CalendarDay">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:padding="8dp"
+    </style>
+    <style name="CalendarDayHeader">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="#888888"
+    </style>
+    <style name="CalendarDaySelected" parent="CalendarDay">
+        android:background="@color/lightBackground"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+    </style>
+    <style name="CalendarDayWithDot" parent="CalendarDay">
+        android:paddingBottom="4dp"
+        android:drawableBottom="@drawable/calendar_event_dot"
+        android:drawablePadding="2dp"
+    </style>
+    <style name="CalendarRow">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="4dp"
+    </style>
+    <style name="CalendarWeekDayText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#2196F3</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="CustomDatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorAccent">#1976D2</item> 
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+    <style name="CustomTabLayout" parent="Widget.MaterialComponents.TabLayout">
+        
+        <item name="tabIndicatorGravity">top</item>
+    </style>
+    <style name="RoundedImageView16dp">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+    <style name="Theme.univault" parent="Base.Theme.univault"/>
+</resources>

@@ -238,7 +238,7 @@ class StudentCalenderFragment : Fragment() {
 
     private fun fetchStudentName(studentID: String) {
         swipeRefresh.isRefreshing = true
-        val url = "http://10.137.118.54/univault/fetch_student_name.php?studentID=$studentID"
+        val url = "http://10.235.18.54/univault/fetch_student_name.php?studentID=$studentID"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -270,7 +270,7 @@ class StudentCalenderFragment : Fragment() {
 
     private fun fetchEvents(collegeName: String) {
         swipeRefresh.isRefreshing = true
-        val url = "http://10.137.118.54/univault/getEvents.php?college_name=${collegeName.replace(" ", "%20")}"
+        val url = "http://10.235.18.54/univault/getEvents.php?college_name=${collegeName.replace(" ", "%20")}"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,

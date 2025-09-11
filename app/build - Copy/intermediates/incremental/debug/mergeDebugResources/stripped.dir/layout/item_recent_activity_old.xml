@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:backgroundTint="#F0F9FF"
+    android:layout_marginBottom="8dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/rounded_bg_light_blue">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:backgroundTint="#2563EB"
+        android:src="@drawable/ic_graduation_hat" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginStart="12dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:text="Title"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:text="Description"
+            android:textSize="12sp"
+            android:textColor="#4B5563"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:text="2 hours ago"
+        android:textSize="12sp"
+        android:textColor="#6B7280"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

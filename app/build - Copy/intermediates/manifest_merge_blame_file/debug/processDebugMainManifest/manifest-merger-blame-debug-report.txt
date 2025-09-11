@@ -1,0 +1,614 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.simats.univault"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="29"
+9        android:targetSdkVersion="35" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:6:5-67
+11-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:6:22-64
+12    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+12-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:8:5-77
+12-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:8:22-74
+13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+13-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:9:5-79
+13-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:9:22-77
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:10:5-80
+14-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:10:22-78
+15    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+15-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:11:5-79
+15-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:11:22-76
+16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+16-->[io.github.afreakyelf:Pdf-Viewer:2.3.4] C:\Users\madhi\.gradle\caches\8.13\transforms\1f6d552cfa7c4d3dc352a363b611c82b\transformed\Pdf-Viewer-2.3.4\AndroidManifest.xml:8:5-79
+16-->[io.github.afreakyelf:Pdf-Viewer:2.3.4] C:\Users\madhi\.gradle\caches\8.13\transforms\1f6d552cfa7c4d3dc352a363b611c82b\transformed\Pdf-Viewer-2.3.4\AndroidManifest.xml:8:22-76
+17    <uses-permission android:name="android.permission.WAKE_LOCK" />
+17-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:9:5-68
+17-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:9:22-65
+18    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+18-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:10:5-77
+18-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:10:22-74
+19    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+19-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:26:5-82
+19-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:26:22-79
+20
+21    <permission
+21-->[androidx.core:core:1.16.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8026b7aa7179a12677cf2859a22af19b\transformed\core-1.16.0\AndroidManifest.xml:22:5-24:47
+22        android:name="com.simats.univault.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22-->[androidx.core:core:1.16.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8026b7aa7179a12677cf2859a22af19b\transformed\core-1.16.0\AndroidManifest.xml:23:9-81
+23        android:protectionLevel="signature" />
+23-->[androidx.core:core:1.16.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8026b7aa7179a12677cf2859a22af19b\transformed\core-1.16.0\AndroidManifest.xml:24:9-44
+24
+25    <uses-permission android:name="com.simats.univault.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25-->[androidx.core:core:1.16.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8026b7aa7179a12677cf2859a22af19b\transformed\core-1.16.0\AndroidManifest.xml:26:5-97
+25-->[androidx.core:core:1.16.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8026b7aa7179a12677cf2859a22af19b\transformed\core-1.16.0\AndroidManifest.xml:26:22-94
+26
+27    <application
+27-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:12:5-155:19
+28        android:allowBackup="true"
+28-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:13:9-35
+29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+29-->[androidx.core:core:1.16.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8026b7aa7179a12677cf2859a22af19b\transformed\core-1.16.0\AndroidManifest.xml:28:18-86
+30        android:debuggable="true"
+31        android:extractNativeLibs="false"
+32        android:hardwareAccelerated="true"
+32-->[io.github.afreakyelf:Pdf-Viewer:2.3.4] C:\Users\madhi\.gradle\caches\8.13\transforms\1f6d552cfa7c4d3dc352a363b611c82b\transformed\Pdf-Viewer-2.3.4\AndroidManifest.xml:10:18-52
+33        android:icon="@mipmap/ic_launcher"
+33-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:14:9-43
+34        android:label="@string/app_name"
+34-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:15:9-41
+35        android:networkSecurityConfig="@xml/network_security_config"
+35-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:19:9-69
+36        android:roundIcon="@mipmap/ic_launcher_round"
+36-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:16:9-54
+37        android:supportsRtl="true"
+37-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:18:9-35
+38        android:testOnly="true"
+39        android:theme="@style/Theme.univault"
+39-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:20:9-46
+40        android:usesCleartextTraffic="true" >
+40-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:17:9-44
+41        <provider
+42            android:name="androidx.core.content.FileProvider"
+42-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:23:13-62
+43            android:authorities="com.simats.univault.provider"
+43-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:24:13-60
+44            android:exported="false"
+44-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:25:13-37
+45            android:grantUriPermissions="true" >
+45-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:26:13-47
+46            <meta-data
+46-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:27:13-29:54
+47                android:name="android.support.FILE_PROVIDER_PATHS"
+47-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:28:17-67
+48                android:resource="@xml/file_paths" />
+48-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:29:17-51
+49        </provider>
+50
+51        <!--
+52     Set custom default icon. This is used when no icon is set for incoming notification messages.
+53     See README(https://goo.gl/l4GJaQ) for more.
+54        -->
+55        <meta-data
+55-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:34:9-36:66
+56            android:name="com.google.firebase.messaging.default_notification_icon"
+56-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:35:13-83
+57            android:resource="@drawable/ic_splash_logo_update" />
+57-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:36:13-63
+58        <!--
+59             Set color used with incoming notification messages. This is used when no color is set for the incoming
+60             notification message. See README(https://goo.gl/6BKBk7) for more.
+61        -->
+62        <meta-data
+62-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:39:9-41:52
+63            android:name="com.google.firebase.messaging.default_notification_color"
+63-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:40:13-84
+64            android:resource="@color/blue_focus" />
+64-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:41:13-49
+65
+66        <receiver
+66-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:42:9-44:39
+67            android:name="com.simats.univault.NotificationReceiver"
+67-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:43:13-49
+68            android:exported="true" />
+68-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:44:13-36
+69
+70        <activity
+70-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:46:9-47:39
+71            android:name="com.simats.univault.ReadingActivity"
+71-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:46:19-50
+72            android:exported="false" />
+72-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:47:13-37
+73        <!-- Login screen -->
+74        <activity
+74-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:49:9-51:40
+75            android:name="com.simats.univault.LoginActivity"
+75-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:50:13-42
+76            android:exported="false" />
+76-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:51:13-37
+77        <activity
+77-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:52:9-54:40
+78            android:name="com.simats.univault.RegisterActivity"
+78-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:53:13-45
+79            android:exported="false" />
+79-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:54:13-37
+80        <activity
+80-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:55:9-56:39
+81            android:name="com.simats.univault.PrepActivity"
+81-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:55:19-47
+82            android:exported="false" />
+82-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:56:13-37
+83        <activity
+83-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:58:9-59:39
+84            android:name="com.simats.univault.StudentDashboardActivity"
+84-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:58:19-59
+85            android:exported="false" />
+85-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:59:13-37
+86        <activity
+86-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:60:9-61:39
+87            android:name="com.simats.univault.FacultyDashboardActivity"
+87-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:60:19-59
+88            android:exported="false" />
+88-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:61:13-37
+89        <activity
+89-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:62:9-63:39
+90            android:name="com.simats.univault.AdminDashboardActivity"
+90-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:62:19-57
+91            android:exported="false" />
+91-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:63:13-37
+92        <activity
+92-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:65:9-67:40
+93            android:name="com.simats.univault.StudentActivity"
+93-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:66:13-44
+94            android:exported="false" />
+94-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:67:13-37
+95        <activity
+95-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:69:9-71:40
+96            android:name="com.simats.univault.StudentProfileActivity"
+96-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:70:13-51
+97            android:exported="false" />
+97-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:71:13-37
+98        <activity
+98-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:72:9-74:40
+99            android:name="com.simats.univault.StudentNotificationsActivity"
+99-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:73:13-57
+100            android:exported="false" />
+100-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:74:13-37
+101        <activity
+101-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:75:9-76:39
+102            android:name="com.simats.univault.PdfViewerActivity"
+102-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:75:19-52
+103            android:exported="false" />
+103-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:76:13-37
+104        <activity
+104-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:77:1-78:31
+105            android:name="com.simats.univault.StudentGradesCompleted"
+105-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:77:11-49
+106            android:exported="false" />
+106-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:78:5-29
+107        <activity
+107-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:79:9-81:40
+108            android:name="com.simats.univault.AcadmicRecordActivity"
+108-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:80:13-50
+109            android:exported="false" />
+109-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:81:13-37
+110        <activity
+110-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:82:9-83:40
+111            android:name="com.simats.univault.StudentGrades"
+111-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:82:19-48
+112            android:exported="false" />
+112-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:83:13-37
+113        <activity
+113-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:84:9-86:40
+114            android:name="com.simats.univault.StudentCourses"
+114-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:85:13-43
+115            android:exported="false" />
+115-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:86:13-37
+116        <activity
+116-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:87:9-89:40
+117            android:name="com.simats.univault.CourseMaterialsActivity"
+117-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:88:13-52
+118            android:exported="false" />
+118-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:89:13-37
+119        <activity
+119-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:90:9-92:40
+120            android:name="com.simats.univault.StudentCalender"
+120-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:91:13-44
+121            android:exported="false" />
+121-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:92:13-37
+122        <!-- FACULTY -->
+123        <activity
+123-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:94:9-96:40
+124            android:name="com.simats.univault.FacultyDashboard"
+124-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:95:13-45
+125            android:exported="false" />
+125-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:96:13-37
+126        <activity
+126-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:97:9-99:39
+127            android:name="com.simats.univault.FacultyStudentsActivity"
+127-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:98:13-52
+128            android:exported="false" />
+128-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:99:13-37
+129        <activity
+129-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:101:9-102:39
+130            android:name="com.simats.univault.FacultyUploadMaterial"
+130-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:101:19-56
+131            android:exported="false" />
+131-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:102:13-37
+132        <activity
+132-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:104:9-105:39
+133            android:name="com.simats.univault.FacultyProfile"
+133-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:104:19-49
+134            android:exported="false" />
+134-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:105:13-37
+135        <activity
+135-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:107:9-108:39
+136            android:name="com.simats.univault.CourseSelectionActivity"
+136-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:107:19-58
+137            android:exported="false" />
+137-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:108:13-37
+138        <activity
+138-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:109:9-110:39
+139            android:name="com.simats.univault.SendAnnouncementActivity"
+139-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:109:19-59
+140            android:exported="false" />
+140-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:110:13-37
+141
+142        <!-- admin -->
+143        <activity
+143-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:113:9-114:39
+144            android:name="com.simats.univault.AdminDashboard"
+144-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:113:19-49
+145            android:exported="false" />
+145-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:114:13-37
+146        <activity
+146-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:115:9-116:39
+147            android:name="com.simats.univault.AdminPostNotice"
+147-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:115:19-50
+148            android:exported="false" />
+148-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:116:13-37
+149        <activity
+149-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:117:9-118:40
+150            android:name="com.simats.univault.AdminCoursee"
+150-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:117:19-47
+151            android:exported="false" />
+151-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:118:13-37
+152        <activity
+152-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:119:9-120:39
+153            android:name="com.simats.univault.AdminProfileActivity"
+153-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:119:19-55
+154            android:exported="false" />
+154-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:120:13-37
+155        <activity
+155-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:121:9-122:39
+156            android:name="com.simats.univault.CalendarActivity"
+156-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:121:19-51
+157            android:exported="false" />
+157-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:122:13-37
+158        <activity
+158-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:123:9-124:39
+159            android:name="com.simats.univault.AdminCourseSelectionActivity"
+159-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:123:19-63
+160            android:exported="false" />
+160-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:124:13-37
+161        <activity
+161-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:125:9-126:35
+162            android:name="com.simats.univault.AdminCourseUpload"
+162-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:125:19-52
+163            android:exported="false" />
+163-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:126:9-33
+164        <!-- Main (launch) screen -->
+165        <activity
+165-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:128:9-141:20
+166            android:name="com.simats.univault.SplashActivity"
+166-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:129:13-43
+167            android:exported="true" >
+167-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:130:13-36
+168            <intent-filter>
+168-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:131:13-134:29
+169                <action android:name="android.intent.action.MAIN" />
+169-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:132:17-69
+169-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:132:25-66
+170
+171                <category android:name="android.intent.category.LAUNCHER" />
+171-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:133:17-77
+171-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:133:27-74
+172            </intent-filter>
+173
+174            <!-- ADD THIS -->
+175            <intent-filter>
+175-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:137:13-140:29
+176                <action android:name="OPEN_SPLASH_ACTIVITY" />
+176-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:138:17-63
+176-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:138:25-60
+177
+178                <category android:name="android.intent.category.DEFAULT" />
+178-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:139:17-76
+178-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:139:27-73
+179            </intent-filter>
+180        </activity>
+181        <activity
+181-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:144:9-74
+182            android:name="com.simats.univault.MainActivity"
+182-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:144:19-47
+183            android:exported="false" />
+183-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:144:48-72
+184        <!-- firebase -->
+185        <service
+185-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:146:9-153:19
+186            android:name="com.simats.univault.MyFirebaseMessagingService"
+186-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:147:13-55
+187            android:exported="false" >
+187-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:148:13-37
+188            <intent-filter>
+188-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:150:13-152:29
+189                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+189-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:151:17-78
+189-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:151:25-75
+190            </intent-filter>
+191        </service>
+192
+193        <activity
+193-->[io.github.afreakyelf:Pdf-Viewer:2.3.4] C:\Users\madhi\.gradle\caches\8.13\transforms\1f6d552cfa7c4d3dc352a363b611c82b\transformed\Pdf-Viewer-2.3.4\AndroidManifest.xml:11:9-13:58
+194            android:name="com.rajat.pdfviewer.PdfViewerActivity"
+194-->[io.github.afreakyelf:Pdf-Viewer:2.3.4] C:\Users\madhi\.gradle\caches\8.13\transforms\1f6d552cfa7c4d3dc352a363b611c82b\transformed\Pdf-Viewer-2.3.4\AndroidManifest.xml:12:13-65
+195            android:windowSoftInputMode="adjustResize" />
+195-->[io.github.afreakyelf:Pdf-Viewer:2.3.4] C:\Users\madhi\.gradle\caches\8.13\transforms\1f6d552cfa7c4d3dc352a363b611c82b\transformed\Pdf-Viewer-2.3.4\AndroidManifest.xml:13:13-55
+196
+197        <service
+197-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:15:9-18:40
+198            android:name="net.gotev.uploadservice.UploadService"
+198-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:16:13-65
+199            android:enabled="true"
+199-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:17:13-35
+200            android:exported="false" />
+200-->[net.gotev:uploadservice:4.7.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d63a80827ba960beb6b0806e075f52cf\transformed\uploadservice-4.7.0\AndroidManifest.xml:18:13-37
+201
+202        <activity
+202-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:23:9-27:75
+203            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+203-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:24:13-93
+204            android:excludeFromRecents="true"
+204-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:25:13-46
+205            android:exported="false"
+205-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:26:13-37
+206            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+206-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:27:13-72
+207        <!--
+208            Service handling Google Sign-In user revocation. For apps that do not integrate with
+209            Google Sign-In, this service will never be started.
+210        -->
+211        <service
+211-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:33:9-37:51
+212            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+212-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:34:13-89
+213            android:exported="true"
+213-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:35:13-36
+214            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+214-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:36:13-107
+215            android:visibleToInstantApps="true" />
+215-->[com.google.android.gms:play-services-auth:21.1.0] C:\Users\madhi\.gradle\caches\8.13\transforms\12cfe77a1acfce94406a39afea37150b\transformed\play-services-auth-21.1.0\AndroidManifest.xml:37:13-48
+216
+217        <receiver
+217-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:29:9-40:20
+218            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+218-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:30:13-78
+219            android:exported="true"
+219-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:31:13-36
+220            android:permission="com.google.android.c2dm.permission.SEND" >
+220-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:32:13-73
+221            <intent-filter>
+221-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:33:13-35:29
+222                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+222-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:34:17-81
+222-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:34:25-78
+223            </intent-filter>
+224
+225            <meta-data
+225-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:37:13-39:40
+226                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+226-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:38:17-92
+227                android:value="true" />
+227-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:39:17-37
+228        </receiver>
+229        <!--
+230             FirebaseMessagingService performs security checks at runtime,
+231             but set to not exported to explicitly avoid allowing another app to call it.
+232        -->
+233        <service
+233-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:46:9-53:19
+234            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+234-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:47:13-82
+235            android:directBootAware="true"
+235-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:48:13-43
+236            android:exported="false" >
+236-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:49:13-37
+237            <intent-filter android:priority="-500" >
+237-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:150:13-152:29
+238                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+238-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:151:17-78
+238-->C:\Users\madhi\Downloads\comrade folder\UniValut-darkmodeupadtestudent\app\src\main\AndroidManifest.xml:151:25-75
+239            </intent-filter>
+240        </service>
+241        <service
+241-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:54:9-63:19
+242            android:name="com.google.firebase.components.ComponentDiscoveryService"
+242-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:55:13-84
+243            android:directBootAware="true"
+243-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:32:13-43
+244            android:exported="false" >
+244-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:56:13-37
+245            <meta-data
+245-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:57:13-59:85
+246                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+246-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:58:17-122
+247                android:value="com.google.firebase.components.ComponentRegistrar" />
+247-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:59:17-82
+248            <meta-data
+248-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:60:13-62:85
+249                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+249-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:61:17-119
+250                android:value="com.google.firebase.components.ComponentRegistrar" />
+250-->[com.google.firebase:firebase-messaging:24.1.1] C:\Users\madhi\.gradle\caches\8.13\transforms\fca584d2a8f4859424307b05abdc7924\transformed\firebase-messaging-24.1.1\AndroidManifest.xml:62:17-82
+251            <meta-data
+251-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\637f775dad978b240fa227f7506a7a21\transformed\firebase-installations-18.0.0\AndroidManifest.xml:15:13-17:85
+252                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+252-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\637f775dad978b240fa227f7506a7a21\transformed\firebase-installations-18.0.0\AndroidManifest.xml:16:17-130
+253                android:value="com.google.firebase.components.ComponentRegistrar" />
+253-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\637f775dad978b240fa227f7506a7a21\transformed\firebase-installations-18.0.0\AndroidManifest.xml:17:17-82
+254            <meta-data
+254-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\637f775dad978b240fa227f7506a7a21\transformed\firebase-installations-18.0.0\AndroidManifest.xml:18:13-20:85
+255                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+255-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\637f775dad978b240fa227f7506a7a21\transformed\firebase-installations-18.0.0\AndroidManifest.xml:19:17-127
+256                android:value="com.google.firebase.components.ComponentRegistrar" />
+256-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\637f775dad978b240fa227f7506a7a21\transformed\firebase-installations-18.0.0\AndroidManifest.xml:20:17-82
+257            <meta-data
+257-->[com.google.firebase:firebase-common-ktx:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\e4b1cceff4bd4a64257da4277539f5d7\transformed\firebase-common-ktx-21.0.0\AndroidManifest.xml:12:13-14:85
+258                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+258-->[com.google.firebase:firebase-common-ktx:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\e4b1cceff4bd4a64257da4277539f5d7\transformed\firebase-common-ktx-21.0.0\AndroidManifest.xml:13:17-116
+259                android:value="com.google.firebase.components.ComponentRegistrar" />
+259-->[com.google.firebase:firebase-common-ktx:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\e4b1cceff4bd4a64257da4277539f5d7\transformed\firebase-common-ktx-21.0.0\AndroidManifest.xml:14:17-82
+260            <meta-data
+260-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:35:13-37:85
+261                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+261-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:36:17-109
+262                android:value="com.google.firebase.components.ComponentRegistrar" />
+262-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:37:17-82
+263            <meta-data
+263-->[com.google.firebase:firebase-datatransport:18.2.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d170aac8b02c3a9f694d9d1ed592e956\transformed\firebase-datatransport-18.2.0\AndroidManifest.xml:25:13-27:85
+264                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+264-->[com.google.firebase:firebase-datatransport:18.2.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d170aac8b02c3a9f694d9d1ed592e956\transformed\firebase-datatransport-18.2.0\AndroidManifest.xml:26:17-115
+265                android:value="com.google.firebase.components.ComponentRegistrar" />
+265-->[com.google.firebase:firebase-datatransport:18.2.0] C:\Users\madhi\.gradle\caches\8.13\transforms\d170aac8b02c3a9f694d9d1ed592e956\transformed\firebase-datatransport-18.2.0\AndroidManifest.xml:27:17-82
+266        </service>
+267
+268        <activity
+268-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\853030e8b3652ee4ed776dc8f42c06a4\transformed\play-services-base-18.3.0\AndroidManifest.xml:20:9-22:45
+269            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+269-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\853030e8b3652ee4ed776dc8f42c06a4\transformed\play-services-base-18.3.0\AndroidManifest.xml:20:19-85
+270            android:exported="false"
+270-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\853030e8b3652ee4ed776dc8f42c06a4\transformed\play-services-base-18.3.0\AndroidManifest.xml:22:19-43
+271            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+271-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\853030e8b3652ee4ed776dc8f42c06a4\transformed\play-services-base-18.3.0\AndroidManifest.xml:21:19-78
+272
+273        <provider
+273-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:23:9-28:39
+274            android:name="com.google.firebase.provider.FirebaseInitProvider"
+274-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:24:13-77
+275            android:authorities="com.simats.univault.firebaseinitprovider"
+275-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:25:13-72
+276            android:directBootAware="true"
+276-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:26:13-43
+277            android:exported="false"
+277-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:27:13-37
+278            android:initOrder="100" />
+278-->[com.google.firebase:firebase-common:21.0.0] C:\Users\madhi\.gradle\caches\8.13\transforms\42d0774f14e165a5b98e578393c4f90f\transformed\firebase-common-21.0.0\AndroidManifest.xml:28:13-36
+279        <provider
+279-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+280            android:name="androidx.startup.InitializationProvider"
+280-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+281            android:authorities="com.simats.univault.androidx-startup"
+281-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+282            android:exported="false" >
+282-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+283            <meta-data
+283-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+284                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+284-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+285                android:value="androidx.startup" />
+285-->[androidx.emoji2:emoji2:1.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\8fc72d8ed796fa28c4adeef9ac0da1da\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+286            <meta-data
+286-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\madhi\.gradle\caches\8.13\transforms\73048ea8ef972b6c55cd9430b16e687b\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+287                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+287-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\madhi\.gradle\caches\8.13\transforms\73048ea8ef972b6c55cd9430b16e687b\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+288                android:value="androidx.startup" />
+288-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\madhi\.gradle\caches\8.13\transforms\73048ea8ef972b6c55cd9430b16e687b\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+289            <meta-data
+289-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+290                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+290-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+291                android:value="androidx.startup" />
+291-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+292        </provider>
+293
+294        <meta-data
+294-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\32421809dabd7ab4fd1204987e5d2ff2\transformed\play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
+295            android:name="com.google.android.gms.version"
+295-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\32421809dabd7ab4fd1204987e5d2ff2\transformed\play-services-basement-18.3.0\AndroidManifest.xml:22:13-58
+296            android:value="@integer/google_play_services_version" />
+296-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\madhi\.gradle\caches\8.13\transforms\32421809dabd7ab4fd1204987e5d2ff2\transformed\play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
+297
+298        <receiver
+298-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+299            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+299-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+300            android:directBootAware="false"
+300-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+301            android:enabled="true"
+301-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+302            android:exported="true"
+302-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+303            android:permission="android.permission.DUMP" >
+303-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+304            <intent-filter>
+304-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+305                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+305-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+305-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+306            </intent-filter>
+307            <intent-filter>
+307-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+308                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+308-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+308-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+309            </intent-filter>
+310            <intent-filter>
+310-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+311                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+311-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+311-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+312            </intent-filter>
+313            <intent-filter>
+313-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+314                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+314-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+314-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\madhi\.gradle\caches\8.13\transforms\4038cfc6ec89c40717e0e11486312576\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+315            </intent-filter>
+316        </receiver>
+317
+318        <service
+318-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\8fb405b679b6c3fd3cbd816a018a68e7\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:28:9-34:19
+319            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+319-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\8fb405b679b6c3fd3cbd816a018a68e7\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:29:13-103
+320            android:exported="false" >
+320-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\8fb405b679b6c3fd3cbd816a018a68e7\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:30:13-37
+321            <meta-data
+321-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\8fb405b679b6c3fd3cbd816a018a68e7\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:31:13-33:39
+322                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+322-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\8fb405b679b6c3fd3cbd816a018a68e7\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:32:17-94
+323                android:value="cct" />
+323-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\8fb405b679b6c3fd3cbd816a018a68e7\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:33:17-36
+324        </service>
+325        <service
+325-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:26:9-30:19
+326            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+326-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:27:13-117
+327            android:exported="false"
+327-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:28:13-37
+328            android:permission="android.permission.BIND_JOB_SERVICE" >
+328-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:29:13-69
+329        </service>
+330
+331        <receiver
+331-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:32:9-34:40
+332            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+332-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:33:13-132
+333            android:exported="false" />
+333-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\madhi\.gradle\caches\8.13\transforms\d5d2557330c09c1928bce649a1a82637\transformed\transport-runtime-3.1.9\AndroidManifest.xml:34:13-37
+334    </application>
+335
+336</manifest>

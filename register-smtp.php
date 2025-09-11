@@ -70,7 +70,7 @@ if ($conn->query($sql) === TRUE) {
         $mail->isHTML(true);
         $mail->Subject = 'Verify your UniValut Account';
 
-        $verification_link = "http://10.137.118.54/UniValut/verify_email.php?token=" . $verification_token;
+        $verification_link = "http://10.235.18.54/UniValut/verify_email.php?token=" . $verification_token;
 
         $mail->Body = "
             Hi $full_name,<br><br>

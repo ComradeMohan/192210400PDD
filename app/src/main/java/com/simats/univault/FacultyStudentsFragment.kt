@@ -67,7 +67,7 @@ class FacultyStudentsFragment : Fragment() {
 
     // Function to fetch the college name from the server
     private fun fetchCollegeName(facultyId: String) {
-        val url = "http://10.137.118.54/univault/get_faculty_name.php?facultyId=$facultyId"
+        val url = "http://10.235.18.54/univault/get_faculty_name.php?facultyId=$facultyId"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -89,7 +89,7 @@ class FacultyStudentsFragment : Fragment() {
 
     // Function to fetch the list of students from the college
     private fun fetchStudentsByCollege(college: String) {
-        val url = "http://10.137.118.54/univault/fetch_students_by_college.php?college=$college"
+        val url = "http://10.235.18.54/univault/fetch_students_by_college.php?college=$college"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -172,7 +172,7 @@ class FacultyStudentsFragment : Fragment() {
         Thread {
             var department: String? = null
             try {
-                val url = URL("http://10.137.118.54/univault/get_student.php?student_number=$studentNumber")
+                val url = URL("http://10.235.18.54/univault/get_student.php?student_number=$studentNumber")
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.connectTimeout = 5000

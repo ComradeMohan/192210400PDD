@@ -135,7 +135,7 @@ class PrepActivity : AppCompatActivity() {
     
     private fun fetchCourseDescription(courseCode: String, courseName: String, collegeName: String) {
         // Construct the API URL
-        val url = "http://10.137.118.54/univault/get_course_description.php?course_code=$courseCode"
+        val url = "http://10.235.18.54/univault/get_course_description.php?course_code=$courseCode"
         Log.d("PrepActivity", "Fetching course description from: $url")
         val queue = Volley.newRequestQueue(this)
         
