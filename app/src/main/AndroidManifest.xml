@@ -54,6 +54,14 @@
             android:exported="false" />
         <activity android:name=".PrepActivity"
             android:exported="false"/>
+        <activity android:name=".MCQTestActivity"
+            android:exported="false"/>
+        <activity android:name=".MCQResultActivity"
+            android:exported="false"/>
+        <activity android:name=".MCQReviewActivity"
+            android:exported="false"/>
+        <activity android:name=".MCQTestHistoryActivity"
+            android:exported="false"/>
 
         <activity android:name=".StudentDashboardActivity"
             android:exported="false"/>

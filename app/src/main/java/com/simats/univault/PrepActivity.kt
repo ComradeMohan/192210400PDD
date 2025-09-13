@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONException
 import android.util.Log
 import com.simats.univault.ReadingActivity
+import com.simats.univault.MCQTestActivity
 
 class PrepActivity : AppCompatActivity() {
     
@@ -27,6 +28,11 @@ class PrepActivity : AppCompatActivity() {
     private lateinit var masterProgressPercent: TextView
     private lateinit var passModeCard: LinearLayout
     private lateinit var masterModeCard: LinearLayout
+    private lateinit var mcqTestCard: LinearLayout
+    private lateinit var testHistoryCard: LinearLayout
+    private lateinit var totalTestsText: TextView
+    private lateinit var averageScoreText: TextView
+    private lateinit var bestScoreText: TextView
     
     // Progress tracking (per mode)
     private var passProgressValue = 0
@@ -36,6 +42,7 @@ class PrepActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_prep)
+        
         
         // Initialize UI elements
         initializeViews()
@@ -48,6 +55,9 @@ class PrepActivity : AppCompatActivity() {
         
         // Update progress
         updateProgress()
+        
+        // Load test history stats
+        loadTestHistoryStats()
     }
     
     private fun initializeViews() {
@@ -59,6 +69,11 @@ class PrepActivity : AppCompatActivity() {
         masterProgressPercent = findViewById(R.id.masterProgressPercent)
         passModeCard = findViewById(R.id.passModeCard)
         masterModeCard = findViewById(R.id.masterModeCard)
+        mcqTestCard = findViewById(R.id.mcqTestCard)
+        testHistoryCard = findViewById(R.id.testHistoryCard)
+        totalTestsText = findViewById(R.id.totalTestsText)
+        averageScoreText = findViewById(R.id.averageScoreText)
+        bestScoreText = findViewById(R.id.bestScoreText)
     }
     
     private fun setupClickListeners() {
@@ -74,6 +89,16 @@ class PrepActivity : AppCompatActivity() {
             selectedMode = "MASTER"
             highlightSelectedMode(masterModeCard, passModeCard)
             showModeDetails("Master Mode", "Comprehensive preparation with advanced concepts, challenging questions, and deep analysis. Achieve 100/100 mastery level.")
+        }
+        
+        // MCQ Test Card Click Listener
+        mcqTestCard.setOnClickListener {
+            startMCQTest()
+        }
+        
+        // Test History Card Click Listener
+        testHistoryCard.setOnClickListener {
+            startTestHistory()
         }
     }
     
@@ -135,7 +160,7 @@ class PrepActivity : AppCompatActivity() {
     
     private fun fetchCourseDescription(courseCode: String, courseName: String, collegeName: String) {
         // Construct the API URL
-        val url = "http://10.235.18.54/univault/get_course_description.php?course_code=$courseCode"
+        val url = "http://192.168.137.229/univault/get_course_description.php?course_code=$courseCode"
         Log.d("PrepActivity", "Fetching course description from: $url")
         val queue = Volley.newRequestQueue(this)
         
@@ -251,6 +276,102 @@ class PrepActivity : AppCompatActivity() {
         startActivity(intent)
     }
     
+    private fun startMCQTest() {
+        // Get course ID from intent or default to 1 (Artificial Intelligence)
+        val courseId = intent.getIntExtra("courseId", 1)
+        
+        // Navigate to MCQ Test Activity
+        val intent = Intent(this, MCQTestActivity::class.java).apply {
+            putExtra("courseCode", this@PrepActivity.intent.getStringExtra("courseCode"))
+            putExtra("courseName", courseTitle.text.toString())
+            putExtra("collegeName", this@PrepActivity.intent.getStringExtra("collegeName"))
+            putExtra("courseId", courseId) // Use the actual course ID
+            putExtra("studentId", 1) // You can get this from shared preferences or login
+        }
+        startActivity(intent)
+    }
+    
+    private fun startTestHistory() {
+        // Get course ID from intent or default to 1 (Artificial Intelligence)
+        val courseId = intent.getIntExtra("courseId", 1)
+        
+        // Navigate to Test History Activity
+        val intent = Intent(this, MCQTestHistoryActivity::class.java).apply {
+            putExtra("courseCode", this@PrepActivity.intent.getStringExtra("courseCode"))
+            putExtra("courseName", courseTitle.text.toString())
+            putExtra("collegeName", this@PrepActivity.intent.getStringExtra("collegeName"))
+            putExtra("courseId", courseId) // Use the actual course ID
+            putExtra("studentId", 1) // You can get this from shared preferences or login
+        }
+        startActivity(intent)
+    }
+    
+    private fun loadTestHistoryStats() {
+        val courseId = intent.getIntExtra("courseId", 1)
+        val studentId = 1 // You can get this from shared preferences or login
+        
+        val url = "http://192.168.137.229/univault/get_mcq_test_history.php?student_id=$studentId&course_id=$courseId"
+        Log.d("PrepActivity", "Loading test history stats from: $url")
+        val queue = Volley.newRequestQueue(this)
+        
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            { response ->
+                try {
+                    if (response.getBoolean("success")) {
+                        val testHistory = response.getJSONArray("test_history")
+                        val totalTests = testHistory.length()
+                        
+                        if (totalTests > 0) {
+                            var totalScore = 0
+                            var bestScore = 0
+                            
+                            for (i in 0 until totalTests) {
+                                val test = testHistory.getJSONObject(i)
+                                val percentage = test.getDouble("percentage")
+                                
+                                totalScore += percentage.toInt()
+                                if (percentage > bestScore) {
+                                    bestScore = percentage.toInt()
+                                }
+                            }
+                            
+                            val averageScore = totalScore / totalTests
+                            
+                            // Update UI
+                            totalTestsText.text = totalTests.toString()
+                            averageScoreText.text = "$averageScore%"
+                            bestScoreText.text = "$bestScore%"
+                        } else {
+                            // No tests taken yet
+                            totalTestsText.text = "0"
+                            averageScoreText.text = "0%"
+                            bestScoreText.text = "0%"
+                        }
+                    } else {
+                        // Handle error case
+                        totalTestsText.text = "0"
+                        averageScoreText.text = "0%"
+                        bestScoreText.text = "0%"
+                    }
+                } catch (e: JSONException) {
+                    Log.e("PrepActivity", "Error parsing test history: ${e.message}")
+                    totalTestsText.text = "0"
+                    averageScoreText.text = "0%"
+                    bestScoreText.text = "0%"
+                }
+            },
+            { error ->
+                Log.e("PrepActivity", "Error loading test history: ${error.message}")
+                totalTestsText.text = "0"
+                averageScoreText.text = "0%"
+                bestScoreText.text = "0%"
+            }
+        )
+        
+        queue.add(jsonObjectRequest)
+    }
+    
     // Method to reset progress
     fun resetProgress() {
         passProgressValue = 0
@@ -277,6 +398,8 @@ class PrepActivity : AppCompatActivity() {
         // Refresh progress when returning to this activity
         loadProgressFromStorage()
         updateProgress()
+        // Refresh test history stats
+        loadTestHistoryStats()
     }
     
     override fun onDestroy() {

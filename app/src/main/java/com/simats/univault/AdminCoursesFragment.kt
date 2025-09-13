@@ -84,7 +84,7 @@ class AdminCoursesFragment : Fragment() {
     }
 
     private fun fetchAdminDetails(adminId: String) {
-        val url = "http://10.235.18.54/univault/getAdminDetails.php?admin_id=$adminId"
+        val url = "http://192.168.137.229/univault/getAdminDetails.php?admin_id=$adminId"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 try {
@@ -110,7 +110,7 @@ class AdminCoursesFragment : Fragment() {
 
     private fun loadCoursesForCollege(college: String) {
         val encodedCollege = URLEncoder.encode(college, StandardCharsets.UTF_8.name())
-        val url = "http://10.235.18.54/univault/getCoursesByCollege.php?college=$encodedCollege"
+        val url = "http://192.168.137.229/univault/getCoursesByCollege.php?college=$encodedCollege"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -157,7 +157,7 @@ class AdminCoursesFragment : Fragment() {
 
 
     private fun loadFacultyForCollege(college: String) {
-        val url = "http://10.235.18.54/univault/getFacultyByCollege.php?college=$collegeName"
+        val url = "http://192.168.137.229/univault/getFacultyByCollege.php?college=$collegeName"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -266,7 +266,7 @@ class AdminCoursesFragment : Fragment() {
     }
 
     private fun deleteCourse(courseId: String) {
-        val url = "http://10.235.18.54/univault/deleteCourse.php?course_id=$courseId"
+        val url = "http://192.168.137.229/univault/deleteCourse.php?course_id=$courseId"
 
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
@@ -315,7 +315,7 @@ class AdminCoursesFragment : Fragment() {
             put("college", collegeName)
         }
 
-        val url = "http://10.235.18.54/univault/addCourse.php"
+        val url = "http://192.168.137.229/univault/addCourse.php"
         val request = JsonObjectRequest(Request.Method.POST, url, courseData,
             { response ->
                 try {
