@@ -340,7 +340,7 @@ class HomeFragment1 : Fragment() {
      * Fetch course count from backend API
      */
     private fun fetchCourseCountFromAPI() {
-        val url = "http://192.168.56.1/univault/get_course_count.php"
+        val url = "http://10.86.199.54/univault/get_course_count.php"
         val queue = Volley.newRequestQueue(requireContext())
         
         val jsonObjectRequest = JsonObjectRequest(
@@ -423,7 +423,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchStudentName(studentID: String) {
-        val url = "http://192.168.56.1/univault/fetch_student_name.php?studentID=$studentID"
+        val url = "http://10.86.199.54/univault/fetch_student_name.php?studentID=$studentID"
         val queue = Volley.newRequestQueue(requireContext())
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -474,7 +474,7 @@ class HomeFragment1 : Fragment() {
     }
 
     fun fetchCollegeIdByName(collegeName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.56.1/univault/get_college_id.php" // Replace with your actual URL
+        val url = "http://10.86.199.54/univault/get_college_id.php" // Replace with your actual URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -509,7 +509,7 @@ class HomeFragment1 : Fragment() {
         requestQueue.add(stringRequest)
     }
     fun fetchDepartmentId(collegeId: Int, departmentName: String, context: Context, callback: (Int?) -> Unit) {
-        val url = "http://192.168.56.1/univault/get_department_id.php" // Replace with your PHP file URL
+        val url = "http://10.86.199.54/univault/get_department_id.php" // Replace with your PHP file URL
 
         val stringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -566,7 +566,7 @@ class HomeFragment1 : Fragment() {
 
 
     private fun fetchLatestNotice(college: String) {
-        val url = "http://192.168.56.1/univault/get_latest_notice.php?college=$college"
+        val url = "http://10.86.199.54/univault/get_latest_notice.php?college=$college"
         val ctx = context ?: return  // Safely get context or return if fragment is not attached
         val queue = Volley.newRequestQueue(ctx)
 

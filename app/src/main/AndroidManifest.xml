@@ -62,6 +62,12 @@
             android:exported="false"/>
         <activity android:name=".MCQTestHistoryActivity"
             android:exported="false"/>
+        <activity android:name=".TheoryQuestionActivity"
+            android:exported="false"/>
+        <activity android:name=".TheoryResultActivity"
+            android:exported="false"/>
+        <activity android:name=".TheoryReviewActivity"
+            android:exported="false"/>
 
         <activity android:name=".StudentDashboardActivity"
             android:exported="false"/>

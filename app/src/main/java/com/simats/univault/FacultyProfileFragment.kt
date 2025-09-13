@@ -114,7 +114,7 @@ class FacultyProfileFragment : Fragment() {
                         .build()
 
                     val request = okhttp3.Request.Builder()
-                        .url("http://192.168.56.1/univault/submit_feedback.php") // Replace with your actual URL
+                        .url("http://10.86.199.54/univault/submit_feedback.php") // Replace with your actual URL
                         .post(requestBody)
                         .build()
 
@@ -195,7 +195,7 @@ class FacultyProfileFragment : Fragment() {
     }
 
     private fun fetchFacultyDetails(facultyId: String) {
-        val url = "http://192.168.56.1/univault/get_faculty_by_id.php?facultyId=$facultyId"
+        val url = "http://10.86.199.54/univault/get_faculty_by_id.php?facultyId=$facultyId"
 
         val requestQueue = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(

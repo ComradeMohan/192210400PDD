@@ -37,6 +37,7 @@ import android.app.AlertDialog
 import android.content.res.Configuration
 import android.graphics.Color
 import android.view.ActionMode
+import android.webkit.WebChromeClient
 import org.json.JSONArray
 
 class ReadingActivity : AppCompatActivity() {
@@ -99,7 +100,7 @@ class ReadingActivity : AppCompatActivity() {
     private var currentZoomLevel: Float = 1.0f
     private var currentFontSize: Int = 16
     private var currentFontFamily: String = "Arial"
-    private var currentReadingMode: String = "light" // light, dark, sepia, high_contrast
+    private var currentReadingMode: String = "light"
     private var isTtsEnabled: Boolean = false
     private var tts: TextToSpeech? = null
     private var scaleGestureDetector: ScaleGestureDetector? = null
@@ -111,6 +112,10 @@ class ReadingActivity : AppCompatActivity() {
     private var currentHighlightColor: String = "#FFFF00" // Yellow
     private var currentUnderlineColor: String = "#FF0000" // Red
     private var annotations: MutableList<Annotation> = mutableListOf()
+
+    // Text Selection Features
+    private var selectionToolbar: PopupWindow? = null
+    private var currentSelection: Triple<Int, Int, String>? = null // start, end, text
 
     // Data class for Topic
     data class Topic(
@@ -166,28 +171,73 @@ class ReadingActivity : AppCompatActivity() {
         topicContent.settings.setSupportZoom(true)
         topicContent.settings.textZoom = 100
         topicContent.setInitialScale(0)
-        topicContent.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+        topicContent.setBackgroundColor(Color.TRANSPARENT)
 
-        // Enable pinch-to-zoom
-        topicContent.settings.setSupportZoom(true)
-        topicContent.settings.builtInZoomControls = false
-        topicContent.settings.displayZoomControls = false
-
-        // Enable text selection
+        // Simplified text selection configuration
         topicContent.isLongClickable = true
         topicContent.isFocusable = true
         topicContent.isFocusableInTouchMode = true
+        
+        // Essential WebView settings for text selection
+        topicContent.settings.setSupportMultipleWindows(false)
+        topicContent.settings.javaScriptCanOpenWindowsAutomatically = false
+        topicContent.settings.allowFileAccess = true
+        topicContent.settings.allowContentAccess = true
+        
+        // Enable text selection - critical settings
+        topicContent.settings.setSupportZoom(true)
+        topicContent.settings.setBuiltInZoomControls(false)
+        topicContent.settings.setDisplayZoomControls(false)
+        topicContent.settings.setUseWideViewPort(true)
+        topicContent.settings.setLoadWithOverviewMode(true)
+        
+        // Enable hardware acceleration
+        topicContent.setLayerType(WebView.LAYER_TYPE_HARDWARE, null)
 
         // Add JavaScript interface for annotations
         topicContent.addJavascriptInterface(AnnotationBridge(), "AndroidAnnotator")
 
+        // Set WebViewClient and WebChromeClient for handling page load and selection
         topicContent.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                Log.d("ReadingActivity", "Page finished loading, enabling text selection")
+
+                // Initialize text selection
                 injectAnnotationJS()
                 renderSavedAnnotations()
+                applyReadingPreferences()
+
+                // Enable text selection
+                enableTextSelection()
+                
+                // Test text selection
+                testTextSelection()
+
+                // Re-enable after delays
+                topicContent.postDelayed({
+                    enableTextSelection()
+                    testTextSelection()
+                }, 1000)
+                
+                topicContent.postDelayed({
+                    enableTextSelection()
+                    testTextSelection()
+                }, 2000)
             }
         }
+
+        // Set WebChromeClient for better text selection support
+        topicContent.webChromeClient = object : WebChromeClient() {
+            // WebChromeClient doesn't have onSelectionChanged method
+            // Text selection is handled through JavaScript interface
+        }
+
+        // Set up text selection with custom floating toolbar
+        setupTextSelection()
+
+        // Add JavaScript interface for text selection
+        topicContent.addJavascriptInterface(TextSelectionBridge(), "TextSelection")
 
         topicProgress = findViewById(R.id.topicProgress)
         progressText = findViewById(R.id.progressText)
@@ -204,22 +254,11 @@ class ReadingActivity : AppCompatActivity() {
     }
 
     private fun initializeEnhancedFeatures() {
-        // Initialize TTS
         initializeTTS()
-
-        // Initialize scale gesture detector for pinch-to-zoom
         initializeScaleGestureDetector()
-
-        // Setup enhanced UI controls
         setupReadingControls()
-
-        // Load saved preferences
         loadReadingPreferences()
-
-        // Load bookmarks
         loadBookmarks()
-
-        // Load annotations
         loadAnnotations()
     }
 
@@ -251,6 +290,8 @@ class ReadingActivity : AppCompatActivity() {
                         }
                     }
                 })
+            } else {
+                Log.e("ReadingActivity", "TTS initialization failed: status $status")
             }
         }
     }
@@ -261,12 +302,10 @@ class ReadingActivity : AppCompatActivity() {
                 val scaleFactor = detector.scaleFactor
                 currentZoomLevel *= scaleFactor
                 currentZoomLevel = currentZoomLevel.coerceIn(0.5f, 3.0f)
-
-                // Apply zoom to WebView using textZoom
                 val textZoom = (currentZoomLevel * 100).toInt()
                 topicContent.settings.textZoom = textZoom
                 updateZoomButtons()
-
+                saveReadingPreferences()
                 return true
             }
         })
@@ -282,7 +321,6 @@ class ReadingActivity : AppCompatActivity() {
         currentFontFamily = prefs.getString("font_family", "Arial") ?: "Arial"
         currentReadingMode = prefs.getString("reading_mode", "light") ?: "light"
         currentZoomLevel = prefs.getFloat("zoom_level", 1.0f)
-
         applyReadingPreferences()
     }
 
@@ -379,7 +417,6 @@ class ReadingActivity : AppCompatActivity() {
         prefs.edit().putStringSet("bookmarks", bookmarks).apply()
     }
 
-    // Annotation persistence
     private fun loadAnnotations() {
         val prefs = getSharedPreferences("AnnotationsPrefs", MODE_PRIVATE)
         val json = prefs.getString("ann_${currentContentId()}", "[]")
@@ -402,6 +439,7 @@ class ReadingActivity : AppCompatActivity() {
             }
         } catch (e: JSONException) {
             Log.e("ReadingActivity", "Failed to load annotations: ${e.message}")
+            Toast.makeText(this, "Error loading annotations", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -430,7 +468,6 @@ class ReadingActivity : AppCompatActivity() {
 
     private fun generateAnnotationId(): String = "ann_${System.currentTimeMillis()}_${(0..9999).random()}"
 
-    // Enhanced Reading Features
     private fun zoomIn() {
         currentZoomLevel = (currentZoomLevel * 1.2f).coerceAtMost(3.0f)
         val textZoom = (currentZoomLevel * 100).toInt()
@@ -557,6 +594,100 @@ class ReadingActivity : AppCompatActivity() {
         val js = """
             document.body.style.fontSize = '${currentFontSize}px';
             document.body.style.fontFamily = '$currentFontFamily, sans-serif';
+            document.body.style.userSelect = 'text';
+            document.body.style.webkitUserSelect = 'text';
+            document.body.style.mozUserSelect = 'text';
+            document.body.style.msUserSelect = 'text';
+            document.body.style.cursor = 'text';
+            
+            // Ensure all text elements are selectable
+            var allElements = document.querySelectorAll('*');
+            for (var i = 0; i < allElements.length; i++) {
+                allElements[i].style.userSelect = 'text';
+                allElements[i].style.webkitUserSelect = 'text';
+                allElements[i].style.mozUserSelect = 'text';
+                allElements[i].style.msUserSelect = 'text';
+            }
+        """
+        topicContent.evaluateJavascript(js, null)
+    }
+
+    private fun enableTextSelection() {
+        val js = """
+            console.log('Enabling simple text selection...');
+            
+            // Simple text selection enable
+            document.body.style.userSelect = 'text';
+            document.body.style.webkitUserSelect = 'text';
+            document.body.style.mozUserSelect = 'text';
+            document.body.style.msUserSelect = 'text';
+            document.body.style.webkitTouchCallout = 'default';
+            document.body.style.webkitTapHighlightColor = 'rgba(76, 175, 80, 0.3)';
+            document.body.style.cursor = 'text';
+            
+            // Enable on all elements
+            var allElements = document.querySelectorAll('*');
+            for (var i = 0; i < allElements.length; i++) {
+                var element = allElements[i];
+                element.style.userSelect = 'text';
+                element.style.webkitUserSelect = 'text';
+                element.style.mozUserSelect = 'text';
+                element.style.msUserSelect = 'text';
+                element.style.webkitTouchCallout = 'default';
+                element.style.webkitTapHighlightColor = 'rgba(76, 175, 80, 0.3)';
+                
+                // Make text elements selectable
+                if (['P', 'DIV', 'SPAN', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI', 'TD', 'TH'].includes(element.tagName)) {
+                    element.style.cursor = 'text';
+                    element.style.minHeight = '24px';
+                }
+            }
+            
+            // Re-initialize if available
+            if (window.AnnotatorJS && window.AnnotatorJS.enableSelection) {
+                window.AnnotatorJS.enableSelection();
+            }
+            
+            console.log('Simple text selection enabled on', allElements.length, 'elements');
+        """
+        topicContent.evaluateJavascript(js, null)
+    }
+
+    private fun clearAutomaticSelections() {
+        val js = """
+            console.log('Clearing automatic selections...');
+            var selection = window.getSelection();
+            if (selection) {
+                selection.removeAllRanges();
+                console.log('Cleared automatic selections');
+            }
+        """
+        topicContent.evaluateJavascript(js, null)
+    }
+
+    private fun testTextSelection() {
+        val js = """
+            console.log('Testing text selection...');
+            console.log('Document ready state:', document.readyState);
+            console.log('Body content length:', document.body ? document.body.innerHTML.length : 'No body');
+            console.log('Selection API available:', typeof window.getSelection);
+            
+            // Test if text selection is working
+            var testElement = document.querySelector('p, div, span, h1, h2, h3, h4, h5, h6');
+            if (testElement) {
+                console.log('Found text element:', testElement.tagName);
+                console.log('Element user-select:', window.getComputedStyle(testElement).userSelect);
+                console.log('Element webkit-user-select:', window.getComputedStyle(testElement).webkitUserSelect);
+            }
+            
+            // Clear any existing selections
+            var selection = window.getSelection();
+            if (selection) {
+                selection.removeAllRanges();
+                console.log('Cleared any existing selections');
+            }
+            
+            console.log('Text selection test complete - try selecting text now');
         """
         topicContent.evaluateJavascript(js, null)
     }
@@ -579,6 +710,9 @@ class ReadingActivity : AppCompatActivity() {
                     ttsButton.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_green_dark))
                 }
                 Toast.makeText(this, "Text-to-Speech started", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.w("ReadingActivity", "No text available for TTS")
+                Toast.makeText(this, "No text to read", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -643,8 +777,9 @@ class ReadingActivity : AppCompatActivity() {
     }
 
     private fun searchInContent(query: String) {
+        val escapedQuery = query.replace("'", "\\'")
         val js = """
-            var searchTerm = '$query';
+            var searchTerm = '$escapedQuery';   
             var content = document.body.innerHTML;
             var regex = new RegExp('(' + searchTerm + ')', 'gi');
             var highlightedContent = content.replace(regex, '<mark style="background-color: yellow; color: black;">$1</mark>');
@@ -745,9 +880,10 @@ class ReadingActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("About Reading Activity")
             .setMessage("""
-                Enhanced Reading Activity v2.0
+                Enhanced Reading Activity v2.1
                 
                 Features:
+                • Text selection with highlight, underline, and note options
                 • Zoom controls with pinch-to-zoom
                 • Font size and family selection
                 • Multiple reading modes (Light, Dark, Sepia, High Contrast)
@@ -763,8 +899,161 @@ class ReadingActivity : AppCompatActivity() {
             .show()
     }
 
+    // Text Selection Methods
+    private fun setupTextSelection() {
+        createSelectionToolbar()
 
-    // JavaScript Interface for Annotations
+        // Simple touch handling for text selection
+        topicContent.setOnTouchListener { _, event ->
+            scaleGestureDetector?.onTouchEvent(event) ?: false
+        }
+    }
+
+    private fun createSelectionToolbar() {
+        val context = this
+        val container = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(16.dpToPx(), 12.dpToPx(), 16.dpToPx(), 12.dpToPx())
+            background = GradientDrawable().apply {
+                setColor(Color.parseColor("#FFFFFFFF"))
+                cornerRadius = 20.dpToPx().toFloat()
+                setStroke(2.dpToPx(), Color.parseColor("#4CAF50"))
+            }
+            elevation = 32f
+        }
+
+        fun createSelectionButton(iconRes: Int, desc: String, onClick: () -> Unit): ImageButton {
+            return ImageButton(context).apply {
+                setImageResource(iconRes)
+                contentDescription = desc
+                background = GradientDrawable().apply {
+                    setColor(Color.parseColor("#F5F5F5"))
+                    cornerRadius = 12.dpToPx().toFloat()
+                    setStroke(2.dpToPx(), Color.parseColor("#4CAF50"))
+                }
+                setPadding(12.dpToPx(), 12.dpToPx(), 12.dpToPx(), 12.dpToPx())
+                setColorFilter(Color.parseColor("#4CAF50"))
+                setOnClickListener {
+                    onClick()
+                    hideSelectionToolbar()
+                }
+                layoutParams = LinearLayout.LayoutParams(56.dpToPx(), 56.dpToPx()).apply {
+                    marginStart = 8.dpToPx()
+                    marginEnd = 8.dpToPx()
+                }
+            }
+        }
+
+        // Create selection action buttons - Only Highlight and Underline
+        val highlightButton = createSelectionButton(android.R.drawable.ic_menu_set_as, "Highlight") {
+            applyHighlight()
+        }
+        val underlineButton = createSelectionButton(android.R.drawable.ic_menu_edit, "Underline") {
+            applyUnderline()
+        }
+
+        container.addView(highlightButton)
+        container.addView(underlineButton)
+
+        selectionToolbar = PopupWindow(container, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true).apply {
+            elevation = 20f
+            isOutsideTouchable = true
+        }
+    }
+
+    private fun showSelectionToolbar(x: Int, y: Int) {
+        val root = findViewById<View>(android.R.id.content)
+        root.post {
+            val pw = selectionToolbar ?: return@post
+            if (pw.isShowing) pw.dismiss()
+
+            // Convert WebView coordinates to screen coordinates
+            val webViewLocation = IntArray(2)
+            topicContent.getLocationOnScreen(webViewLocation)
+            val screenX = webViewLocation[0] + x
+            val screenY = webViewLocation[1] + y - 60.dpToPx() // Position above selection
+
+            pw.showAtLocation(root, Gravity.TOP or Gravity.START,
+                screenX.coerceAtLeast(0), screenY.coerceAtLeast(0))
+        }
+    }
+
+    private fun hideSelectionToolbar() {
+        selectionToolbar?.dismiss()
+    }
+
+    private fun applyHighlight() {
+        currentSelection?.let { (start, end, text) ->
+            val annotation = Annotation(
+                    id = generateAnnotationId(),
+                    contentId = currentContentId(),
+                    type = "highlight",
+                start = start,
+                end = end,
+                color = currentHighlightColor
+            )
+            annotations.add(annotation)
+            saveAnnotations()
+            applyAnnotationToWebView(annotation)
+            Toast.makeText(this, "Text highlighted", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun applyUnderline() {
+        currentSelection?.let { (start, end, text) ->
+            val annotation = Annotation(
+                    id = generateAnnotationId(),
+                    contentId = currentContentId(),
+                    type = "underline",
+                start = start,
+                end = end,
+                color = currentUnderlineColor
+            )
+            annotations.add(annotation)
+            saveAnnotations()
+            applyAnnotationToWebView(annotation)
+            Toast.makeText(this, "Text underlined", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun addNoteToSelection() {
+        currentSelection?.let { (start, end, text) ->
+            showNoteDialog("") { noteText ->
+                val annotation = Annotation(
+                        id = generateAnnotationId(),
+                        contentId = currentContentId(),
+                        type = "note",
+                    start = start,
+                    end = end,
+                        noteText = noteText
+                    )
+                annotations.add(annotation)
+                saveAnnotations()
+                applyAnnotationToWebView(annotation)
+                Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun copySelection() {
+        currentSelection?.let { (_, _, text) ->
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Selected text", text)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun applyAnnotationToWebView(annotation: Annotation) {
+        val js = when (annotation.type) {
+            "highlight" -> "AnnotatorJS.applyAnnotation('${annotation.id}', 'highlight', ${annotation.start}, ${annotation.end}, '${annotation.color}', '');"
+            "underline" -> "AnnotatorJS.applyAnnotation('${annotation.id}', 'underline', ${annotation.start}, ${annotation.end}, '${annotation.color}', '');"
+            "note" -> "AnnotatorJS.applyAnnotation('${annotation.id}', 'note', ${annotation.start}, ${annotation.end}, '', '${annotation.noteText}');"
+            else -> ""
+        }
+        topicContent.evaluateJavascript(js, null)
+    }
+
     inner class AnnotationBridge {
         @JavascriptInterface
         fun onAnnotationTapped(id: String) {
@@ -785,17 +1074,131 @@ class ReadingActivity : AppCompatActivity() {
         }
     }
 
-    // Inject JavaScript for Annotations
+    // JavaScript interface for text selection
+    inner class TextSelectionBridge {
+        @JavascriptInterface
+        fun onTextSelected(start: Int, end: Int, text: String, x: Float, y: Float) {
+            runOnUiThread {
+                Log.d("TextSelection", "Text selected: start=$start, end=$end, text='$text'")
+                if (text.trim().isNotEmpty()) {
+                    currentSelection = Triple(start, end, text)
+                    showSelectionToolbar(x.toInt(), y.toInt())
+                }
+            }
+        }
+
+        @JavascriptInterface
+        fun onSelectionCleared() {
+            runOnUiThread {
+                Log.d("TextSelection", "Selection cleared")
+                currentSelection = null
+                hideSelectionToolbar()
+            }
+        }
+
+        @JavascriptInterface
+        fun onSelectionChanged(start: Int, end: Int, text: String, x: Float, y: Float) {
+            runOnUiThread {
+                Log.d("TextSelection", "Selection changed: start=$start, end=$end, text='$text'")
+                if (text.trim().isNotEmpty()) {
+                    currentSelection = Triple(start, end, text)
+                    showSelectionToolbar(x.toInt(), y.toInt())
+                } else {
+                    currentSelection = null
+                    hideSelectionToolbar()
+                }
+            }
+        }
+    }
+
     private fun injectAnnotationJS() {
         val js = """
             (function() {
                 if (window.__annotatorInstalled) return;
                 window.__annotatorInstalled = true;
+                
+                console.log('Simple text selection script loaded');
+                
+                // Simple text selection detection
+                var selectionTimeout;
+                var lastSelection = '';
+                
+                function handleSelection() {
+                    clearTimeout(selectionTimeout);
+                    selectionTimeout = setTimeout(function() {
+                        var selection = window.getSelection();
+                        var selectedText = selection ? selection.toString().trim() : '';
+                        
+                        if (selectedText && selectedText.length > 0 && selectedText !== lastSelection) {
+                            lastSelection = selectedText;
+                            var range = selection.getRangeAt(0);
+                            var rect = range.getBoundingClientRect();
+                            var start = getTextOffset(range.startContainer, range.startOffset);
+                            var end = getTextOffset(range.endContainer, range.endOffset);
+                            
+                            console.log('Text selected:', selectedText);
+                            
+                            if (selectedText.length > 1 && window.TextSelection) {
+                                window.TextSelection.onTextSelected(start, end, selectedText, rect.left + rect.width/2, rect.top);
+                            }
+                        } else if (!selectedText && lastSelection) {
+                            lastSelection = '';
+                            if (window.TextSelection) {
+                                window.TextSelection.onSelectionCleared();
+                            }
+                        }
+                    }, 100);
+                }
+                
+                // Simple event listeners
+                document.addEventListener('mouseup', handleSelection);
+                document.addEventListener('touchend', handleSelection);
+                document.addEventListener('selectionchange', handleSelection);
+                
+                // Enable text selection on all elements
+                function enableSelectionOnAll() {
+                    var allElements = document.querySelectorAll('*');
+                    for (var i = 0; i < allElements.length; i++) {
+                        var element = allElements[i];
+                        element.style.userSelect = 'text';
+                        element.style.webkitUserSelect = 'text';
+                        element.style.mozUserSelect = 'text';
+                        element.style.msUserSelect = 'text';
+                        element.style.webkitTouchCallout = 'default';
+                        element.style.webkitTapHighlightColor = 'rgba(76, 175, 80, 0.3)';
+                        
+                        if (['P', 'DIV', 'SPAN', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI', 'TD', 'TH'].includes(element.tagName)) {
+                            element.style.cursor = 'text';
+                            element.style.minHeight = '24px';
+                        }
+                    }
+                    console.log('Text selection enabled on', allElements.length, 'elements');
+                }
+                
+                // Enable immediately
+                enableSelectionOnAll();
+                setTimeout(enableSelectionOnAll, 500);
+                setTimeout(enableSelectionOnAll, 1000);
+                
+                function getTextOffset(node, offset) {
+                    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+                    var total = 0;
+                    var current;
+                    while (current = walker.nextNode()) {
+                        if (current === node) {
+                            return total + offset;
+                        }
+                        total += current.nodeValue ? current.nodeValue.length : 0;
+                    }
+                    return total;
+                }
 
                 function getSelectedOffsets() {
                     var selection = window.getSelection();
                     if (!selection || selection.rangeCount === 0) return null;
                     var range = selection.getRangeAt(0);
+                    if (!range.toString().trim()) return null;
+                    
                     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
                     var start = 0, end = 0;
                     var currentOffset = 0;
@@ -811,7 +1214,7 @@ class ReadingActivity : AppCompatActivity() {
                             end = currentOffset + range.endOffset;
                             break;
                         }
-                        currentOffset += node.nodeValue.length;
+                        currentOffset += node.nodeValue ? node.nodeValue.length : 0;
                     }
                     return {start: start, end: end, text: selection.toString()};
                 }
@@ -820,16 +1223,18 @@ class ReadingActivity : AppCompatActivity() {
                     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
                     var currentOffset = 0;
                     var ranges = [];
+                    
                     while (walker.nextNode()) {
                         var node = walker.currentNode;
                         var nodeStart = currentOffset;
-                        var nodeEnd = currentOffset + node.nodeValue.length;
+                        var nodeEnd = currentOffset + (node.nodeValue ? node.nodeValue.length : 0);
                         var s = Math.max(start, nodeStart);
                         var e = Math.min(end, nodeEnd);
+                        
                         if (e > s) {
                             ranges.push({node: node, s: s - nodeStart, e: e - nodeStart});
                         }
-                        currentOffset += nodeEnd;
+                        currentOffset = nodeEnd;
                         if (currentOffset >= end) break;
                     }
 
@@ -840,9 +1245,11 @@ class ReadingActivity : AppCompatActivity() {
                         var before = document.createTextNode(text.substring(0, r.s));
                         var middle = document.createTextNode(text.substring(r.s, r.e));
                         var after = document.createTextNode(text.substring(r.e));
+                        
                         var span = document.createElement('span');
                         span.setAttribute('data-ann-id', id);
                         span.setAttribute('data-ann-type', type);
+                        
                         var style = '';
                         if (type === 'highlight') {
                             style = 'background-color:' + (color || '#FFFF00') + ';padding:2px;border-radius:3px;';
@@ -852,10 +1259,14 @@ class ReadingActivity : AppCompatActivity() {
                             style = 'border-bottom:2px dotted #90caf9;background-color:rgba(144,202,249,0.1);padding:2px;';
                             if (noteText) span.setAttribute('title', noteText);
                         }
+                        
                         span.style.cssText = style + 'cursor:pointer;';
                         span.onclick = function() {
-                            window.AndroidAnnotator.onAnnotationTapped(id);
+                            if (window.AndroidAnnotator) {
+                                window.AndroidAnnotator.onAnnotationTapped(id);
+                            }
                         };
+                        
                         node.parentNode.insertBefore(before, node);
                         node.parentNode.insertBefore(span, node);
                         span.appendChild(middle);
@@ -863,7 +1274,7 @@ class ReadingActivity : AppCompatActivity() {
                         node.parentNode.removeChild(node);
                     }
                 }
-
+                
                 window.AnnotatorJS = {
                     getSelectedOffsets: function() {
                         var offsets = getSelectedOffsets();
@@ -871,8 +1282,13 @@ class ReadingActivity : AppCompatActivity() {
                     },
                     applyAnnotation: function(id, type, start, end, color, noteText) {
                         applyAnnotation(id, type, start, end, color, noteText);
+                    },
+                    enableSelection: function() {
+                        enableSelectionOnAll();
                     }
                 };
+                
+                console.log('Simple text selection system initialized');
             })();
         """.trimIndent()
         topicContent.evaluateJavascript(js, null)
@@ -880,22 +1296,31 @@ class ReadingActivity : AppCompatActivity() {
 
     private fun renderSavedAnnotations() {
         annotations.filter { it.contentId == currentContentId() }.forEach { ann ->
+            val escapedNoteText = ann.noteText?.replace("'", "\\'") ?: ""
             val js = """
-                AnnotatorJS.applyAnnotation('${ann.id}', '${ann.type}', ${ann.start}, ${ann.end}, '${ann.color ?: ""}', '${ann.noteText ?: ""}');
+                AnnotatorJS.applyAnnotation('${ann.id}', '${ann.type}', ${ann.start}, ${ann.end}, '${ann.color ?: ""}', '$escapedNoteText');
             """
-            topicContent.evaluateJavascript(js, null)
+        topicContent.evaluateJavascript(js, null)
         }
     }
 
     private fun handleSelectionAction(itemId: Int) {
         topicContent.evaluateJavascript("AnnotatorJS.getSelectedOffsets();") { result ->
             try {
-                if (result == "null") return@evaluateJavascript
+                if (result == "null") {
+                    Log.w("ReadingActivity", "No valid text selection")
+                    Toast.makeText(this, "Please select some text", Toast.LENGTH_SHORT).show()
+                    return@evaluateJavascript
+                }
                 val json = JSONObject(result)
                 val start = json.getInt("start")
                 val end = json.getInt("end")
                 val text = json.getString("text")
-                if (end <= start || text.isBlank()) return@evaluateJavascript
+                if (end <= start || text.isBlank()) {
+                    Log.w("ReadingActivity", "Invalid selection range or empty text: start=$start, end=$end, text='$text'")
+                    Toast.makeText(this, "Invalid selection", Toast.LENGTH_SHORT).show()
+                    return@evaluateJavascript
+                }
 
                 val annotationId = generateAnnotationId()
                 when (itemId) {
@@ -923,8 +1348,9 @@ class ReadingActivity : AppCompatActivity() {
                         showNoteDialog("") { noteText ->
                             val ann = Annotation(annotationId, currentContentId(), "note", start, end, null, noteText)
                             annotations.add(ann)
+                            val escapedNoteText = noteText.replace("'", "\\'")
                             topicContent.evaluateJavascript(
-                                "AnnotatorJS.applyAnnotation('$annotationId', 'note', $start, $end, '', '$noteText');",
+                                "AnnotatorJS.applyAnnotation('$annotationId', 'note', $start, $end, '', '$escapedNoteText');",
                                 null
                             )
                             saveAnnotations()
@@ -999,7 +1425,7 @@ class ReadingActivity : AppCompatActivity() {
     private fun copyToClipboard(text: String) {
         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         cm.setPrimaryClip(ClipData.newPlainText("selection", text))
-        Toast.makeText(this, "Copied", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupScrollListener() {
@@ -1015,20 +1441,6 @@ class ReadingActivity : AppCompatActivity() {
                 hasScrolledToMarkAsRead = true
             }
         }
-    }
-
-    private fun hasUserScrolledToMarkAsRead(): Boolean {
-        return hasScrolledToMarkAsRead
-    }
-
-    private fun showLoadingSpinner() {
-        loadingSpinnerLayout.visibility = View.VISIBLE
-        topicContent.visibility = View.GONE
-    }
-
-    private fun hideLoadingSpinner() {
-        loadingSpinnerLayout.visibility = View.GONE
-        topicContent.visibility = View.VISIBLE
     }
 
     private fun getIntentData() {
@@ -1049,27 +1461,22 @@ class ReadingActivity : AppCompatActivity() {
             putString("last_mode", selectedMode)
             putLong("last_study_time", System.currentTimeMillis())
         }.apply()
-
-        Log.d("ReadingActivity", "Saved course data - Code: $courseCode, Name: $courseTitle, Mode: $selectedMode")
     }
 
     private fun setupClickListeners() {
         setupCheckboxListener()
-
         previousButton.setOnClickListener {
             if (currentTopicIndex > 0) {
                 currentTopicIndex--
                 loadCurrentTopic()
             }
         }
-
         nextButton.setOnClickListener {
             if (currentTopicIndex < topics.size - 1) {
                 currentTopicIndex++
                 loadCurrentTopic()
             }
         }
-
         completeTopicButton.setOnClickListener {
             completeCurrentTopic()
         }
@@ -1081,12 +1488,10 @@ class ReadingActivity : AppCompatActivity() {
                 if (isChecked) {
                     updateTopicReadStatus(topic.id, true)
                     updateReadStatus(true)
-                    Log.d("ReadingActivity", "User marked topic as read: ${topic.name}")
                 } else {
                     updateTopicReadStatus(topic.id, false)
                     updateReadStatus(false)
                     hasScrolledToMarkAsRead = false
-                    Log.d("ReadingActivity", "User manually unchecked topic: ${topic.name}")
                 }
             }
         }
@@ -1100,7 +1505,6 @@ class ReadingActivity : AppCompatActivity() {
             "utf-8",
             null
         )
-
         fetchTopicsFromAPI()
     }
 
@@ -1130,6 +1534,11 @@ class ReadingActivity : AppCompatActivity() {
                               padding: 8px; 
                               box-sizing: border-box;
                               transition: all 0.3s ease;
+                              user-select: text !important;
+                              -webkit-user-select: text !important;
+                              -moz-user-select: text !important;
+                              -ms-user-select: text !important;
+                              cursor: text;
                             }
                             h1, h2, h3, h4, h5, h6 { 
                               color: #4CAF50; 
@@ -1261,6 +1670,100 @@ class ReadingActivity : AppCompatActivity() {
                               border-radius: 3px;
                               font-weight: bold;
                             }
+                            
+                            /* Enhanced text selection styling */
+                            ::selection {
+                              background-color: #4CAF50 !important;
+                              color: white !important;
+                              text-shadow: none !important;
+                            }
+                            
+                            ::-moz-selection {
+                              background-color: #4CAF50 !important;
+                              color: white !important;
+                              text-shadow: none !important;
+                            }
+                            
+                            /* Make sure all text is selectable with enhanced properties */
+                            * {
+                              user-select: text !important;
+                              -webkit-user-select: text !important;
+                              -moz-user-select: text !important;
+                              -ms-user-select: text !important;
+                              -webkit-touch-callout: default !important;
+                              -webkit-tap-highlight-color: transparent !important;
+                              -webkit-user-drag: none !important;
+                              -khtml-user-select: text !important;
+                            }
+                            
+                            /* Ensure text elements are selectable with better interaction */
+                            p, div, span, h1, h2, h3, h4, h5, h6, li, td, th, pre, code, blockquote {
+                              user-select: text !important;
+                              -webkit-user-select: text !important;
+                              -moz-user-select: text !important;
+                              -ms-user-select: text !important;
+                              cursor: text !important;
+                              -webkit-touch-callout: default !important;
+                              -webkit-tap-highlight-color: transparent !important;
+                              min-height: 20px !important;
+                              position: relative !important;
+                            }
+                            
+                            /* Enhanced selection for better click handling */
+                            p:hover, div:hover, span:hover, h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+                              background-color: rgba(76, 175, 80, 0.05) !important;
+                              transition: background-color 0.2s ease !important;
+                            }
+                            
+                            /* Enhanced text selection for mobile */
+                            @media (max-width: 768px) {
+                              p, div, span, h1, h2, h3, h4, h5, h6, li, td, th, pre, code, blockquote {
+                                -webkit-touch-callout: default !important;
+                                -webkit-user-select: text !important;
+                                -moz-user-select: text !important;
+                                -ms-user-select: text !important;
+                                user-select: text !important;
+                                touch-action: manipulation !important;
+                                min-height: 32px !important;
+                                padding: 4px !important;
+                                margin: 2px 0 !important;
+                                cursor: text !important;
+                                -webkit-tap-highlight-color: rgba(76, 175, 80, 0.2) !important;
+                              }
+                              
+                              /* Make text more selectable on mobile */
+                              body {
+                                -webkit-touch-callout: default !important;
+                                -webkit-user-select: text !important;
+                                -webkit-tap-highlight-color: transparent !important;
+                                touch-action: manipulation !important;
+                              }
+                              
+                              /* Enhanced selection highlighting for mobile */
+                              ::selection {
+                                background-color: #4CAF50 !important;
+                                color: white !important;
+                                text-shadow: none !important;
+                              }
+                              
+                              ::-moz-selection {
+                                background-color: #4CAF50 !important;
+                                color: white !important;
+                                text-shadow: none !important;
+                              }
+                              
+                              /* Better touch targets */
+                              p, div, span {
+                                min-height: 40px !important;
+                                line-height: 1.6 !important;
+                                padding: 8px 4px !important;
+                              }
+                              
+                              h1, h2, h3, h4, h5, h6 {
+                                min-height: 36px !important;
+                                padding: 6px 4px !important;
+                              }
+                            }
                             @media (max-width: 768px) {
                               body { padding: 4px; }
                               h1 { font-size: 1.5em; }
@@ -1300,7 +1803,7 @@ class ReadingActivity : AppCompatActivity() {
                     loadTopicReadStatus(topic.id)
                     loadAnnotations()
                     renderSavedAnnotations()
-                }, 2000)
+                }, 1000) // Reduced delay for better UX
             }
         }
     }
@@ -1326,39 +1829,25 @@ class ReadingActivity : AppCompatActivity() {
 
     private fun updateNavigationButtons() {
         previousButton.isEnabled = currentTopicIndex > 0
-
         if (currentTopicIndex == topics.size - 1) {
             nextButton.visibility = View.GONE
             completeTopicButton.visibility = View.VISIBLE
-            previousButton.layoutParams = (previousButton.layoutParams as LinearLayout.LayoutParams).apply {
-                weight = 1f
-            }
-            completeTopicButton.layoutParams = (completeTopicButton.layoutParams as LinearLayout.LayoutParams).apply {
-                weight = 1f
-            }
         } else {
             nextButton.visibility = View.VISIBLE
             nextButton.isEnabled = currentTopicIndex < topics.size - 1
             completeTopicButton.visibility = View.GONE
-            previousButton.layoutParams = (previousButton.layoutParams as LinearLayout.LayoutParams).apply {
-                weight = 1f
-            }
-            nextButton.layoutParams = (nextButton.layoutParams as LinearLayout.LayoutParams).apply {
-                weight = 1f
-            }
         }
     }
 
     private fun loadTopicReadStatus(topicId: String) {
         val sharedPrefs = getSharedPreferences("TopicProgress", MODE_PRIVATE)
         val isRead = sharedPrefs.getBoolean("topic_${courseCode}_${getModeSuffix()}_${topicId}", false)
-        setCheckboxCheckedSilently(isRead)
+            setCheckboxCheckedSilently(isRead)
     }
 
     private fun updateTopicReadStatus(topicId: String, isRead: Boolean) {
         val sharedPrefs = getSharedPreferences("TopicProgress", MODE_PRIVATE)
         sharedPrefs.edit().putBoolean("topic_${courseCode}_${getModeSuffix()}_${topicId}", isRead).apply()
-
         updateTopicProgressToBackend(topicId, isRead)
         updateCourseProgress()
         updateProgress()
@@ -1391,7 +1880,6 @@ class ReadingActivity : AppCompatActivity() {
         }
 
         val progress = (completedTopics * 100) / topics.size
-
         val courseProgressPrefs = getSharedPreferences("CourseProgress", MODE_PRIVATE)
         courseProgressPrefs.edit()
             .putInt("progress_${courseCode}_${getModeSuffix()}", progress)
@@ -1402,9 +1890,7 @@ class ReadingActivity : AppCompatActivity() {
         currentTopic?.let { topic ->
             updateTopicReadStatus(topic.id, true)
             setCheckboxCheckedSilently(true)
-
             Toast.makeText(this, "Topic completed! Great job!", Toast.LENGTH_LONG).show()
-
             if (currentTopicIndex == topics.size - 1) {
                 showCourseCompletionDialog()
             }
@@ -1415,9 +1901,7 @@ class ReadingActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("🎉 Course Completed!")
             .setMessage("Congratulations! You have successfully completed all topics in this course.")
-            .setPositiveButton("View Progress") { _, _ ->
-                finish()
-            }
+            .setPositiveButton("View Progress") { _, _ -> finish() }
             .setNegativeButton("Continue Reading") { _, _ -> }
             .create()
             .show()
@@ -1431,11 +1915,10 @@ class ReadingActivity : AppCompatActivity() {
             else -> "all"
         }
 
-        val url = "http://192.168.56.1/univault/get_topics.php?course_code=$courseId&mode=$apiMode"
+        val url = "http://10.86.199.54/univault/get_topics.php?course_code=$courseId&mode=$apiMode"
         Log.d("ReadingActivity", "Fetching topics from: $url")
 
         val queue = Volley.newRequestQueue(this)
-
         val stringRequest = object : com.android.volley.toolbox.StringRequest(
             Request.Method.GET, url,
             { body ->
@@ -1459,21 +1942,13 @@ class ReadingActivity : AppCompatActivity() {
                         loadCurrentTopic()
                         Toast.makeText(this, "Loaded ${topics.size} topics", Toast.LENGTH_SHORT).show()
                     } else {
-                        showLoadingSpinner()
-                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                             showNoTopicsState("📚 No topics found for this course and mode.\n\nPlease check back later or contact your instructor.")
-                            Toast.makeText(this, "No topics found", Toast.LENGTH_SHORT).show()
-                        }, 2000)
                     }
                 } catch (arrayEx: JSONException) {
                     try {
                         val obj = JSONObject(body)
                         val errorMsg = obj.optString("error", "No topics found")
-                        showLoadingSpinner()
-                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                             showNoTopicsState("📚 $errorMsg\n\nPlease check back later or contact your instructor.")
-                            Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show()
-                        }, 2000)
                     } catch (objEx: JSONException) {
                         Log.e("ReadingActivity", "Unrecognized server response")
                         showNoTopicsState("❌ Unrecognized server response. Please try again later.")
@@ -1486,7 +1961,6 @@ class ReadingActivity : AppCompatActivity() {
                 Toast.makeText(this, "Network error: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         ) {}
-
         queue.add(stringRequest)
     }
 
@@ -1527,10 +2001,8 @@ class ReadingActivity : AppCompatActivity() {
     }
 
     private fun updateTopicProgressToBackend(topicId: String, isRead: Boolean) {
-        val url = "http://192.168.56.1/univault/update_topic_progress.php"
-
+        val url = "http://10.86.199.54/univault/update_topic_progress.php"
         val queue = Volley.newRequestQueue(this)
-
         val jsonObject = JSONObject().apply {
             put("student_id", getStudentId())
             put("course_code", courseCode)
@@ -1542,7 +2014,6 @@ class ReadingActivity : AppCompatActivity() {
                 else -> "all"
             })
         }
-
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, jsonObject,
             { response ->
@@ -1556,7 +2027,6 @@ class ReadingActivity : AppCompatActivity() {
                 Log.e("ReadingActivity", "Failed to update backend: ${error.message}")
             }
         )
-
         queue.add(jsonObjectRequest)
     }
 
@@ -1573,6 +2043,17 @@ class ReadingActivity : AppCompatActivity() {
         }
         loadTotalStudyTime()
         updateStudyTimeDisplay()
+
+        // Re-enable text selection when activity resumes
+        topicContent.postDelayed({
+            enableTextSelection()
+            Log.d("ReadingActivity", "Text selection re-enabled on resume")
+        }, 500)
+        
+        topicContent.postDelayed({
+            enableTextSelection()
+            Log.d("ReadingActivity", "Text selection re-enabled on resume (delayed)")
+        }, 1500)
     }
 
     override fun onPause() {
@@ -1595,15 +2076,11 @@ class ReadingActivity : AppCompatActivity() {
         if (sessionStartTime > 0) {
             val currentTime = System.currentTimeMillis()
             val sessionDuration = currentTime - sessionStartTime
-
             if (sessionDuration > 0) {
                 totalStudyTimeMillis += sessionDuration
                 saveStudyTime()
-
-                // Assuming HomeFragment1 is defined elsewhere
                 HomeFragment1.saveReadingSession(this, sessionDuration, courseCode)
             }
-
             sessionStartTime = 0
         }
     }
@@ -1613,7 +2090,6 @@ class ReadingActivity : AppCompatActivity() {
         sharedPreferences.edit()
             .putLong("total_study_time_$courseCode", totalStudyTimeMillis)
             .apply()
-
         saveStudyTimeToBackend()
     }
 
@@ -1630,7 +2106,6 @@ class ReadingActivity : AppCompatActivity() {
     private fun updateStudyTimeDisplay() {
         val hours = getTotalStudyTimeInHours()
         val minutes = (hours * 60).toInt()
-
         if (minutes < 60) {
             studyTimeText.text = "Study time: $minutes min"
         } else {
@@ -1650,6 +2125,16 @@ class ReadingActivity : AppCompatActivity() {
         }
         autoCheckScheduled = false
         setupCheckboxListener()
+    }
+
+    private fun showLoadingSpinner() {
+        loadingSpinnerLayout.visibility = View.VISIBLE
+        topicContent.visibility = View.GONE
+    }
+
+    private fun hideLoadingSpinner() {
+        loadingSpinnerLayout.visibility = View.GONE
+        topicContent.visibility = View.VISIBLE
     }
 
     private fun showNoTopicsState(message: String) {
@@ -1677,10 +2162,8 @@ class ReadingActivity : AppCompatActivity() {
     }
 
     private fun saveStudyTimeToBackend() {
-        val url = "http://192.168.56.1/univault/save_study_time.php"
-
+        val url = "http://10.86.199.54/univault/save_study_time.php"
         val queue = Volley.newRequestQueue(this)
-
         val jsonObject = JSONObject().apply {
             put("student_id", getStudentId())
             put("course_code", courseCode)
@@ -1691,7 +2174,6 @@ class ReadingActivity : AppCompatActivity() {
                 else -> "all"
             })
         }
-
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, jsonObject,
             { response ->
@@ -1705,7 +2187,6 @@ class ReadingActivity : AppCompatActivity() {
                 Log.e("ReadingActivity", "Failed to save study time to backend: ${error.message}")
             }
         )
-
         queue.add(jsonObjectRequest)
     }
 
@@ -1722,10 +2203,8 @@ class ReadingActivity : AppCompatActivity() {
             else -> "all"
         }
 
-        val url = "http://192.168.56.1/univault/get_study_time.php?student_id=$studentId&course_code=$courseCode&mode=$apiMode"
-
+        val url = "http://10.86.199.54/univault/get_study_time.php?student_id=$studentId&course_code=$courseCode&mode=$apiMode"
         val queue = Volley.newRequestQueue(this)
-
         val stringRequest = object : com.android.volley.toolbox.StringRequest(
             Request.Method.GET, url,
             { response ->
@@ -1733,7 +2212,6 @@ class ReadingActivity : AppCompatActivity() {
                     val jsonResponse = JSONObject(response)
                     if (jsonResponse.optBoolean("success", false)) {
                         val backendStudyTime = jsonResponse.optLong("total_study_time_millis", 0)
-
                         if (backendStudyTime > totalStudyTimeMillis) {
                             totalStudyTimeMillis = backendStudyTime
                             val sharedPreferences = getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
@@ -1744,7 +2222,6 @@ class ReadingActivity : AppCompatActivity() {
                                 updateStudyTimeDisplay()
                             }
                         }
-
                         Log.d("ReadingActivity", "Study time loaded from backend: ${jsonResponse.optString("formatted_time")}")
                     } else {
                         Log.w("ReadingActivity", "Backend response: ${jsonResponse.optString("error", "Unknown error")}")
@@ -1757,7 +2234,6 @@ class ReadingActivity : AppCompatActivity() {
                 Log.e("ReadingActivity", "Failed to load study time from backend: ${error.message}")
             }
         ) {}
-
         queue.add(stringRequest)
     }
 }

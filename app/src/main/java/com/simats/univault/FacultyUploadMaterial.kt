@@ -357,7 +357,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
             return
         }
 
-        val url = "http://192.168.56.1/UniVault/upload_material.php"
+        val url = "http://10.86.199.54/UniVault/upload_material.php"
 
         // Create request with timeout for better network handling
         val request = VolleyFileUpload(
@@ -404,7 +404,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
 
     private fun fetchPDFs(college: String, course: String) {
         pdfContainer.removeAllViews()
-        val url = "http://192.168.56.1/univault/list_pdfs.php?college=$college&course=$course"
+        val url = "http://10.86.199.54/univault/list_pdfs.php?college=$college&course=$course"
 
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -479,7 +479,7 @@ class FacultyUploadMaterial : AppCompatActivity() {
     }
 
     private fun deleteFileFromServer(fileName: String) {
-        val url = "http://192.168.56.1/UniVault/delete_material.php"
+        val url = "http://10.86.199.54/UniVault/delete_material.php"
 
         val request = object : StringRequest(
             Method.POST, url,

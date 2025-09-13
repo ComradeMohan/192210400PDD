@@ -29,6 +29,7 @@ class PrepActivity : AppCompatActivity() {
     private lateinit var passModeCard: LinearLayout
     private lateinit var masterModeCard: LinearLayout
     private lateinit var mcqTestCard: LinearLayout
+    private lateinit var theoryQuestionsCard: LinearLayout
     private lateinit var testHistoryCard: LinearLayout
     private lateinit var totalTestsText: TextView
     private lateinit var averageScoreText: TextView
@@ -70,6 +71,7 @@ class PrepActivity : AppCompatActivity() {
         passModeCard = findViewById(R.id.passModeCard)
         masterModeCard = findViewById(R.id.masterModeCard)
         mcqTestCard = findViewById(R.id.mcqTestCard)
+        theoryQuestionsCard = findViewById(R.id.theoryQuestionsCard)
         testHistoryCard = findViewById(R.id.testHistoryCard)
         totalTestsText = findViewById(R.id.totalTestsText)
         averageScoreText = findViewById(R.id.averageScoreText)
@@ -94,6 +96,11 @@ class PrepActivity : AppCompatActivity() {
         // MCQ Test Card Click Listener
         mcqTestCard.setOnClickListener {
             startMCQTest()
+        }
+        
+        // Theory Questions Card Click Listener
+        theoryQuestionsCard.setOnClickListener {
+            startTheoryQuestions()
         }
         
         // Test History Card Click Listener
@@ -160,7 +167,7 @@ class PrepActivity : AppCompatActivity() {
     
     private fun fetchCourseDescription(courseCode: String, courseName: String, collegeName: String) {
         // Construct the API URL
-        val url = "http://192.168.56.1/univault/get_course_description.php?course_code=$courseCode"
+        val url = "http://10.86.199.54/univault/get_course_description.php?course_code=$courseCode"
         Log.d("PrepActivity", "Fetching course description from: $url")
         val queue = Volley.newRequestQueue(this)
         
@@ -291,6 +298,21 @@ class PrepActivity : AppCompatActivity() {
         startActivity(intent)
     }
     
+    private fun startTheoryQuestions() {
+        // Get course ID from intent or default to 1 (Artificial Intelligence)
+        val courseId = intent.getIntExtra("courseId", 1)
+        
+        // Navigate to Theory Questions Activity
+        val intent = Intent(this, TheoryQuestionActivity::class.java).apply {
+            putExtra("courseCode", this@PrepActivity.intent.getStringExtra("courseCode"))
+            putExtra("courseName", courseTitle.text.toString())
+            putExtra("collegeName", this@PrepActivity.intent.getStringExtra("collegeName"))
+            putExtra("courseId", courseId) // Use the actual course ID
+            putExtra("studentId", 1) // You can get this from shared preferences or login
+        }
+        startActivity(intent)
+    }
+    
     private fun startTestHistory() {
         // Get course ID from intent or default to 1 (Artificial Intelligence)
         val courseId = intent.getIntExtra("courseId", 1)
@@ -310,8 +332,8 @@ class PrepActivity : AppCompatActivity() {
         val courseId = intent.getIntExtra("courseId", 1)
         val studentId = 1 // You can get this from shared preferences or login
         
-        val url = "http://192.168.56.1/univault/get_mcq_test_history.php?student_id=$studentId&course_id=$courseId"
-        Log.d("PrepActivity", "Loading test history stats from: $url")
+        val url = "http://10.86.199.54/univault/get_combined_test_history.php?student_id=$studentId&course_id=$courseId"
+        Log.d("PrepActivity", "Loading combined test history stats from: $url")
         val queue = Volley.newRequestQueue(this)
         
         val jsonObjectRequest = JsonObjectRequest(
@@ -319,35 +341,17 @@ class PrepActivity : AppCompatActivity() {
             { response ->
                 try {
                     if (response.getBoolean("success")) {
-                        val testHistory = response.getJSONArray("test_history")
-                        val totalTests = testHistory.length()
+                        val statistics = response.getJSONObject("statistics")
+                        val totalTests = statistics.getInt("total_tests")
+                        val averageScore = statistics.getDouble("average_score")
+                        val bestScore = statistics.getDouble("best_score")
                         
-                        if (totalTests > 0) {
-                            var totalScore = 0
-                            var bestScore = 0
-                            
-                            for (i in 0 until totalTests) {
-                                val test = testHistory.getJSONObject(i)
-                                val percentage = test.getDouble("percentage")
-                                
-                                totalScore += percentage.toInt()
-                                if (percentage > bestScore) {
-                                    bestScore = percentage.toInt()
-                                }
-                            }
-                            
-                            val averageScore = totalScore / totalTests
-                            
-                            // Update UI
-                            totalTestsText.text = totalTests.toString()
-                            averageScoreText.text = "$averageScore%"
-                            bestScoreText.text = "$bestScore%"
-                        } else {
-                            // No tests taken yet
-                            totalTestsText.text = "0"
-                            averageScoreText.text = "0%"
-                            bestScoreText.text = "0%"
-                        }
+                        // Update UI
+                        totalTestsText.text = totalTests.toString()
+                        averageScoreText.text = "${averageScore.toInt()}%"
+                        bestScoreText.text = "${bestScore.toInt()}%"
+                        
+                        Log.d("PrepActivity", "Loaded combined test history: $totalTests tests, avg: $averageScore%, best: $bestScore%")
                     } else {
                         // Handle error case
                         totalTestsText.text = "0"
@@ -355,7 +359,7 @@ class PrepActivity : AppCompatActivity() {
                         bestScoreText.text = "0%"
                     }
                 } catch (e: JSONException) {
-                    Log.e("PrepActivity", "Error parsing test history: ${e.message}")
+                    Log.e("PrepActivity", "Error parsing combined test history: ${e.message}")
                     totalTestsText.text = "0"
                     averageScoreText.text = "0%"
                     bestScoreText.text = "0%"
