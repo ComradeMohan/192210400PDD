@@ -90,7 +90,7 @@ class MCQTestHistoryActivity : AppCompatActivity() {
             return
         }
         
-        val url = "http://192.168.137.229/univault/get_mcq_test_history.php?student_id=$studentId&course_id=$courseId"
+        val url = "http://192.168.56.1/univault/get_mcq_test_history.php?student_id=$studentId&course_id=$courseId"
         Log.d("MCQTestHistoryActivity", "Loading test history from: $url")
         
         val queue = Volley.newRequestQueue(this)

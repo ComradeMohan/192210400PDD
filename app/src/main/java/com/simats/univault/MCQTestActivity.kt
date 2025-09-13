@@ -142,7 +142,7 @@ class MCQTestActivity : AppCompatActivity() {
         // Show loading indicator
         questionText.text = "Loading questions..."
         
-        val url = "http://192.168.137.229/univault/get_mcq_questions.php?course_id=$courseId&limit=15"
+        val url = "http://192.168.56.1/univault/get_mcq_questions.php?course_id=$courseId&limit=15"
         Log.d("MCQTestActivity", "Loading questions from: $url")
         
         val queue = Volley.newRequestQueue(this)
@@ -394,7 +394,7 @@ class MCQTestActivity : AppCompatActivity() {
     }
     
     private fun saveTestResult(score: Int, totalQuestions: Int, timeTaken: Long) {
-        val url = "http://192.168.137.229/univault/save_mcq_result.php"
+        val url = "http://192.168.56.1/univault/save_mcq_result.php"
         
         // Prepare answers data
         val answersData = mutableMapOf<String, Int>()

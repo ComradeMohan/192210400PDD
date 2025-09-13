@@ -79,7 +79,7 @@ class MCQReviewActivity : AppCompatActivity() {
             return
         }
         
-        val url = "http://192.168.137.229/univault/get_mcq_test_review.php?test_result_id=$testResultId"
+        val url = "http://192.168.56.1/univault/get_mcq_test_review.php?test_result_id=$testResultId"
         Log.d("MCQReviewActivity", "Loading review from: $url")
         
         val queue = Volley.newRequestQueue(this)

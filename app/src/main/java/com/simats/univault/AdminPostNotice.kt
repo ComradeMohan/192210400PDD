@@ -78,7 +78,7 @@ class AdminPostNotice : AppCompatActivity() {
         attachmentPath: String,
         isHighPriority: Boolean
     ) {
-        val url = "http://192.168.137.229/univault/post_notice.php"
+        val url = "http://192.168.56.1/univault/post_notice.php"
 
         val params = HashMap<String, String>().apply {
             put("title", title)
@@ -121,7 +121,7 @@ class AdminPostNotice : AppCompatActivity() {
     }
 
     private fun loadOldNotices(college: String) {
-        val url = "http://192.168.137.229/univault/fetch_notifications.php?college_name=$college"
+        val url = "http://192.168.56.1/univault/fetch_notifications.php?college_name=$college"
 
         val request = StringRequest(
             Request.Method.GET, url,
@@ -185,7 +185,7 @@ class AdminPostNotice : AppCompatActivity() {
     }
 
     private fun deleteNoticeFromServer(noticeTitle: String) {
-        val url = "http://192.168.137.229/univault/delete_notice.php"
+        val url = "http://192.168.56.1/univault/delete_notice.php"
 
         val params = HashMap<String, String>()
         params["title"] = noticeTitle

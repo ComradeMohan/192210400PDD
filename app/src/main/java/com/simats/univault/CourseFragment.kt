@@ -93,7 +93,7 @@ import com.simats.univault.R
             }
         }
         private fun fetchCollegeName(studentID: String, adapter: CourseAdapter) {
-            val url = "http://192.168.137.229/univault/fetch_student_name.php?studentID=$studentID"
+            val url = "http://192.168.56.1/univault/fetch_student_name.php?studentID=$studentID"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(
@@ -123,8 +123,8 @@ import com.simats.univault.R
         }
 
         private fun fetchCourses(collegeName: String, adapter: CourseAdapter) {
-//            val url = "http://192.168.137.229/univault/fetch_courses.php?college=$collegeName"
-            val url = "http://192.168.137.229/univault/get_prep_courses.php"
+//            val url = "http://192.168.56.1/univault/fetch_courses.php?college=$collegeName"
+            val url = "http://192.168.56.1/univault/get_prep_courses.php"
             val queue = Volley.newRequestQueue(requireContext())
 
             val jsonObjectRequest = JsonObjectRequest(
