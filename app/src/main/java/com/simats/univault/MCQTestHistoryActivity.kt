@@ -28,10 +28,11 @@ class MCQTestHistoryActivity : AppCompatActivity() {
     
     data class TestHistoryItem(
         val testResultId: Int,
+        val testType: String, // "MCQ" or "Theory"
         val score: Int,
         val totalQuestions: Int,
         val percentage: Double,
-        val timeTaken: Int,
+        val timeTaken: Int?,
         val testDate: String
     ) {
         // Calculate grade from percentage
@@ -90,8 +91,8 @@ class MCQTestHistoryActivity : AppCompatActivity() {
             return
         }
         
-        val url = "http://10.86.199.54/univault/get_mcq_test_history.php?student_id=$studentId&course_id=$courseId"
-        Log.d("MCQTestHistoryActivity", "Loading test history from: $url")
+        val url = "http://10.86.199.54/univault/get_combined_test_history.php?student_id=$studentId&course_id=$courseId"
+        Log.d("MCQTestHistoryActivity", "Loading combined test history from: $url")
         
         val queue = Volley.newRequestQueue(this)
         val jsonObjectRequest = JsonObjectRequest(
@@ -131,11 +132,12 @@ class MCQTestHistoryActivity : AppCompatActivity() {
         for (i in 0 until testHistoryArray.length()) {
             val testObj = testHistoryArray.getJSONObject(i)
             val testHistoryItem = TestHistoryItem(
-                testResultId = testObj.getInt("test_result_id"),
-                score = testObj.getInt("score"),
+                testResultId = testObj.getInt("id"),
+                testType = testObj.getString("test_type"),
+                score = testObj.getInt("total_score"),
                 totalQuestions = testObj.getInt("total_questions"),
                 percentage = testObj.getDouble("percentage"),
-                timeTaken = testObj.getInt("time_taken"),
+                timeTaken = if (testObj.isNull("time_taken")) null else testObj.getInt("time_taken"),
                 testDate = testObj.getString("test_date")
             )
             
@@ -147,16 +149,23 @@ class MCQTestHistoryActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val testView = inflater.inflate(R.layout.item_test_history, testHistoryList, false)
         
-        // Set test number and date
-        testView.findViewById<TextView>(R.id.testNumberText).text = "Test #$testNumber"
+        // Set test number and date with test type
+        val testNumberText = testView.findViewById<TextView>(R.id.testNumberText)
+        testNumberText.text = "${testItem.testType} Test #$testNumber"
+        
         testView.findViewById<TextView>(R.id.testDateText).text = formatDate(testItem.testDate)
         
         // Set score and percentage
         testView.findViewById<TextView>(R.id.scoreText).text = "${testItem.score}/${testItem.totalQuestions}"
         testView.findViewById<TextView>(R.id.percentageText).text = "${testItem.percentage}%"
         
-        // Set time taken
-        testView.findViewById<TextView>(R.id.timeText).text = formatTime(testItem.timeTaken)
+        // Set time taken (handle null for theory tests)
+        val timeText = testView.findViewById<TextView>(R.id.timeText)
+        timeText.text = if (testItem.timeTaken != null) {
+            formatTime(testItem.timeTaken)
+        } else {
+            "No Limit"
+        }
         
         // Set grade with color
         val gradeText = testView.findViewById<TextView>(R.id.gradeText)
@@ -165,17 +174,26 @@ class MCQTestHistoryActivity : AppCompatActivity() {
         
         // Set click listener to view detailed review
         testView.setOnClickListener {
-            viewTestReview(testItem.testResultId)
+            viewTestReview(testItem.testResultId, testItem.testType)
         }
         
         testHistoryList.addView(testView)
     }
     
-    private fun viewTestReview(testResultId: Int) {
-        val intent = Intent(this, MCQReviewActivity::class.java).apply {
-            putExtra("testResultId", testResultId)
-            putExtra("courseId", courseId)
-            putExtra("studentId", studentId)
+    private fun viewTestReview(testResultId: Int, testType: String) {
+        val intent = if (testType == "MCQ") {
+            Intent(this, MCQReviewActivity::class.java).apply {
+                putExtra("testResultId", testResultId)
+                putExtra("courseId", courseId)
+                putExtra("studentId", studentId)
+            }
+        } else {
+            Intent(this, TheoryReviewActivity::class.java).apply {
+                putExtra("test_result_id", testResultId)
+                putExtra("courseId", courseId)
+                putExtra("studentId", studentId)
+                putExtra("courseName", courseName)
+            }
         }
         startActivity(intent)
     }

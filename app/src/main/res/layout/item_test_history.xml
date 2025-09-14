@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Test #1"
+            android:text="MCQ Test #1"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -115,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time Taken"
+                android:text="Time/Duration"
                 android:textSize="12sp"
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
