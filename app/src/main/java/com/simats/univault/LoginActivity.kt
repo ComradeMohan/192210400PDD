@@ -208,7 +208,7 @@ class LoginActivity : AppCompatActivity() {
                                 val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
                                 sf.edit().putBoolean("isLoggedIn", true).apply()
                                 sf.edit().putString("userType", userType).apply()
-                                sf.edit().putString("userID", studentNumber).apply()
+                                sf.edit().putInt("userID", studentNumber.toInt()).apply()
                                 sf.edit().putString("college", college).apply()
 
                                 FirebaseMessaging.getInstance().token.addOnCompleteListener {
@@ -309,7 +309,7 @@ class LoginActivity : AppCompatActivity() {
                         val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
                         sf.edit().putBoolean("isLoggedIn", true).apply()
                         sf.edit().putString("userType", userType).apply()
-                        sf.edit().putString("userID", studentNumber).apply()
+                        sf.edit().putInt("userID", studentNumber.toInt()).apply()
                         sf.edit().putString("college", college).apply()
                         sf.edit().putString("email", email).apply()
 

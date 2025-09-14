@@ -12,6 +12,24 @@ class MainActivity : AppCompatActivity() {
 
 
     private val REQUEST_CODE_POST_NOTIFICATIONS = 1001
+    
+    private fun getUserIdSafely(sf: android.content.SharedPreferences): String {
+        return try {
+            // Try to get as Integer first (new format)
+            sf.getInt("userID", 0).toString()
+        } catch (e: ClassCastException) {
+            // If it's stored as String (old format), get it and convert
+            try {
+                val stringId = sf.getString("userID", "0") ?: "0"
+                val intId = stringId.toIntOrNull() ?: 0
+                // Update to new format
+                sf.edit().putInt("userID", intId).apply()
+                intId.toString()
+            } catch (e: Exception) {
+                "0"
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
         val isLoggedIn = sf.getBoolean("isLoggedIn",false)
         val userType = sf.getString("userType","")
-        val userId = sf.getString("userID","")
+        val userId = getUserIdSafely(sf)
 
         if (isLoggedIn){
             if (userType.equals("admin")){

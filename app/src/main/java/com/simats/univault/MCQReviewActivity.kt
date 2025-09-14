@@ -42,10 +42,32 @@ class MCQReviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mcq_review)
         
+        // Get student_id from shared preferences FIRST (this is the source of truth)
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        studentId = sf.getInt("userID", 0)
+        
         // Get intent data
         testResultId = intent.getIntExtra("testResultId", 0)
         courseId = intent.getIntExtra("courseId", 0)
-        studentId = intent.getIntExtra("studentId", 0)
+        
+        // Only use intent studentId if SharedPreferences doesn't have a valid one
+        val intentStudentId = intent.getIntExtra("studentId", 0)
+        if (studentId <= 0 && intentStudentId > 0) {
+            studentId = intentStudentId
+            // Save it to SharedPreferences for future use
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Ensure we have a valid studentId
+        if (studentId <= 0) {
+            studentId = 1 // Last resort default
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Update login status
+        sf.edit().putBoolean("isLoggedIn", true).apply()
+        
+        Log.d("MCQReviewActivity", "Initialized with - testResultId: $testResultId, courseId: $courseId, studentId: $studentId")
         
         // Initialize UI elements
         initializeViews()

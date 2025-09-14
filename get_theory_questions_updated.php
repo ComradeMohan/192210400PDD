@@ -27,12 +27,38 @@ try {
 }
 
 // Get parameters
-$courseId = isset($_GET['course_id']) ? (int)$_GET['course_id'] : 1;
+$courseCode = isset($_GET['course_code']) ? $_GET['course_code'] : '';
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 15;
 $difficulty = isset($_GET['difficulty']) ? $_GET['difficulty'] : null;
 $includeAnswer = isset($_GET['include_answer']) ? filter_var($_GET['include_answer'], FILTER_VALIDATE_BOOLEAN) : false;
 
+// Validate course_code parameter
+if (empty($courseCode)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Missing required parameter: course_code'
+    ]);
+    exit;
+}
+
 try {
+    // First, get the course_id from course_code
+    $course_sql = "SELECT course_id FROM prepcourses WHERE course_code = :course_code";
+    $course_stmt = $pdo->prepare($course_sql);
+    $course_stmt->bindParam(':course_code', $courseCode, PDO::PARAM_STR);
+    $course_stmt->execute();
+    $course_result = $course_stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$course_result) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Course not found for course_code: ' . $courseCode
+        ]);
+        exit;
+    }
+    
+    $courseId = (int)$course_result['course_id'];
+    
     // Build the query based on your table structure
     $sql = "SELECT question_id, course_id, question_text, keywords, complete_answer, difficulty_level, marks, created_at 
             FROM theory_questions 
@@ -96,6 +122,7 @@ try {
         'questions' => $formattedQuestions,
         'total_questions' => count($formattedQuestions),
         'course_id' => $courseId,
+        'course_code' => $courseCode,
         'include_answer' => $includeAnswer
     ]);
     

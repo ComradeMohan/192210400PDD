@@ -29,6 +29,24 @@ import java.net.URL
 
 class FacultyStudentsFragment : Fragment() {
 
+    private fun getUserIdSafely(sf: android.content.SharedPreferences): String {
+        return try {
+            // Try to get as Integer first (new format)
+            sf.getInt("userID", 0).toString()
+        } catch (e: ClassCastException) {
+            // If it's stored as String (old format), get it and convert
+            try {
+                val stringId = sf.getString("userID", "0") ?: "0"
+                val intId = stringId.toIntOrNull() ?: 0
+                // Update to new format
+                sf.edit().putInt("userID", intId).apply()
+                intId.toString()
+            } catch (e: Exception) {
+                "0"
+            }
+        }
+    }
+
     private lateinit var searchEditText: EditText
     private lateinit var studentsListLayout: LinearLayout
     private var allStudents = mutableListOf<Triple<String, String, String>>() // name, number, department
@@ -50,7 +68,7 @@ class FacultyStudentsFragment : Fragment() {
         studentsListLayout = view.findViewById(R.id.studentsList)
 
         val sf = requireContext().getSharedPreferences("user_sf", AppCompatActivity.MODE_PRIVATE)
-        val facultyId = sf.getString("userID", null)
+        val facultyId = getUserIdSafely(sf)
         collegeName = sf.getString("college", null)
 
         if (!facultyId.isNullOrEmpty() && !collegeName.isNullOrEmpty()) {

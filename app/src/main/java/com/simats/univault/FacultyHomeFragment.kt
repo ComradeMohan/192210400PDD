@@ -75,15 +75,12 @@ class FacultyHomeFragment : Fragment() {
 
         val uploadButton: LinearLayout = view.findViewById(R.id.uploadResourcesButton)
         uploadButton.setOnClickListener {
-            if (collegeName != null) {
-                val courseFragment = CourseFragment.newInstanceWithCollegeName(collegeName!!)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, courseFragment)
-                    .addToBackStack(null)
-                    .commit()
-            } else {
-                Toast.makeText(requireContext(), "College name not available", Toast.LENGTH_SHORT).show()
-            }
+            // Use simplified CourseFragment that doesn't require college name
+            val courseFragment = CourseFragment.newInstance(facultyId ?: "")
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, courseFragment)
+                .addToBackStack(null)
+                .commit()
         }
         loadQuickNote()
         val sendAnnounce: LinearLayout = view.findViewById(R.id.sendAnnouncementButton)

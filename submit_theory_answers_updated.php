@@ -79,7 +79,7 @@ if (!$input) {
 }
 
 // Validate required fields
-$requiredFields = ['student_id', 'course_id', 'answers'];
+$requiredFields = ['student_id', 'course_code', 'answers'];
 foreach ($requiredFields as $field) {
     if (!isset($input[$field])) {
         echo json_encode([
@@ -91,7 +91,7 @@ foreach ($requiredFields as $field) {
 }
 
 $studentId = (int)$input['student_id'];
-$courseId = (int)$input['course_id'];
+$courseCode = $input['course_code'];
 $answers = $input['answers'];
 
 if (!is_array($answers) || empty($answers)) {
@@ -103,6 +103,23 @@ if (!is_array($answers) || empty($answers)) {
 }
 
 try {
+    // Validate course_code exists in prepcourses table
+    $course_sql = "SELECT course_id FROM prepcourses WHERE course_code = :course_code";
+    $course_stmt = $pdo->prepare($course_sql);
+    $course_stmt->bindParam(':course_code', $courseCode, PDO::PARAM_STR);
+    $course_stmt->execute();
+    $course_result = $course_stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$course_result) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Course not found for course_code: ' . $courseCode
+        ]);
+        exit;
+    }
+    
+    $courseId = (int)$course_result['course_id'];
+    
     // Start transaction
     $pdo->beginTransaction();
     
@@ -146,12 +163,12 @@ try {
     
     // Insert test result with calculated marks and scores
     $stmt = $pdo->prepare("
-        INSERT INTO theory_test_results (student_id, course_id, total_questions, total_marks, total_score, answered_questions, percentage) 
-        VALUES (:student_id, :course_id, :total_questions, :total_marks, :total_score, :answered_questions, :percentage)
+        INSERT INTO theory_test_results (student_id, course_code, total_questions, total_marks, total_score, answered_questions, percentage) 
+        VALUES (:student_id, :course_code, :total_questions, :total_marks, :total_score, :answered_questions, :percentage)
     ");
     $stmt->execute([
         'student_id' => $studentId,
-        'course_id' => $courseId,
+        'course_code' => $courseCode,
         'total_questions' => count($answers),
         'total_marks' => $totalMarks,
         'total_score' => $totalScore,
@@ -205,6 +222,8 @@ try {
         'total_marks' => $totalMarks,
         'total_score' => $totalScore,
         'percentage' => $percentage,
+        'course_id' => $courseId,
+        'course_code' => $courseCode,
         'question_scores' => $questionScores,
         'submission_date' => date('Y-m-d H:i:s')
     ]);

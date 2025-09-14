@@ -29,18 +29,47 @@ class TheoryQuestionActivity : AppCompatActivity() {
     private var theoryQuestions: MutableList<JSONObject> = mutableListOf()
     private var currentQuestionIndex = 0
     private var userAnswers: MutableList<String> = mutableListOf()
-    private var courseId: Int = 1
-    private var studentId: Int = 1
+    private var courseCode: String = ""
+    private var courseId: Int = 1 // Separate field for database lookup
+    private var studentId: Int = 0 // Will be loaded from SharedPreferences
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theory_questions)
         
+        // Get student_id from shared preferences FIRST (this is the source of truth)
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        studentId = sf.getInt("userID", 0)
+        
+        // Get intent data
+        courseCode = intent.getStringExtra("courseCode") ?: "Unknown"
+        courseId = intent.getIntExtra("courseId", 1) // This is separate from courseCode
+        
+        // Only use intent studentId if SharedPreferences doesn't have a valid one
+        val intentStudentId = intent.getIntExtra("studentId", 0)
+        if (studentId <= 0 && intentStudentId > 0) {
+            studentId = intentStudentId
+            // Save it to SharedPreferences for future use
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Ensure we have a valid studentId
+        if (studentId <= 0) {
+            studentId = 1 // Last resort default
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Update login status
+        sf.edit().putBoolean("isLoggedIn", true).apply()
+        
+        Log.d("TheoryQuestionActivity", "Initialized with - courseCode: $courseCode, courseId: $courseId, studentId: $studentId")
+        
         // Initialize UI elements
         initializeViews()
         
-        // Get data from intent
-        getIntentData()
+        // Get course name from intent
+        val courseName = intent.getStringExtra("courseName") ?: "Unknown Course"
+        courseTitle.text = courseName
         
         // Set up click listeners
         setupClickListeners()
@@ -61,12 +90,6 @@ class TheoryQuestionActivity : AppCompatActivity() {
         progressText = findViewById(R.id.progressText)
     }
     
-    private fun getIntentData() {
-        courseId = intent.getIntExtra("courseId", 1)
-        studentId = intent.getIntExtra("studentId", 1)
-        val courseName = intent.getStringExtra("courseName") ?: "Unknown Course"
-        courseTitle.text = courseName
-    }
     
     private fun setupClickListeners() {
         nextButton.setOnClickListener {
@@ -92,7 +115,7 @@ class TheoryQuestionActivity : AppCompatActivity() {
     }
     
     private fun loadTheoryQuestions() {
-        val url = "http://10.86.199.54/univault/get_theory_questions_updated.php?course_id=$courseId&limit=15"
+        val url = "http://10.86.199.54/univault/get_theory_questions_updated.php?course_id=$courseCode&limit=15"
         Log.d("TheoryQuestionActivity", "Loading theory questions from: $url")
         val queue = Volley.newRequestQueue(this)
         
@@ -205,7 +228,7 @@ class TheoryQuestionActivity : AppCompatActivity() {
         // Prepare answers data
         val answersData = JSONObject()
         answersData.put("student_id", studentId)
-        answersData.put("course_id", courseId)
+        answersData.put("course_code", courseCode)
         
         val answersArray = org.json.JSONArray()
         for (i in theoryQuestions.indices) {
@@ -215,6 +238,9 @@ class TheoryQuestionActivity : AppCompatActivity() {
             answersArray.put(answerObj)
         }
         answersData.put("answers", answersArray)
+        
+        Log.d("TheoryQuestionActivity", "Submitting theory answers - studentId: $studentId, courseCode: $courseCode")
+        Log.d("TheoryQuestionActivity", "Sending data: $answersData")
         
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, answersData,

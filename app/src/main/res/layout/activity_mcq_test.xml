@@ -47,7 +47,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bg_light_blue"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -64,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="15:00"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -75,7 +74,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                     android:id="@+id/questionCounter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1 of 10"
+                    android:text="1 of 15"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -108,7 +108,7 @@
                 android:layout_height="8dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@android:color/white"
-                android:max="10"
+                android:max="15"
                 android:progress="1"
                 android:progressTint="@android:color/holo_green_light" />
         </LinearLayout>
@@ -144,7 +144,7 @@
                     android:background="@drawable/rounded_bg_light_blue"
                     android:padding="6dp"
                     android:text="Question"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -196,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="To predict short-term price movements using technical indicators"
+                        android:text="Fetching ...."
                         android:textColor="@android:color/black"
                         android:textSize="15sp" />
 
@@ -239,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="To evaluate a company's intrinsic value based on financial statements"
+                        android:text="Fetching ...."
                         android:textColor="@android:color/black"
                         android:textSize="15sp" />
 
@@ -282,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="To analyze market sentiment and investor behavior patterns"
+                        android:text="Fetching ...."
                         android:textColor="@android:color/black"
                         android:textSize="15sp" />
 
@@ -325,7 +325,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="To track daily trading volumes and price fluctuations"
+                        android:text="Fetching ...."
                         android:textColor="@android:color/black"
                         android:textSize="15sp" />
 
@@ -345,7 +345,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_bg_light_green"
+                android:background="@drawable/dashed_border"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="12dp"
@@ -363,7 +363,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Selected: Option B"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>

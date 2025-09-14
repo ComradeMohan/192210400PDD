@@ -62,13 +62,18 @@ try {
     // Debug: Log the number of answers found
     error_log("Found " . count($answers) . " answers for test_result_id: $test_result_id");
     
+    if (empty($answers)) {
+        echo json_encode(['error' => 'No answers found for this test', 'debug' => ['test_result_id' => $test_result_id]]);
+        exit;
+    }
+    
     // Format the response
     $response = [
         'success' => true,
         'test_info' => [
             'test_result_id' => (int)$test_result['test_result_id'],
-            'course_id' => (int)$test_result['course_id'],
-            'course_name' => 'Course ' . $test_result['course_id'], // Use course_id as fallback
+            'course_code' => $test_result['course_code'],
+            'course_name' => 'Course ' . $test_result['course_code'], // Use course_code
             'score' => (int)$test_result['score'],
             'total_questions' => (int)$test_result['total_questions'],
             'percentage' => $test_result['total_questions'] > 0 ? 

@@ -72,9 +72,29 @@ class TheoryReviewActivity : AppCompatActivity() {
     private fun getIntentData() {
         testResultId = intent.getIntExtra("test_result_id", 0)
         courseId = intent.getIntExtra("courseId", 1)
-        studentId = intent.getIntExtra("studentId", 1)
+        
+        // Get student_id from shared preferences FIRST (this is the source of truth)
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        studentId = sf.getInt("userID", 0)
+        
+        // Only use intent studentId if SharedPreferences doesn't have a valid one
+        val intentStudentId = intent.getIntExtra("studentId", 0)
+        if (studentId <= 0 && intentStudentId > 0) {
+            studentId = intentStudentId
+            // Save it to SharedPreferences for future use
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Ensure we have a valid studentId
+        if (studentId <= 0) {
+            studentId = 1 // Last resort default
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
         val courseName = intent.getStringExtra("courseName") ?: "Unknown Course"
         courseTitle.text = courseName
+        
+        Log.d("TheoryReviewActivity", "Initialized with - courseId: $courseId, studentId: $studentId")
     }
     
     private fun setupClickListeners() {

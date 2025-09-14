@@ -177,20 +177,20 @@ class ReadingActivity : AppCompatActivity() {
         topicContent.isLongClickable = true
         topicContent.isFocusable = true
         topicContent.isFocusableInTouchMode = true
-        
+
         // Essential WebView settings for text selection
         topicContent.settings.setSupportMultipleWindows(false)
         topicContent.settings.javaScriptCanOpenWindowsAutomatically = false
         topicContent.settings.allowFileAccess = true
         topicContent.settings.allowContentAccess = true
-        
+
         // Enable text selection - critical settings
         topicContent.settings.setSupportZoom(true)
         topicContent.settings.setBuiltInZoomControls(false)
         topicContent.settings.setDisplayZoomControls(false)
         topicContent.settings.setUseWideViewPort(true)
         topicContent.settings.setLoadWithOverviewMode(true)
-        
+
         // Enable hardware acceleration
         topicContent.setLayerType(WebView.LAYER_TYPE_HARDWARE, null)
 
@@ -210,20 +210,25 @@ class ReadingActivity : AppCompatActivity() {
 
                 // Enable text selection
                 enableTextSelection()
-                
+
                 // Test text selection
                 testTextSelection()
 
-                // Re-enable after delays
+                // Re-enable after delays to handle rendering latency
                 topicContent.postDelayed({
                     enableTextSelection()
                     testTextSelection()
                 }, 1000)
-                
+
                 topicContent.postDelayed({
                     enableTextSelection()
                     testTextSelection()
                 }, 2000)
+
+                topicContent.postDelayed({
+                    enableTextSelection()
+                    testTextSelection()
+                }, 3000)
             }
         }
 
@@ -814,6 +819,7 @@ class ReadingActivity : AppCompatActivity() {
         val options = arrayOf(
             "Toggle Reading Controls",
             "Reset All Settings",
+            "Test Word Selection",
             "Export Annotations",
             "Import Annotations",
             "About"
@@ -825,9 +831,10 @@ class ReadingActivity : AppCompatActivity() {
                 when (which) {
                     0 -> toggleReadingControls()
                     1 -> resetAllSettings()
-                    2 -> exportAnnotations()
-                    3 -> importAnnotations()
-                    4 -> showAboutDialog()
+                    2 -> testWordSelection()
+                    3 -> exportAnnotations()
+                    4 -> importAnnotations()
+                    5 -> showAboutDialog()
                 }
             }
             .setNegativeButton("Cancel", null)
@@ -866,6 +873,78 @@ class ReadingActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    private fun testWordSelection() {
+        val js = """
+            console.log('🧪 Testing word selection functionality...');
+            
+            // Show test instructions
+            var testInstructions = document.createElement('div');
+            testInstructions.id = 'word-selection-test';
+            testInstructions.style.cssText = 
+                'position: fixed;' +
+                'top: 50%;' +
+                'left: 50%;' +
+                'transform: translate(-50%, -50%);' +
+                'background: linear-gradient(135deg, #FF9800, #F57C00);' +
+                'color: white;' +
+                'padding: 20px 25px;' +
+                'border-radius: 15px;' +
+                'box-shadow: 0 8px 25px rgba(0,0,0,0.3);' +
+                'z-index: 10000;' +
+                'font-family: Arial, sans-serif;' +
+                'font-size: 16px;' +
+                'font-weight: bold;' +
+                'text-align: center;' +
+                'max-width: 90%;' +
+                'animation: testPulse 2s infinite;';
+            
+            testInstructions.innerHTML = 
+                '<div style="margin-bottom: 10px;">🧪 Word Selection Test</div>' +
+                '<div style="font-size: 14px; opacity: 0.9; line-height: 1.5;">' +
+                'Try these actions on any text:<br><br>' +
+                '• Double-click a word<br>' +
+                '• Long-press (500ms) on a word<br>' +
+                '• Look for the green feedback popup<br>' +
+                '• Use the toolbar to highlight/underline' +
+                '</div>' +
+                '<div style="margin-top: 15px; font-size: 12px; opacity: 0.8;">' +
+                'This message will auto-hide in 8 seconds' +
+                '</div>';
+            
+            // Add CSS animation
+            if (!document.getElementById('test-pulse-styles')) {
+                var style = document.createElement('style');
+                style.id = 'test-pulse-styles';
+                style.textContent = `
+                    @keyframes testPulse {
+                        0% { transform: translate(-50%, -50%) scale(1); }
+                        50% { transform: translate(-50%, -50%) scale(1.05); }
+                        100% { transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(testInstructions);
+            
+            // Auto-hide after 8 seconds
+            setTimeout(function() {
+                if (testInstructions && testInstructions.parentNode) {
+                    testInstructions.style.animation = 'testPulse 0.5s ease-out reverse';
+                    setTimeout(function() {
+                        if (testInstructions && testInstructions.parentNode) {
+                            testInstructions.parentNode.removeChild(testInstructions);
+                        }
+                    }, 500);
+                }
+            }, 8000);
+            
+            console.log('✅ Word selection test instructions displayed');
+        """
+        topicContent.evaluateJavascript(js, null)
+        Log.d("ReadingActivity", "📄 Word selection test initiated")
     }
 
     private fun exportAnnotations() {
@@ -985,9 +1064,9 @@ class ReadingActivity : AppCompatActivity() {
     private fun applyHighlight() {
         currentSelection?.let { (start, end, text) ->
             val annotation = Annotation(
-                    id = generateAnnotationId(),
-                    contentId = currentContentId(),
-                    type = "highlight",
+                id = generateAnnotationId(),
+                contentId = currentContentId(),
+                type = "highlight",
                 start = start,
                 end = end,
                 color = currentHighlightColor
@@ -1002,9 +1081,9 @@ class ReadingActivity : AppCompatActivity() {
     private fun applyUnderline() {
         currentSelection?.let { (start, end, text) ->
             val annotation = Annotation(
-                    id = generateAnnotationId(),
-                    contentId = currentContentId(),
-                    type = "underline",
+                id = generateAnnotationId(),
+                contentId = currentContentId(),
+                type = "underline",
                 start = start,
                 end = end,
                 color = currentUnderlineColor
@@ -1020,13 +1099,13 @@ class ReadingActivity : AppCompatActivity() {
         currentSelection?.let { (start, end, text) ->
             showNoteDialog("") { noteText ->
                 val annotation = Annotation(
-                        id = generateAnnotationId(),
-                        contentId = currentContentId(),
-                        type = "note",
+                    id = generateAnnotationId(),
+                    contentId = currentContentId(),
+                    type = "note",
                     start = start,
                     end = end,
-                        noteText = noteText
-                    )
+                    noteText = noteText
+                )
                 annotations.add(annotation)
                 saveAnnotations()
                 applyAnnotationToWebView(annotation)
@@ -1117,11 +1196,13 @@ class ReadingActivity : AppCompatActivity() {
                 if (window.__annotatorInstalled) return;
                 window.__annotatorInstalled = true;
                 
-                console.log('Simple text selection script loaded');
+                console.log('Enhanced text selection script loaded');
                 
-                // Simple text selection detection
+                // Text selection detection
                 var selectionTimeout;
                 var lastSelection = '';
+                var longPressTimer = null;
+                var isLongPressing = false;
                 
                 function handleSelection() {
                     clearTimeout(selectionTimeout);
@@ -1150,10 +1231,220 @@ class ReadingActivity : AppCompatActivity() {
                     }, 100);
                 }
                 
-                // Simple event listeners
+                // Function to select word at position
+                function selectWordAtPosition(x, y) {
+                    var element = document.elementFromPoint(x, y);
+                    if (!element) return;
+                    
+                    // Find the text node
+                    var textNode = null;
+                    var walker = document.createTreeWalker(
+                        element,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    var node;
+                    while (node = walker.nextNode()) {
+                        if (node.nodeValue && node.nodeValue.trim().length > 0) {
+                            textNode = node;
+                            break;
+                        }
+                    }
+                    
+                    if (!textNode) return;
+                    
+                    // Get the word at the click position
+                    var range = document.createRange();
+                    var text = textNode.nodeValue;
+                    var textOffset = 0;
+                    
+                    // Calculate offset within the text node
+                    var tempRange = document.createRange();
+                    tempRange.setStart(textNode, 0);
+                    tempRange.setEnd(textNode, textNode.nodeValue.length);
+                    var rect = tempRange.getBoundingClientRect();
+                    
+                    // Find word boundaries
+                    var wordStart = 0;
+                    var wordEnd = text.length;
+                    
+                    // Find the start of the word
+                    for (var i = 0; i < text.length; i++) {
+                        if (/\w/.test(text[i])) {
+                            wordStart = i;
+                            break;
+                        }
+                    }
+                    
+                    // Find the end of the word
+                    for (var i = wordStart; i < text.length; i++) {
+                        if (!/\w/.test(text[i])) {
+                            wordEnd = i;
+                            break;
+                        }
+                    }
+                    
+                    if (wordStart < wordEnd) {
+                        // Select the word
+                        range.setStart(textNode, wordStart);
+                        range.setEnd(textNode, wordEnd);
+                        
+                        var selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        
+                        // Trigger selection event
+                        var selectedText = text.substring(wordStart, wordEnd);
+                        var rect = range.getBoundingClientRect();
+                        var start = getTextOffset(range.startContainer, range.startOffset);
+                        var end = getTextOffset(range.endContainer, range.endOffset);
+                        
+                        console.log('Word selected via click:', selectedText);
+                        
+                        // Show visual feedback
+                        showWordSelectionFeedback(selectedText, rect.left + rect.width/2, rect.top);
+                        
+                        if (window.TextSelection) {
+                            window.TextSelection.onTextSelected(start, end, selectedText, rect.left + rect.width/2, rect.top);
+                        }
+                    }
+                }
+                
+                // Double click handler
+                function handleDoubleClick(event) {
+                    event.preventDefault();
+                    console.log('Double click detected at:', event.clientX, event.clientY);
+                    selectWordAtPosition(event.clientX, event.clientY);
+                }
+                
+                // Long press handlers
+                function handleTouchStart(event) {
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                    }
+                    
+                    isLongPressing = false;
+                    longPressTimer = setTimeout(function() {
+                        isLongPressing = true;
+                        console.log('Long press detected at:', event.touches[0].clientX, event.touches[0].clientY);
+                        selectWordAtPosition(event.touches[0].clientX, event.touches[0].clientY);
+                    }, 500); // 500ms for long press
+                }
+                
+                function handleTouchEnd(event) {
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                    isLongPressing = false;
+                }
+                
+                function handleTouchMove(event) {
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                }
+                
+                // Mouse long press handler
+                function handleMouseDown(event) {
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                    }
+                    
+                    isLongPressing = false;
+                    longPressTimer = setTimeout(function() {
+                        isLongPressing = true;
+                        console.log('Mouse long press detected at:', event.clientX, event.clientY);
+                        selectWordAtPosition(event.clientX, event.clientY);
+                    }, 500); // 500ms for long press
+                }
+                
+                function handleMouseUp(event) {
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                    isLongPressing = false;
+                }
+                
+                // Event listeners
                 document.addEventListener('mouseup', handleSelection);
                 document.addEventListener('touchend', handleSelection);
                 document.addEventListener('selectionchange', handleSelection);
+                
+                // Visual feedback for word selection
+                function showWordSelectionFeedback(text, x, y) {
+                    // Remove any existing feedback
+                    var existingFeedback = document.getElementById('word-selection-feedback');
+                    if (existingFeedback) {
+                        existingFeedback.remove();
+                    }
+                    
+                    // Create feedback element
+                    var feedback = document.createElement('div');
+                    feedback.id = 'word-selection-feedback';
+                    feedback.style.cssText = 
+                        'position: fixed;' +
+                        'left: ' + x + 'px;' +
+                        'top: ' + (y - 40) + 'px;' +
+                        'background: linear-gradient(135deg, #4CAF50, #45a049);' +
+                        'color: white;' +
+                        'padding: 8px 12px;' +
+                        'border-radius: 20px;' +
+                        'font-size: 14px;' +
+                        'font-weight: bold;' +
+                        'z-index: 10000;' +
+                        'box-shadow: 0 4px 12px rgba(0,0,0,0.3);' +
+                        'transform: translateX(-50%);' +
+                        'animation: wordSelectBounce 0.3s ease-out;' +
+                        'pointer-events: none;' +
+                        'max-width: 200px;' +
+                        'text-align: center;' +
+                        'word-wrap: break-word;';
+                    
+                    feedback.innerHTML = 
+                        '<div style="font-size: 12px; opacity: 0.9; margin-bottom: 2px;">Word Selected</div>' +
+                        '<div style="font-size: 16px;">"' + text + '"</div>';
+                    
+                    // Add CSS animation
+                    if (!document.getElementById('word-selection-styles')) {
+                        var style = document.createElement('style');
+                        style.id = 'word-selection-styles';
+                        style.textContent = `
+                            @keyframes wordSelectBounce {
+                                0% { transform: translateX(-50%) scale(0.8); opacity: 0; }
+                                50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+                                100% { transform: translateX(-50%) scale(1); opacity: 1; }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                    
+                    document.body.appendChild(feedback);
+                    
+                    // Auto-remove after 2 seconds
+                    setTimeout(function() {
+                        if (feedback && feedback.parentNode) {
+                            feedback.style.animation = 'wordSelectBounce 0.3s ease-out reverse';
+                            setTimeout(function() {
+                                if (feedback && feedback.parentNode) {
+                                    feedback.parentNode.removeChild(feedback);
+                                }
+                            }, 300);
+                        }
+                    }, 2000);
+                }
+                
+                // Double click and long press listeners
+                document.addEventListener('dblclick', handleDoubleClick);
+                document.addEventListener('touchstart', handleTouchStart);
+                document.addEventListener('touchend', handleTouchEnd);
+                document.addEventListener('touchmove', handleTouchMove);
+                document.addEventListener('mousedown', handleMouseDown);
+                document.addEventListener('mouseup', handleMouseUp);
                 
                 // Enable text selection on all elements
                 function enableSelectionOnAll() {
@@ -1179,6 +1470,72 @@ class ReadingActivity : AppCompatActivity() {
                 enableSelectionOnAll();
                 setTimeout(enableSelectionOnAll, 500);
                 setTimeout(enableSelectionOnAll, 1000);
+                
+                // Show instructions for word selection
+                setTimeout(function() {
+                    showWordSelectionInstructions();
+                }, 2000);
+                
+                // Function to show word selection instructions
+                function showWordSelectionInstructions() {
+                    // Check if instructions already shown
+                    if (document.getElementById('word-selection-instructions')) return;
+                    
+                    var instructions = document.createElement('div');
+                    instructions.id = 'word-selection-instructions';
+                    instructions.style.cssText = 
+                        'position: fixed;' +
+                        'top: 20px;' +
+                        'left: 50%;' +
+                        'transform: translateX(-50%);' +
+                        'background: linear-gradient(135deg, #2196F3, #1976D2);' +
+                        'color: white;' +
+                        'padding: 15px 20px;' +
+                        'border-radius: 25px;' +
+                        'box-shadow: 0 8px 25px rgba(0,0,0,0.3);' +
+                        'z-index: 10000;' +
+                        'font-family: Arial, sans-serif;' +
+                        'font-size: 14px;' +
+                        'font-weight: bold;' +
+                        'text-align: center;' +
+                        'max-width: 90%;' +
+                        'animation: slideDown 0.5s ease-out;';
+                    
+                    instructions.innerHTML = 
+                        '<div style="margin-bottom: 8px;">🎯 Word Selection Tips</div>' +
+                        '<div style="font-size: 12px; opacity: 0.9; line-height: 1.4;">' +
+                        '• Double-click any word to select it<br>' +
+                        '• Long-press (500ms) to select a word<br>' +
+                        '• Use the toolbar to highlight or underline' +
+                        '</div>';
+                    
+                    // Add CSS animation if not exists
+                    if (!document.getElementById('slide-down-styles')) {
+                        var style = document.createElement('style');
+                        style.id = 'slide-down-styles';
+                        style.textContent = `
+                            @keyframes slideDown {
+                                from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+                                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                    
+                    document.body.appendChild(instructions);
+                    
+                    // Auto-hide after 6 seconds
+                    setTimeout(function() {
+                        if (instructions && instructions.parentNode) {
+                            instructions.style.animation = 'slideDown 0.5s ease-out reverse';
+                            setTimeout(function() {
+                                if (instructions && instructions.parentNode) {
+                                    instructions.parentNode.removeChild(instructions);
+                                }
+                            }, 500);
+                        }
+                    }, 6000);
+                }
                 
                 function getTextOffset(node, offset) {
                     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
@@ -1288,7 +1645,14 @@ class ReadingActivity : AppCompatActivity() {
                     }
                 };
                 
-                console.log('Simple text selection system initialized');
+                // Observe for DOM changes to re-enable selection
+                var observer = new MutationObserver(function(mutations) {
+                    enableSelectionOnAll();
+                    console.log('DOM changed, re-enabled text selection');
+                });
+                observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+                
+                console.log('Simple text selection system initialized with mutation observer');
             })();
         """.trimIndent()
         topicContent.evaluateJavascript(js, null)
@@ -1300,7 +1664,7 @@ class ReadingActivity : AppCompatActivity() {
             val js = """
                 AnnotatorJS.applyAnnotation('${ann.id}', '${ann.type}', ${ann.start}, ${ann.end}, '${ann.color ?: ""}', '$escapedNoteText');
             """
-        topicContent.evaluateJavascript(js, null)
+            topicContent.evaluateJavascript(js, null)
         }
     }
 
@@ -1803,6 +2167,25 @@ class ReadingActivity : AppCompatActivity() {
                     loadTopicReadStatus(topic.id)
                     loadAnnotations()
                     renderSavedAnnotations()
+
+                    // Additional delays to ensure text selection works after content latency
+                    topicContent.postDelayed({
+                        injectAnnotationJS()
+                        enableTextSelection()
+                        testTextSelection()
+                    }, 500)
+
+                    topicContent.postDelayed({
+                        injectAnnotationJS()
+                        enableTextSelection()
+                        testTextSelection()
+                    }, 1500)
+
+                    topicContent.postDelayed({
+                        injectAnnotationJS()
+                        enableTextSelection()
+                        testTextSelection()
+                    }, 2500)
                 }, 1000) // Reduced delay for better UX
             }
         }
@@ -1842,7 +2225,7 @@ class ReadingActivity : AppCompatActivity() {
     private fun loadTopicReadStatus(topicId: String) {
         val sharedPrefs = getSharedPreferences("TopicProgress", MODE_PRIVATE)
         val isRead = sharedPrefs.getBoolean("topic_${courseCode}_${getModeSuffix()}_${topicId}", false)
-            setCheckboxCheckedSilently(isRead)
+        setCheckboxCheckedSilently(isRead)
     }
 
     private fun updateTopicReadStatus(topicId: String, isRead: Boolean) {
@@ -1942,13 +2325,13 @@ class ReadingActivity : AppCompatActivity() {
                         loadCurrentTopic()
                         Toast.makeText(this, "Loaded ${topics.size} topics", Toast.LENGTH_SHORT).show()
                     } else {
-                            showNoTopicsState("📚 No topics found for this course and mode.\n\nPlease check back later or contact your instructor.")
+                        showNoTopicsState("📚 No topics found for this course and mode.\n\nPlease check back later or contact your instructor.")
                     }
                 } catch (arrayEx: JSONException) {
                     try {
                         val obj = JSONObject(body)
                         val errorMsg = obj.optString("error", "No topics found")
-                            showNoTopicsState("📚 $errorMsg\n\nPlease check back later or contact your instructor.")
+                        showNoTopicsState("📚 $errorMsg\n\nPlease check back later or contact your instructor.")
                     } catch (objEx: JSONException) {
                         Log.e("ReadingActivity", "Unrecognized server response")
                         showNoTopicsState("❌ Unrecognized server response. Please try again later.")
@@ -2049,7 +2432,7 @@ class ReadingActivity : AppCompatActivity() {
             enableTextSelection()
             Log.d("ReadingActivity", "Text selection re-enabled on resume")
         }, 500)
-        
+
         topicContent.postDelayed({
             enableTextSelection()
             Log.d("ReadingActivity", "Text selection re-enabled on resume (delayed)")

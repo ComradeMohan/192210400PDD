@@ -187,9 +187,19 @@ class HomeFragment1 : Fragment() {
 
         // Fetch student name and college
         studentID?.let {
-            fetchStudentName(it)
+            if (it.isNotEmpty() && it != "0") {
+                fetchStudentName(it)
+            } else {
+                tvStudentName.text = "Invalid Student ID"
+                Toast.makeText(requireContext(), "Invalid Student ID. Redirecting to login...", Toast.LENGTH_LONG).show()
+                clearUserData()
+                redirectToLogin()
+            }
         } ?: run {
             tvStudentName.text = "ID not found"
+            Toast.makeText(requireContext(), "Student ID not found. Redirecting to login...", Toast.LENGTH_LONG).show()
+            clearUserData()
+            redirectToLogin()
         }
 
         return view
@@ -461,11 +471,20 @@ class HomeFragment1 : Fragment() {
                     collegeName?.let { fetchLatestNotice(it) }
                 } else {
                     tvStudentName.text = "Student not found"
+                    Toast.makeText(requireContext(), "Student not found. Redirecting to login...", Toast.LENGTH_LONG).show()
+                    
+                    // Clear stored user data and redirect to login
+                    clearUserData()
+                    redirectToLogin()
                 }
             },
             {
                 if (isAdded) {
-                    Toast.makeText(context, "Error fetching student data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error fetching student data. Redirecting to login...", Toast.LENGTH_LONG).show()
+                    
+                    // Clear stored user data and redirect to login
+                    clearUserData()
+                    redirectToLogin()
                 }
             }
         )
@@ -603,6 +622,70 @@ class HomeFragment1 : Fragment() {
             in 17..20 -> "Good Evening,"
             else -> "Good Night,"
         }
+    }
+    
+    /**
+     * Clear all stored user data when redirecting to login
+     */
+    private fun clearUserData() {
+        try {
+            val context = requireContext()
+            
+            // Clear user session data
+            val userSf = context.getSharedPreferences("user_sf", Context.MODE_PRIVATE)
+            userSf.edit().clear().apply()
+            
+            // Clear last studied course data
+            val lastStudiedPrefs = context.getSharedPreferences("LastStudied", Context.MODE_PRIVATE)
+            lastStudiedPrefs.edit().clear().apply()
+            
+            // Clear study time data
+            val studyTimePrefs = context.getSharedPreferences("study_time_prefs", Context.MODE_PRIVATE)
+            studyTimePrefs.edit().clear().apply()
+            
+            // Clear reading session data
+            val readingSessionsPrefs = context.getSharedPreferences("reading_sessions", Context.MODE_PRIVATE)
+            readingSessionsPrefs.edit().clear().apply()
+            
+            // Clear reading activities data
+            val readingActivitiesPrefs = context.getSharedPreferences("reading_activities", Context.MODE_PRIVATE)
+            readingActivitiesPrefs.edit().clear().apply()
+            
+            // Clear current session data
+            val currentSessionPrefs = context.getSharedPreferences("current_session", Context.MODE_PRIVATE)
+            currentSessionPrefs.edit().clear().apply()
+            
+            // Clear topic progress data
+            val topicProgressPrefs = context.getSharedPreferences("TopicProgress", Context.MODE_PRIVATE)
+            topicProgressPrefs.edit().clear().apply()
+            
+            // Clear topic totals data
+            val topicTotalsPrefs = context.getSharedPreferences("TopicTotals", Context.MODE_PRIVATE)
+            topicTotalsPrefs.edit().clear().apply()
+            
+            // Clear course progress data
+            val courseProgressPrefs = context.getSharedPreferences("CourseProgress", Context.MODE_PRIVATE)
+            courseProgressPrefs.edit().clear().apply()
+            
+            Log.d("HomeFragment1", "All user data cleared successfully")
+            
+        } catch (e: Exception) {
+            Log.e("HomeFragment1", "Error clearing user data: ${e.message}")
+        }
+    }
+    
+    /**
+     * Redirect to login page with proper flags
+     */
+    private fun redirectToLogin() {
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            if (isAdded) {
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                activity?.finish()
+            }
+        }, 2000) // 2 second delay to show the message
     }
 
     private fun loadLastStudiedCourse() {

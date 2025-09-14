@@ -24,6 +24,17 @@ $input = json_decode(file_get_contents('php://input'), true);
 // Debug: Log the received data
 error_log("Received data: " . print_r($input, true));
 
+// Add debug endpoint for testing
+if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+    echo json_encode([
+        'debug' => true,
+        'received_data' => $input,
+        'raw_input' => file_get_contents('php://input'),
+        'method' => $_SERVER['REQUEST_METHOD']
+    ]);
+    exit;
+}
+
 if (!$input) {
     echo json_encode(['error' => 'Invalid JSON data']);
     exit;
@@ -31,21 +42,58 @@ if (!$input) {
 
 // Extract data
 $student_id = isset($input['student_id']) ? (int)$input['student_id'] : 0;
-$course_id = isset($input['course_id']) ? (int)$input['course_id'] : 0;
+$course_code = isset($input['course_code']) ? $input['course_code'] : '';
 $score = isset($input['score']) ? (int)$input['score'] : 0;
 $total_questions = isset($input['total_questions']) ? (int)$input['total_questions'] : 0;
 $time_taken = isset($input['time_taken']) ? (int)$input['time_taken'] : 0;
 $answers = isset($input['answers']) ? $input['answers'] : [];
 
+// Get course_id from course_code
+$course_id = 0;
+if (!empty($course_code)) {
+    try {
+        // Try different possible table/column combinations
+        $course_sql = "SELECT course_id FROM prepcourses WHERE course_code = :course_code";
+        $course_stmt = $pdo->prepare($course_sql);
+        $course_stmt->bindParam(':course_code', $course_code, PDO::PARAM_STR);
+        $course_stmt->execute();
+        $course_id = $course_stmt->fetchColumn();
+        
+        // If not found, try alternative table/column names
+        if (!$course_id) {
+            $course_sql = "SELECT id FROM prepcourses WHERE course_code = :course_code";
+            $course_stmt = $pdo->prepare($course_sql);
+            $course_stmt->bindParam(':course_code', $course_code, PDO::PARAM_STR);
+            $course_stmt->execute();
+            $course_id = $course_stmt->fetchColumn();
+        }
+        
+        // If still not found, try with different column name
+        if (!$course_id) {
+            $course_sql = "SELECT course_id FROM prepcourses WHERE code = :course_code";
+            $course_stmt = $pdo->prepare($course_sql);
+            $course_stmt->bindParam(':course_code', $course_code, PDO::PARAM_STR);
+            $course_stmt->execute();
+            $course_id = $course_stmt->fetchColumn();
+        }
+        
+        error_log("Course lookup result: course_code='$course_code', course_id=$course_id");
+        
+    } catch (Exception $e) {
+        error_log("Error looking up course: " . $e->getMessage());
+    }
+}
+
 // Debug: Log extracted data
-error_log("Extracted data - student_id: $student_id, course_id: $course_id, score: $score, total_questions: $total_questions, time_taken: $time_taken");
+error_log("Extracted data - student_id: $student_id, course_code: $course_code, course_id: $course_id, score: $score, total_questions: $total_questions, time_taken: $time_taken");
 
 // Validate required fields
-if ($student_id <= 0 || $course_id <= 0 || $total_questions <= 0) {
+if ($student_id <= 0 || empty($course_code) || $total_questions <= 0) {
     echo json_encode(['error' => 'Missing required fields', 'debug' => [
         'student_id' => $student_id,
-        'course_id' => $course_id,
-        'total_questions' => $total_questions
+        'course_code' => $course_code,
+        'total_questions' => $total_questions,
+        'raw_input' => $input
     ]]);
     exit;
 }
@@ -54,13 +102,13 @@ try {
     // Start transaction
     $pdo->beginTransaction();
     
-    // Insert test result
-    $sql = "INSERT INTO mcq_test_results (student_id, course_id, score, total_questions, time_taken, test_date) 
-            VALUES (:student_id, :course_id, :score, :total_questions, :time_taken, NOW())";
+    // Insert test result using course_code
+    $sql = "INSERT INTO mcq_test_results (student_id, course_code, score, total_questions, time_taken, test_date) 
+            VALUES (:student_id, :course_code, :score, :total_questions, :time_taken, NOW())";
     
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
-    $stmt->bindParam(':course_id', $course_id, PDO::PARAM_INT);
+    $stmt->bindParam(':course_code', $course_code, PDO::PARAM_STR);
     $stmt->bindParam(':score', $score, PDO::PARAM_INT);
     $stmt->bindParam(':total_questions', $total_questions, PDO::PARAM_INT);
     $stmt->bindParam(':time_taken', $time_taken, PDO::PARAM_INT);

@@ -1,4 +1,3 @@
-import android.content.Context
 import android.content.Intent
     import android.os.Bundle
     import android.text.Editable
@@ -22,7 +21,6 @@ import com.simats.univault.R
 
     class CourseFragment : Fragment() {
         private var studentID: String? = null
-        private var collegeName: String? = null
         private val allCourses = mutableListOf<Course>()
         private lateinit var adapter: CourseAdapter
         private lateinit var editTextSearch: EditText
@@ -36,14 +34,8 @@ import com.simats.univault.R
             super.onViewCreated(view, savedInstanceState)
             // Retrieve arguments
             studentID = arguments?.getString("studentID")
-            collegeName = arguments?.getString("collegeName")
 
             editTextSearch = view.findViewById(R.id.editTextSearch)
-
-            if (collegeName.isNullOrEmpty()) {
-                val sf = requireContext().getSharedPreferences("user_sf", Context.MODE_PRIVATE)
-                collegeName = sf.getString("collegeName", null)
-            }
 
             val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCourses)
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -53,7 +45,6 @@ import com.simats.univault.R
                 val intent = Intent(requireContext(), PrepActivity::class.java)
                 intent.putExtra("courseCode", course.Code)
                 intent.putExtra("courseName", course.Title)
-                intent.putExtra("collegeName", collegeName)
                 startActivity(intent)
             }
             recyclerView.adapter = adapter
@@ -65,19 +56,9 @@ import com.simats.univault.R
                 }
                 override fun afterTextChanged(s: Editable?) { }
             })
-            when {
-                !collegeName.isNullOrEmpty() -> {
-                    // Admin or Faculty flow
-                    fetchCourses(collegeName!!, adapter)
-                }
-                !studentID.isNullOrEmpty() -> {
-                    // Student flow
-                    fetchCollegeName(studentID!!, adapter)
-                }
-                else -> {
-                    Toast.makeText(requireContext(), "No student ID or college name provided", Toast.LENGTH_SHORT).show()
-                }
-            }
+            
+            // Directly fetch courses without college name logic
+            fetchCourses(adapter)
         }
         private fun filterCourses(query: String) {
             if (query.isEmpty()) {
@@ -92,37 +73,7 @@ import com.simats.univault.R
                 adapter.updateCourseList(filtered)
             }
         }
-        private fun fetchCollegeName(studentID: String, adapter: CourseAdapter) {
-            val url = "http://10.86.199.54/univault/fetch_student_name.php?studentID=$studentID"
-            val queue = Volley.newRequestQueue(requireContext())
-
-            val jsonObjectRequest = JsonObjectRequest(
-                com.android.volley.Request.Method.GET, url, null,
-                { response ->
-                    try {
-                        val success = response.getBoolean("success")
-                        if (success) {
-                            collegeName = response.getString("college")
-                            Toast.makeText(requireContext(), "College: $collegeName", Toast.LENGTH_SHORT).show()
-                            collegeName?.let {
-                                fetchCourses(it, adapter)
-                            }
-                        } else {
-                            Toast.makeText(requireContext(), "Error fetching college name", Toast.LENGTH_SHORT).show()
-                        }
-                    } catch (e: JSONException) {
-                        Toast.makeText(requireContext(), "Error parsing response", Toast.LENGTH_SHORT).show()
-                    }
-                },
-                { error ->
-                    Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
-            )
-
-            queue.add(jsonObjectRequest)
-        }
-
-        private fun fetchCourses(collegeName: String, adapter: CourseAdapter) {
+        private fun fetchCourses(adapter: CourseAdapter) {
 //            val url = "http://10.86.199.54/univault/fetch_courses.php?college=$collegeName"
             val url = "http://10.86.199.54/univault/get_prep_courses.php"
             val queue = Volley.newRequestQueue(requireContext())
@@ -170,14 +121,6 @@ import com.simats.univault.R
                 val fragment = CourseFragment()
                 val args = Bundle()
                 args.putString("studentID", studentID)
-                fragment.arguments = args
-                return fragment
-            }
-
-            fun newInstanceWithCollegeName(collegeName: String): CourseFragment {
-                val fragment = CourseFragment()
-                val args = Bundle()
-                args.putString("collegeName", collegeName)
                 fragment.arguments = args
                 return fragment
             }

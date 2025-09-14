@@ -53,7 +53,7 @@ class MCQTestActivity : AppCompatActivity() {
     private var courseName: String = ""
     private var collegeName: String = ""
     private var courseId: Int = 1
-    private var studentId: Int = 1 // You can get this from shared preferences or login
+    private var studentId: Int = 0 // Will be loaded from SharedPreferences
     
     // MCQ Questions from server
     private var mcqQuestions = mutableListOf<MCQQuestion>()
@@ -69,12 +69,37 @@ class MCQTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mcq_test)
         
+        // Get student_id from shared preferences FIRST (this is the source of truth)
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        studentId = sf.getInt("userID", 0)
+        
         // Get intent data
         courseCode = intent.getStringExtra("courseCode") ?: "Unknown"
         courseName = intent.getStringExtra("courseName") ?: "MCQ Test"
         collegeName = intent.getStringExtra("collegeName") ?: "Unknown College"
-        courseId = intent.getIntExtra("courseId", 1)
-        studentId = intent.getIntExtra("studentId", 1)
+        courseId = intent.getIntExtra("courseId", 1) // This is separate from courseCode
+        
+        // Only use intent studentId if SharedPreferences doesn't have a valid one
+        val intentStudentId = intent.getIntExtra("studentId", 0)
+        if (studentId <= 0 && intentStudentId > 0) {
+            studentId = intentStudentId
+            // Save it to SharedPreferences for future use
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Ensure we have a valid studentId
+        if (studentId <= 0) {
+            studentId = 1 // Last resort default
+            sf.edit().putInt("userID", studentId).apply()
+        }
+        
+        // Update login status
+        sf.edit().putBoolean("isLoggedIn", true).apply()
+        
+        Log.d("MCQTestActivity", "Initialized with - courseCode: $courseCode, courseId: $courseId, studentId: $studentId")
+        
+        // Validate studentId
+        validateStudentId()
         
         // Initialize UI elements
         initializeViews()
@@ -142,7 +167,7 @@ class MCQTestActivity : AppCompatActivity() {
         // Show loading indicator
         questionText.text = "Loading questions..."
         
-        val url = "http://10.86.199.54/univault/get_mcq_questions.php?course_id=$courseId&limit=15"
+        val url = "http://10.86.199.54/univault/get_mcq_questions.php?course_id=$courseCode&limit=15"
         Log.d("MCQTestActivity", "Loading questions from: $url")
         
         val queue = Volley.newRequestQueue(this)
@@ -197,6 +222,9 @@ class MCQTestActivity : AppCompatActivity() {
             return
         }
         
+        // Set progress bar max to actual number of questions
+        progressBar.max = mcqQuestions.size
+        
         // Start timer
         startTimer()
         
@@ -210,6 +238,26 @@ class MCQTestActivity : AppCompatActivity() {
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         questionText.text = "Error: $message"
+    }
+    
+    private fun validateStudentId() {
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        val storedStudentId = sf.getInt("userID", 0)
+        val isLoggedIn = sf.getBoolean("isLoggedIn", false)
+        
+        Log.d("MCQTestActivity", "Validation - Current studentId: $studentId, Stored: $storedStudentId, LoggedIn: $isLoggedIn")
+        
+        if (studentId <= 0 || studentId != storedStudentId) {
+            Log.w("MCQTestActivity", "StudentId mismatch! Using stored value: $storedStudentId")
+            studentId = storedStudentId
+            if (studentId <= 0) {
+                Log.e("MCQTestActivity", "No valid studentId found! Using default 1")
+                studentId = 1
+                sf.edit().putInt("userID", studentId).apply()
+            }
+        }
+        
+        Log.d("MCQTestActivity", "Final studentId: $studentId")
     }
     
     private fun startTimer() {
@@ -405,19 +453,25 @@ class MCQTestActivity : AppCompatActivity() {
         
         val requestData = JSONObject().apply {
             put("student_id", studentId)
-            put("course_id", courseId)
+            put("course_code", courseCode)
             put("score", score)
             put("total_questions", totalQuestions)
             put("time_taken", timeTaken)
             put("answers", JSONObject(answersData))
         }
         
+        Log.d("MCQTestActivity", "Sending data: $requestData")
+        Log.d("MCQTestActivity", "Student ID: $studentId, Course Code: $courseCode, Score: $score, Total Questions: $totalQuestions")
+        Log.d("MCQTestActivity", "StudentId source - SharedPrefs: ${getSharedPreferences("user_sf", MODE_PRIVATE).getInt("userID", -1)}")
+        
         val queue = Volley.newRequestQueue(this)
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, requestData,
             { response ->
                 try {
-                    if (response.getBoolean("success")) {
+                    Log.d("MCQTestActivity", "Response received: $response")
+                    
+                    if (response.has("success") && response.getBoolean("success")) {
                         val testResultId = response.getInt("test_result_id")
                         
                         // Navigate to results
@@ -443,9 +497,12 @@ class MCQTestActivity : AppCompatActivity() {
                         finish()
                         
                     } else {
-                        showError("Failed to save results: ${response.optString("error", "Unknown error")}")
+                        val errorMessage = response.optString("error", "Unknown error")
+                        Log.e("MCQTestActivity", "Server error: $errorMessage")
+                        showError("Failed to save results: $errorMessage")
                     }
                 } catch (e: JSONException) {
+                    Log.e("MCQTestActivity", "JSON parsing error: ${e.message}")
                     showError("Error saving results: ${e.message}")
                 }
             },

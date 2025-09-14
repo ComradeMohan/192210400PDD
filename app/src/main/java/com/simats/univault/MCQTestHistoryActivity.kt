@@ -22,7 +22,7 @@ class MCQTestHistoryActivity : AppCompatActivity() {
     private lateinit var noTestsText: TextView
     
     // Data
-    private var courseId: Int = 0
+    private var courseId: String=""
     private var studentId: Int = 0
     private var courseName: String = ""
     
@@ -54,9 +54,16 @@ class MCQTestHistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mcq_test_history)
         
         // Get intent data
-        courseId = intent.getIntExtra("courseId", 0)
+        courseId = intent.getStringExtra("courseCode") ?: ""
         studentId = intent.getIntExtra("studentId", 0)
         courseName = intent.getStringExtra("courseName") ?: "Unknown Course"
+
+        val sf = getSharedPreferences("user_sf", MODE_PRIVATE)
+        sf.edit().putBoolean("isLoggedIn", true).apply()
+        sf.edit().putInt("userID", studentId.toInt()).apply()
+        
+        // Log the received data for debugging
+        Log.d("MCQTestHistoryActivity", "Received - courseId: '$courseId', studentId: $studentId, courseName: '$courseName'")
         
         // Initialize UI elements
         initializeViews()
@@ -67,7 +74,7 @@ class MCQTestHistoryActivity : AppCompatActivity() {
         // Load test history
         loadTestHistory()
     }
-    
+
     private fun initializeViews() {
         backButton = findViewById(R.id.backButton)
         courseTitle = findViewById(R.id.courseTitle)
@@ -85,13 +92,13 @@ class MCQTestHistoryActivity : AppCompatActivity() {
     }
     
     private fun loadTestHistory() {
-        if (courseId <= 0 || studentId <= 0) {
-            Toast.makeText(this, "Invalid course or student ID", Toast.LENGTH_SHORT).show()
+        if (courseId.isEmpty() || studentId <= 0) {
+            Toast.makeText(this, "Invalid course or student - Course: '$courseId', Student: $studentId", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
         
-        val url = "http://10.86.199.54/univault/get_combined_test_history.php?student_id=$studentId&course_id=$courseId"
+        val url = "http://10.86.199.54/univault/get_combined_test_history.php?student_id=$studentId&course_id=$courseId" 
         Log.d("MCQTestHistoryActivity", "Loading combined test history from: $url")
         
         val queue = Volley.newRequestQueue(this)
@@ -184,14 +191,14 @@ class MCQTestHistoryActivity : AppCompatActivity() {
         val intent = if (testType == "MCQ") {
             Intent(this, MCQReviewActivity::class.java).apply {
                 putExtra("testResultId", testResultId)
-                putExtra("courseId", courseId)
+                putExtra("courseId", courseId) // Pass courseCode as courseId
                 putExtra("studentId", studentId)
+                putExtra("courseName", courseName)
             }
         } else {
             Intent(this, TheoryReviewActivity::class.java).apply {
                 putExtra("test_result_id", testResultId)
-                putExtra("courseId", courseId)
-                putExtra("studentId", studentId)
+                putExtra("courseCode", courseId)
                 putExtra("courseName", courseName)
             }
         }
