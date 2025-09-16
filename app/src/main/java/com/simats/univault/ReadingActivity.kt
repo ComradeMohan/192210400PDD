@@ -39,6 +39,18 @@ import android.graphics.Color
 import android.view.ActionMode
 import android.webkit.WebChromeClient
 import org.json.JSONArray
+import android.widget.PopupWindow
+import android.graphics.Typeface
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.graphics.drawable.Drawable
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.ColorFilter
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.inputmethod.InputMethodManager
 
 class ReadingActivity : AppCompatActivity() {
 
@@ -69,6 +81,7 @@ class ReadingActivity : AppCompatActivity() {
     private lateinit var completeTopicButton: Button
     private lateinit var loadingSpinnerLayout: LinearLayout
     private lateinit var studyTimeText: TextView
+    private lateinit var notesButton: ImageButton
 
     // Enhanced UI Controls
     private lateinit var readingControlsLayout: LinearLayout
@@ -116,6 +129,10 @@ class ReadingActivity : AppCompatActivity() {
     // Text Selection Features
     private var selectionToolbar: PopupWindow? = null
     private var currentSelection: Triple<Int, Int, String>? = null // start, end, text
+
+    // Notes Features
+    private var topicNotes: MutableMap<String, String> = mutableMapOf()
+    private var notesPopup: PopupWindow? = null
 
     // Data class for Topic
     data class Topic(
@@ -196,7 +213,6 @@ class ReadingActivity : AppCompatActivity() {
 
         // Add JavaScript interface for annotations
         topicContent.addJavascriptInterface(AnnotationBridge(), "AndroidAnnotator")
-
         // Set WebViewClient and WebChromeClient for handling page load and selection
         topicContent.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -253,11 +269,11 @@ class ReadingActivity : AppCompatActivity() {
         completeTopicButton = findViewById(R.id.completeTopicButton)
         loadingSpinnerLayout = findViewById(R.id.loadingSpinnerLayout)
         studyTimeText = findViewById(R.id.studyTimeText)
+        notesButton = findViewById(R.id.notesButton)
 
         // Setup scroll listener for progress tracking
         setupScrollListener()
     }
-
     private fun initializeEnhancedFeatures() {
         initializeTTS()
         initializeScaleGestureDetector()
@@ -265,8 +281,8 @@ class ReadingActivity : AppCompatActivity() {
         loadReadingPreferences()
         loadBookmarks()
         loadAnnotations()
+        loadTopicNotes()
     }
-
     private fun initializeTTS() {
         tts = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
@@ -1844,6 +1860,9 @@ class ReadingActivity : AppCompatActivity() {
         completeTopicButton.setOnClickListener {
             completeCurrentTopic()
         }
+        notesButton.setOnClickListener {
+            showNotesDialog()
+        }
     }
 
     private fun setupCheckboxListener() {
@@ -2167,6 +2186,7 @@ class ReadingActivity : AppCompatActivity() {
                     loadTopicReadStatus(topic.id)
                     loadAnnotations()
                     renderSavedAnnotations()
+                    updateNotesButtonAppearance()
 
                     // Additional delays to ensure text selection works after content latency
                     topicContent.postDelayed({
@@ -2453,6 +2473,7 @@ class ReadingActivity : AppCompatActivity() {
         tts?.shutdown()
         saveReadingPreferences()
         saveAnnotations()
+        saveTopicNotes() // Add this line to save topic notes
     }
 
     private fun updateStudyTime() {
@@ -2618,5 +2639,356 @@ class ReadingActivity : AppCompatActivity() {
             }
         ) {}
         queue.add(stringRequest)
+    }
+
+    // ==================== NOTES FUNCTIONALITY ====================
+
+    private fun loadTopicNotes() {
+        val prefs = getSharedPreferences("TopicNotes", MODE_PRIVATE)
+        val notesData = prefs.all
+        topicNotes.clear()
+        
+        for ((key, value) in notesData) {
+            if (value is String) {
+                topicNotes[key] = value
+            }
+        }
+        
+        updateNotesButtonAppearance()
+        Log.d("ReadingActivity", "Loaded ${topicNotes.size} topic notes from cache")
+    }
+
+    private fun saveTopicNotes() {
+        val prefs = getSharedPreferences("TopicNotes", MODE_PRIVATE)
+        val editor = prefs.edit()
+        
+        for ((key, value) in topicNotes) {
+            editor.putString(key, value)
+        }
+        
+        editor.apply()
+        Log.d("ReadingActivity", "Saved ${topicNotes.size} topic notes to cache")
+    }
+
+    private fun getCurrentTopicNotesKey(): String {
+        val topicId = currentTopic?.id ?: "unknown"
+        return "${courseCode}_${selectedMode}_${topicId}"
+    }
+
+    private fun getCurrentTopicNotes(): String {
+        val key = getCurrentTopicNotesKey()
+        return topicNotes[key] ?: ""
+    }
+
+    private fun saveCurrentTopicNotes(notes: String) {
+        val key = getCurrentTopicNotesKey()
+        if (notes.trim().isEmpty()) {
+            topicNotes.remove(key)
+        } else {
+            topicNotes[key] = notes
+        }
+        saveTopicNotes()
+        updateNotesButtonAppearance()
+    }
+
+    private fun updateNotesButtonAppearance() {
+        if (::notesButton.isInitialized) {
+            val hasNotes = getCurrentTopicNotes().isNotEmpty()
+            if (hasNotes) {
+                notesButton.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                notesButton.alpha = 1.0f
+            } else {
+                notesButton.setColorFilter(ContextCompat.getColor(this, android.R.color.darker_gray))
+                notesButton.alpha = 0.7f
+            }
+        }
+    }
+
+    private fun showNotesDialog() {
+        if (notesPopup?.isShowing == true) {
+            notesPopup?.dismiss()
+            return
+        }
+
+        val context = this
+        val rootView = findViewById<ViewGroup>(android.R.id.content)
+        
+        // Create main container with animated notepad design
+        val container = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(24.dpToPx(), 20.dpToPx(), 24.dpToPx(), 20.dpToPx())
+            background = GradientDrawable().apply {
+                // Notepad-like gradient background
+                colors = intArrayOf(
+                    Color.parseColor("#FEFEFE"),
+                    Color.parseColor("#F8F8F0")
+                )
+                gradientType = GradientDrawable.LINEAR_GRADIENT
+                cornerRadius = 16.dpToPx().toFloat()
+                setStroke(2.dpToPx(), Color.parseColor("#E0E0E0"))
+            }
+            elevation = 20f
+        }
+
+        // Header with notepad styling
+        val header = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, 0, 0, 16.dpToPx())
+        }
+
+        val noteIcon = ImageView(context).apply {
+            setImageResource(android.R.drawable.ic_menu_edit)
+            setColorFilter(Color.parseColor("#FF9800"))
+            layoutParams = LinearLayout.LayoutParams(32.dpToPx(), 32.dpToPx()).apply {
+                marginEnd = 12.dpToPx()
+            }
+        }
+
+        val titleText = TextView(context).apply {
+            text = "✏️ Topic Notes"
+            textSize = 18f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.parseColor("#333333"))
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        }
+
+        val closeButton = ImageButton(context).apply {
+            setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(Color.parseColor("#F5F5F5"))
+                setStroke(1.dpToPx(), Color.parseColor("#E0E0E0"))
+            }
+            setColorFilter(Color.parseColor("#757575"))
+            setPadding(8.dpToPx(), 8.dpToPx(), 8.dpToPx(), 8.dpToPx())
+            layoutParams = LinearLayout.LayoutParams(36.dpToPx(), 36.dpToPx())
+            setOnClickListener {
+                hideNotesDialog()
+            }
+        }
+
+        header.addView(noteIcon)
+        header.addView(titleText)
+        header.addView(closeButton)
+
+        // Topic name display
+        val topicLabel = TextView(context).apply {
+            text = "📖 ${currentTopic?.name ?: "Current Topic"}"
+            textSize = 14f
+            setTextColor(Color.parseColor("#666666"))
+            setPadding(0, 0, 0, 12.dpToPx())
+            setTypeface(null, Typeface.ITALIC)
+        }
+
+        // Ruled lines background for notepad effect
+        val notesContainer = FrameLayout(context).apply {
+            background = GradientDrawable().apply {
+                setColor(Color.parseColor("#FEFEFE"))
+                cornerRadius = 12.dpToPx().toFloat()
+                setStroke(1.dpToPx(), Color.parseColor("#E8E8E8"))
+            }
+            setPadding(16.dpToPx(), 16.dpToPx(), 16.dpToPx(), 16.dpToPx())
+        }
+
+        // Create ruled lines background
+        val ruledBackground = View(context).apply {
+            background = object : Drawable() {
+                override fun draw(canvas: Canvas) {
+                    val paint = Paint().apply {
+                        color = Color.parseColor("#E8F4FD")
+                        strokeWidth = 1.dpToPx().toFloat()
+                        isAntiAlias = true
+                    }
+                    val lineHeight = 24.dpToPx().toFloat()
+                    var y = lineHeight
+                    while (y < bounds.height()) {
+                        canvas.drawLine(0f, y, bounds.width().toFloat(), y, paint)
+                        y += lineHeight
+                    }
+                    // Left margin line
+                    paint.color = Color.parseColor("#FFE0E0")
+                    paint.strokeWidth = 2.dpToPx().toFloat()
+                    canvas.drawLine(40.dpToPx().toFloat(), 0f, 40.dpToPx().toFloat(), bounds.height().toFloat(), paint)
+                }
+                
+                override fun setAlpha(alpha: Int) {}
+                override fun setColorFilter(colorFilter: ColorFilter?) {}
+                override fun getOpacity(): Int = PixelFormat.OPAQUE
+            }
+        }
+
+        // Notes EditText with notepad styling
+        val notesEditText = EditText(context).apply {
+            setText(getCurrentTopicNotes())
+            hint = "Write your notes here...\n\n• Key points\n• Important concepts\n• Questions to review\n• Personal insights"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            gravity = Gravity.TOP or Gravity.START
+            textSize = 16f
+            setTextColor(Color.parseColor("#333333"))
+            setHintTextColor(Color.parseColor("#999999"))
+            background = null
+            setPadding(44.dpToPx(), 8.dpToPx(), 8.dpToPx(), 8.dpToPx()) // Left padding for margin line
+            setLineSpacing(8.dpToPx().toFloat(), 1.0f)
+            layoutParams = FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                300.dpToPx()
+            )
+            
+            // Custom selection handles color
+            try {
+                val field = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+                field.isAccessible = true
+                field.set(this, android.R.drawable.editbox_background)
+            } catch (e: Exception) {
+                Log.w("ReadingActivity", "Could not customize cursor: ${e.message}")
+            }
+        }
+
+        notesContainer.addView(ruledBackground)
+        notesContainer.addView(notesEditText)
+
+        // Action buttons
+        val buttonContainer = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+            setPadding(0, 16.dpToPx(), 0, 0)
+        }
+
+        fun createActionButton(text: String, bgColor: String, textColor: String, onClick: () -> Unit): Button {
+            return Button(context).apply {
+                this.text = text
+                textSize = 14f
+                setTextColor(Color.parseColor(textColor))
+                background = GradientDrawable().apply {
+                    setColor(Color.parseColor(bgColor))
+                    cornerRadius = 20.dpToPx().toFloat()
+                    setStroke(1.dpToPx(), Color.parseColor("#E0E0E0"))
+                }
+                setPadding(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 12.dpToPx())
+                setOnClickListener { onClick() }
+                layoutParams = LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
+                ).apply {
+                    marginStart = 8.dpToPx()
+                    marginEnd = 8.dpToPx()
+                }
+                elevation = 4f
+            }
+        }
+
+        val saveButton = createActionButton(
+            "💾 Save", "#4CAF50", "#FFFFFF"
+        ) {
+            val notes = notesEditText.text.toString()
+            saveCurrentTopicNotes(notes)
+            Toast.makeText(context, "Notes saved! 📝", Toast.LENGTH_SHORT).show()
+            hideNotesDialog()
+        }
+
+        val clearButton = createActionButton(
+            "🗑️ Clear", "#FF5722", "#FFFFFF"
+        ) {
+            AlertDialog.Builder(context)
+                .setTitle("Clear Notes")
+                .setMessage("Are you sure you want to clear all notes for this topic?")
+                .setPositiveButton("Clear") { _, _ ->
+                    notesEditText.setText("")
+                    saveCurrentTopicNotes("")
+                    Toast.makeText(context, "Notes cleared! 🗑️", Toast.LENGTH_SHORT).show()
+                    hideNotesDialog()
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
+        val cancelButton = createActionButton(
+            "❌ Cancel", "#757575", "#FFFFFF"
+        ) {
+            hideNotesDialog()
+        }
+
+        buttonContainer.addView(saveButton)
+        buttonContainer.addView(clearButton)
+        buttonContainer.addView(cancelButton)
+
+        // Assemble the dialog
+        container.addView(header)
+        container.addView(topicLabel)
+        container.addView(notesContainer)
+        container.addView(buttonContainer)
+
+        // Create and show popup with animation
+        notesPopup = PopupWindow(
+            container,
+            (rootView.width * 0.9).toInt(),
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 20f
+            isOutsideTouchable = true
+            isFocusable = true
+            animationStyle = android.R.style.Animation_Dialog
+        }
+
+        // Show with slide-in animation
+        rootView.post {
+            container.alpha = 0f
+            container.scaleX = 0.8f
+            container.scaleY = 0.8f
+            
+            notesPopup?.showAtLocation(
+                rootView,
+                Gravity.CENTER,
+                0,
+                0
+            )
+            
+            // Animate in
+            container.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(300)
+                .setInterpolator(android.view.animation.DecelerateInterpolator())
+                .start()
+                
+            // Focus on EditText and show keyboard
+            notesEditText.requestFocus()
+            notesEditText.postDelayed({
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(notesEditText, InputMethodManager.SHOW_IMPLICIT)
+            }, 200)
+        }
+        
+        Log.d("ReadingActivity", "Notes dialog shown for topic: ${currentTopic?.name}")
+    }
+
+    private fun hideNotesDialog() {
+        notesPopup?.let { popup ->
+            if (popup.isShowing) {
+                val contentView = popup.contentView
+                contentView.animate()
+                    .alpha(0f)
+                    .scaleX(0.8f)
+                    .scaleY(0.8f)
+                    .setDuration(200)
+                    .setInterpolator(android.view.animation.AccelerateInterpolator())
+                    .withEndAction {
+                        popup.dismiss()
+                        notesPopup = null
+                    }
+                    .start()
+            }
+        }
+        
+        // Hide keyboard
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocus = currentFocus
+        if (currentFocus != null) {
+            imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        }
+        
+        Log.d("ReadingActivity", "Notes dialog hidden")
     }
 }
