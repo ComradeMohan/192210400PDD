@@ -1,0 +1,9 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <!-- Background color with low opacity -->
+    <solid android:color="#3B82F640" /> <!-- primary color with 25% opacity -->
+
+    <!-- Border -->
+    <stroke
+        android:width="2dp"
+        android:color="#3B82F6" />  <!-- primary color -->
+</shape>

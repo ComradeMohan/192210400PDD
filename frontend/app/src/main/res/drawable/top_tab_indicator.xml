@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Inset controls how much shorter the line is compared to full width -->
+    <item
+        android:left="24dp"
+        android:right="24dp"
+        android:top="0dp">
+
+        <shape android:shape="rectangle">
+            <!-- Indicator color -->
+            <solid android:color="@color/blue_focus" />
+
+            <!-- Rounded corners (match Material default) -->
+            <corners android:radius="50dp" />
+
+            <!-- Thickness -->
+            <size android:height="3dp" />
+        </shape>
+    </item>
+</layer-list>

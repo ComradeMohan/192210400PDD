@@ -1,0 +1,50 @@
+<!-- res/drawable/grade_distribution_placeholder.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Grade S (Deep Blue) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#375E97"/> <!-- Deep Blue -->
+            <size android:width="50dp" android:height="50dp"/>
+        </shape>
+    </item>
+
+    <!-- Grade A (Orange-Red) -->
+    <item android:left="50dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FB6542"/> <!-- Orange-Red -->
+            <size android:width="50dp" android:height="50dp"/>
+        </shape>
+    </item>
+
+    <!-- Grade B (Yellow-Orange) -->
+    <item android:left="100dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFBB00"/> <!-- Yellow-Orange -->
+            <size android:width="50dp" android:height="50dp"/>
+        </shape>
+    </item>
+
+    <!-- Grade C (Soft Blue-Gray) -->
+    <item android:left="150dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#CEE6F2"/> <!-- Soft Blue-Gray -->
+            <size android:width="50dp" android:height="50dp"/>
+        </shape>
+    </item>
+
+    <!-- Grade D (Dusty Rose) -->
+    <item android:left="200dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E3867D"/> <!-- Dusty Rose -->
+            <size android:width="50dp" android:height="50dp"/>
+        </shape>
+    </item>
+
+    <!-- Grade E (Forest Green) -->
+    <item android:left="250dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#2C5F2D"/> <!-- Forest Green -->
+            <size android:width="50dp" android:height="50dp"/>
+        </shape>
+    </item>
+</layer-list>

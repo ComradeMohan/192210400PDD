@@ -1,0 +1,5 @@
+<!-- res/anim/layout_animation.xml -->
+<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
+    android:animation="@anim/slide_in_bottom"
+    android:animationOrder="normal"
+    android:delay="15%" />
