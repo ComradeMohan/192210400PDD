@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_student_background"
+    android:padding="16dp">
+
+    <!-- Top Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="?attr/homeAsUpIndicator"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post Notice"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:textColor="?attr/app_name_color"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="539dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="ExtraText">
+
+            <!-- Notice Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Notice Title"
+                android:textColor="?attr/app_name_color"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etNoticeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_border"
+                android:hint="Enter notice title"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:textColor="?app_name_color"
+                android:textColorHint="#A9A9A9"
+                android:textSize="16sp" />
+
+            <!-- Target Audience -->
+
+
+            <!-- Notice Details -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Notice Details"
+                android:textColor="?attr/app_name_color"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etNoticeDetails"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_border"
+                android:gravity="top|start"
+                android:hint="Enter notice details"
+                android:inputType="textMultiLine"
+                android:padding="12dp"
+                android:textColorHint="#A9A9A9"
+                android:textSize="14sp" />
+
+            <!-- Schedule -->
+
+            <!-- Attachment -->
+
+            <!-- High Priority -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="High Priority"
+                    android:textColor="?attr/app_name_color"
+                    android:textSize="16sp" />
+
+                <Switch
+                    android:id="@+id/switchHighPriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/postNoticeFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <Button
+                    android:id="@+id/btnSubmitResources"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/buttonBlue"
+                    android:padding="12dp"
+                    android:text="Post Notice "
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="#F2F2F2"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="#444444" />
+
+            <!-- Old Notifications Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Old Notifications"
+                android:textColor="?attr/app_name_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:id="@+id/oldNoticesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp" />
+            </ScrollView>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

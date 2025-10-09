@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.simats.univault.app-mergeDebugResources-66:/values-ldltr-v21/values-ldltr-v21.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\madhi\\.gradle\\caches\\8.13\\transforms\\09c8693870052859816d8be541809ded\\transformed\\appcompat-1.7.0\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "112",
+                        "endOffsets": "163"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,139 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/root_layout"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical">-->
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/fragment_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1" />-->
+
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:id="@+id/curved_bottom_nav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cardCornerRadius="20dp"-->
+<!--        app:cardElevation="8dp"-->
+<!--        android:layout_margin="16dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:padding="8dp"-->
+<!--            android:background="?attr/facultyBottomNav">-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/nav_home_curved"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:background="?attr/selectableItemBackgroundBorderless">-->
+<!--                <ImageView-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:src="@drawable/ic_home" />-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Home"-->
+<!--                    android:textSize="10sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/nav_courses_curved"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:background="?attr/selectableItemBackgroundBorderless">-->
+<!--                <ImageView-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:src="@drawable/ic_courses" />-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Courses"-->
+<!--                    android:textSize="10sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/nav_schedule_curved"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:background="?attr/selectableItemBackgroundBorderless">-->
+<!--                <ImageView-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:src="@drawable/ic_calendar" />-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Schedule"-->
+<!--                    android:textSize="10sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/nav_profile_curved"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:background="?attr/selectableItemBackgroundBorderless">-->
+<!--                <ImageView-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:src="@drawable/ic_profile" />-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Profile"-->
+<!--                    android:textSize="10sp" />-->
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+<!--    </com.google.android.material.card.MaterialCardView>-->
+<!--</LinearLayout>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/bottomNavigation"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:labelVisibilityMode="labeled"/>
+</LinearLayout>

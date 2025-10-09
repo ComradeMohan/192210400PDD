@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- Main vertical content -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <!-- Header -->
+
+        <!-- Total Students Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Admin Dashboard"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="12dp"
+                android:contentDescription="Profile Picture"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_header_background" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:padding="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clipToOutline="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginRight="100dp"
+            android:backgroundTintMode="src_in"
+            android:backgroundTint="#DCEAFE"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/rounded_bg_light_blue">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_graduation_hat" />
+
+            <LinearLayout
+                android:layout_width="109dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Students"
+                    android:textColor="#1E40AF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvTotalStudents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="2450"
+                    android:textColor="#1E40AF"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Tabs -->
+
+
+        <!-- Quick Actions -->
+        <TextView
+            android:text="Quick Actions"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:columnOrderPreserved="false"
+            android:alignmentMode="alignMargins"
+            android:rowOrderPreserved="false"
+            android:useDefaultMargins="true">
+
+            <!-- Add Student -->
+            <LinearLayout
+                android:id="@+id/btnAddStudent"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_margin="4dp"
+                android:elevation="2dp"
+                android:background="@drawable/rounded_bg_light_blue">
+
+                <TextView
+                    android:text=""
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_add" />
+
+
+                <TextView
+                    android:text="Add Student"
+                    android:textColor="#2563EB"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"/>
+
+
+            </LinearLayout>
+
+            <!-- Add Faculty -->
+            <LinearLayout
+                android:id="@+id/btnAddFaculty"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_margin="4dp"
+                android:elevation="2dp"
+                android:background="@drawable/rounded_bg_light_blue">
+
+                <TextView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_add" />
+
+
+                <TextView
+                    android:text="Add Faculty"
+                    android:textColor="#2563EB"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <!-- Post Notice -->
+            <LinearLayout
+                android:id="@+id/btnPostNotice"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_margin="4dp"
+                android:elevation="2dp"
+                android:background="@drawable/rounded_bg_light_purple">
+
+                <TextView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:textSize="24sp"
+                    android:background="@drawable/ic_post_notice"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Post Notice"
+                    android:textColor="#7C3AED"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <!-- Upload Files -->
+            <LinearLayout
+                android:id="@+id/btnUploadFiles"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_margin="4dp"
+                android:elevation="2dp"
+                android:background="@drawable/rounded_bg_light_green">
+
+                <TextView
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_doc"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Upload Files"
+                    android:textColor="#16A34A"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+        </GridLayout>
+
+        <!-- Recent Activity -->
+        <TextView
+            android:text="Recent Activity"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecentActivity"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <!-- Bottom Navigation -->
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

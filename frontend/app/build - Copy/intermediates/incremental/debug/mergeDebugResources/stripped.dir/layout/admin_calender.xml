@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Calendar Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Header Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textStyle="bold"
+                    android:textSize="22sp"/>
+
+                <ImageView
+                    android:id="@+id/ivProfile"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_profile"
+                    android:scaleType="centerCrop"/>
+            </LinearLayout>
+
+            <!-- CalendarView -->
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <!-- Events List -->
+    <TextView
+        android:id="@+id/tvEventsHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Events"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:padding="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEvents"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
+
+    <!-- Bottom Navigation -->
+
+    <!-- Add Event Bottom Sheet Layout -->
+    <!-- Place in separate file: res/layout/bottom_sheet_add_event.xml -->
+</LinearLayout>

@@ -1,0 +1,5 @@
+<!-- res/drawable/tag_bg.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <solid android:color="#93C5FD" /> <!-- Light blue -->
+    <corners android:radius="6dp" />
+</shape>

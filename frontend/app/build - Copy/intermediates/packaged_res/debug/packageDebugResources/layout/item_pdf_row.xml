@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_pdf_row_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    android:background="?attr/pendingSubject">
+
+    <ImageView
+        android:id="@+id/fileIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_pdf"
+        android:contentDescription="File Icon" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp">
+
+        <!-- File Name TextView -->
+        <TextView
+            android:id="@+id/fileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample File Name"
+            android:textSize="16sp"
+            android:textColor="?attr/app_name_color" />
+
+        <!-- File Details TextView -->
+        <TextView
+            android:id="@+id/fileDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PDF • 01/01/2020"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/viewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View"
+        android:textColor="@color/primary"
+        style="?android:attr/borderlessButtonStyle" />
+</LinearLayout>

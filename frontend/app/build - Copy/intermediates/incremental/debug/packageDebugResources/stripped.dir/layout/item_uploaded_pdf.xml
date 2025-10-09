@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_pdf"
+    android:contentDescription="PDF Icon"
+    android:layout_marginEnd="12dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/fileNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="filename.pdf"
+            android:textSize="16sp"
+            android:textColor="?attr/app_name_color" />
+
+        <TextView
+            android:id="@+id/uploadDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uploaded on: 2025-05-31"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Delete"
+        android:src="@android:drawable/ic_delete"
+        tools:ignore="TouchTargetSizeCheck" />
+</LinearLayout>

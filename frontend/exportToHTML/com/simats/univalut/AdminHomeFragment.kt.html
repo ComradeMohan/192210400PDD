@@ -1,0 +1,281 @@
+<html>
+<head>
+<title>AdminHomeFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AdminHomeFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">simats</span><span class="s2">.</span><span class="s1">univalut</span>
+
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Intent</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">os</span><span class="s2">.</span><span class="s1">Bundle</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">InputType</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">LayoutInflater</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">View</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">ViewGroup</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.*</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">appcompat</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">AlertDialog</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">fragment</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">Fragment</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">fragment</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">FragmentActivity</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">recyclerview</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">LinearLayoutManager</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">Request</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">toolbox</span><span class="s2">.</span><span class="s1">JsonObjectRequest</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">toolbox</span><span class="s2">.</span><span class="s1">Volley</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">simats</span><span class="s2">.</span><span class="s1">univalut</span><span class="s2">.</span><span class="s1">databinding</span><span class="s2">.</span><span class="s1">FragmentAdminHomeBinding</span>
+<span class="s1">import org</span><span class="s2">.</span><span class="s1">json</span><span class="s2">.</span><span class="s1">JSONObject</span>
+
+<span class="s0">class </span><span class="s1">AdminHomeFragment : Fragment</span><span class="s2">() {</span>
+
+    <span class="s1">private </span><span class="s0">var </span><span class="s1">_binding: FragmentAdminHomeBinding? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">binding get</span><span class="s2">() = </span><span class="s1">_binding</span><span class="s2">!!</span>
+
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">context: FragmentActivity</span>
+    <span class="s1">private </span><span class="s0">var </span><span class="s1">adminId: String? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s1">private </span><span class="s0">var </span><span class="s1">collegeName: String? </span><span class="s2">= </span><span class="s0">null</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView</span><span class="s2">(</span>
+        <span class="s1">inflater: LayoutInflater</span><span class="s2">, </span><span class="s1">container: ViewGroup?</span><span class="s2">,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s2">)</span><span class="s1">: View </span><span class="s2">{</span>
+        <span class="s1">_binding </span><span class="s2">= </span><span class="s1">FragmentAdminHomeBinding</span><span class="s2">.</span><span class="s1">inflate</span><span class="s2">(</span><span class="s1">inflater</span><span class="s2">, </span><span class="s1">container</span><span class="s2">, </span><span class="s0">false</span><span class="s2">)</span>
+        <span class="s1">context </span><span class="s2">= </span><span class="s1">activity ?: requireActivity</span><span class="s2">()</span>
+        <span class="s0">return </span><span class="s1">binding</span><span class="s2">.</span><span class="s1">root</span>
+    <span class="s2">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onViewCreated</span><span class="s2">(</span><span class="s1">view: View</span><span class="s2">, </span><span class="s1">savedInstanceState: Bundle?</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onViewCreated</span><span class="s2">(</span><span class="s1">view</span><span class="s2">, </span><span class="s1">savedInstanceState</span><span class="s2">)</span>
+
+        <span class="s1">adminId </span><span class="s2">= </span><span class="s1">arguments?</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;admin_id&quot;</span><span class="s2">)</span>
+        <span class="s1">adminId?</span><span class="s2">.</span><span class="s1">let </span><span class="s2">{ </span><span class="s1">fetchAdminDetails</span><span class="s2">(</span><span class="s1">it</span><span class="s2">) }</span>
+
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvTotalStudents</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s3">&quot;0&quot;  </span><span class="s4">// Placeholder for student count</span>
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">rvRecentActivity</span><span class="s2">.</span><span class="s1">layoutManager </span><span class="s2">= </span><span class="s1">LinearLayoutManager</span><span class="s2">(</span><span class="s1">context</span><span class="s2">)</span>
+
+
+
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">btnAddStudent</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;Add Student clicked&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">btnAddFaculty</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s1">showAddFacultyDialog</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">btnPostNotice</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s0">val </span><span class="s1">college </span><span class="s2">= </span><span class="s1">collegeName ?: </span><span class="s0">return</span><span class="s1">@setOnClickListener</span>
+            <span class="s0">val </span><span class="s1">intent </span><span class="s2">= </span><span class="s1">Intent</span><span class="s2">(</span><span class="s1">context</span><span class="s2">, </span><span class="s1">AdminPostNotice::</span><span class="s0">class</span><span class="s2">.</span><span class="s1">java</span><span class="s2">).</span><span class="s1">apply </span><span class="s2">{</span>
+                <span class="s1">putExtra</span><span class="s2">(</span><span class="s3">&quot;COLLEGE_NAME&quot;</span><span class="s2">, </span><span class="s1">college</span><span class="s2">)</span>
+            <span class="s2">}</span>
+            <span class="s1">startActivity</span><span class="s2">(</span><span class="s1">intent</span><span class="s2">)</span>
+        <span class="s2">}</span>
+
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">btnUploadFiles</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s0">val </span><span class="s1">fragment </span><span class="s2">= </span><span class="s1">FacultyMaterialsFragment</span><span class="s2">().</span><span class="s1">apply </span><span class="s2">{</span>
+                <span class="s1">arguments </span><span class="s2">= </span><span class="s1">Bundle</span><span class="s2">().</span><span class="s1">apply </span><span class="s2">{</span>
+                    <span class="s1">putString</span><span class="s2">(</span><span class="s3">&quot;college_name&quot;</span><span class="s2">, </span><span class="s1">collegeName</span><span class="s2">)</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+            <span class="s1">parentFragmentManager</span><span class="s2">.</span><span class="s1">beginTransaction</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">replace</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">fragment_container</span><span class="s2">, </span><span class="s1">fragment</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">addToBackStack</span><span class="s2">(</span><span class="s0">null</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">commit</span><span class="s2">()</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">fetchAdminDetails</span><span class="s2">(</span><span class="s1">adminId: String</span><span class="s2">) {</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.86.199.54/univault/getAdminDetails.php?admin_id=</span><span class="s0">$</span><span class="s1">adminId</span><span class="s3">&quot;</span>
+        <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
+            <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
+                <span class="s0">try </span><span class="s2">{</span>
+                    <span class="s0">val </span><span class="s1">name </span><span class="s2">= </span><span class="s1">response</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;name&quot;</span><span class="s2">)</span>
+                    <span class="s1">collegeName </span><span class="s2">= </span><span class="s1">response</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;college&quot;</span><span class="s2">)</span>
+                    <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvTitle</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s3">&quot;</span><span class="s0">$</span><span class="s1">name </span><span class="s3">- </span><span class="s0">$</span><span class="s1">collegeName</span><span class="s3">&quot;</span>
+                    <span class="s1">collegeName?</span><span class="s2">.</span><span class="s1">let </span><span class="s2">{ </span><span class="s1">fetchLatestNotice</span><span class="s2">(</span><span class="s1">it</span><span class="s2">) }</span>
+                    <span class="s1">fetchFeedbacks</span><span class="s2">()</span>
+                <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s1">e: Exception</span><span class="s2">) {</span>
+                    <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">()</span>
+                    <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">context</span><span class="s2">, </span><span class="s3">&quot;Error parsing admin details&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+                <span class="s2">}</span>
+            <span class="s2">},</span>
+            <span class="s2">{</span>
+                <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;Error: </span><span class="s0">${</span><span class="s1">it</span><span class="s2">.</span><span class="s1">message</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+            <span class="s2">})</span>
+
+        <span class="s1">Volley</span><span class="s2">.</span><span class="s1">newRequestQueue</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">()).</span><span class="s1">add</span><span class="s2">(</span><span class="s1">request</span><span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">fetchLatestNotice</span><span class="s2">(</span><span class="s1">college: String</span><span class="s2">) {</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.86.199.54/univault/get_latest_notice.php?college=</span><span class="s0">$</span><span class="s1">college</span><span class="s3">&quot;</span>
+        <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
+            <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">getBoolean</span><span class="s2">(</span><span class="s3">&quot;success&quot;</span><span class="s2">)) {</span>
+                    <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvNoticeTitle</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s1">response</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;title&quot;</span><span class="s2">)</span>
+                    <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvNoticeDescription</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s1">response</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;description&quot;</span><span class="s2">)</span>
+                <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                    <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvNoticeTitle</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s3">&quot;No Notices&quot;</span>
+                    <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvNoticeDescription</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+                <span class="s2">}</span>
+            <span class="s2">},</span>
+            <span class="s2">{</span>
+                <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvNoticeTitle</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s3">&quot;Error&quot;</span>
+                <span class="s1">binding</span><span class="s2">.</span><span class="s1">tvNoticeDescription</span><span class="s2">.</span><span class="s1">text </span><span class="s2">= </span><span class="s3">&quot;Failed to fetch notice.&quot;</span>
+            <span class="s2">})</span>
+
+        <span class="s1">Volley</span><span class="s2">.</span><span class="s1">newRequestQueue</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">()).</span><span class="s1">add</span><span class="s2">(</span><span class="s1">request</span><span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">fetchFeedbacks</span><span class="s2">() {</span>
+        <span class="s0">val </span><span class="s1">college </span><span class="s2">= </span><span class="s1">collegeName ?: </span><span class="s0">return  </span><span class="s4">// Skip if college name is null</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.86.199.54/univault/get_feedbacks.php?college=</span><span class="s0">$</span><span class="s1">college</span><span class="s3">&quot;</span>
+
+        <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
+            <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">getBoolean</span><span class="s2">(</span><span class="s3">&quot;success&quot;</span><span class="s2">)) {</span>
+                    <span class="s0">val </span><span class="s1">feedbackList </span><span class="s2">= </span><span class="s1">mutableListOf</span><span class="s2">&lt;</span><span class="s1">Feedback</span><span class="s2">&gt;()</span>
+                    <span class="s0">val </span><span class="s1">dataArray </span><span class="s2">= </span><span class="s1">response</span><span class="s2">.</span><span class="s1">getJSONArray</span><span class="s2">(</span><span class="s3">&quot;data&quot;</span><span class="s2">)</span>
+                    <span class="s0">for </span><span class="s2">(</span><span class="s1">i </span><span class="s0">in </span><span class="s5">0 </span><span class="s1">until dataArray</span><span class="s2">.</span><span class="s1">length</span><span class="s2">()) {</span>
+                        <span class="s0">val </span><span class="s1">obj </span><span class="s2">= </span><span class="s1">dataArray</span><span class="s2">.</span><span class="s1">getJSONObject</span><span class="s2">(</span><span class="s1">i</span><span class="s2">)</span>
+                        <span class="s1">feedbackList</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span>
+                            <span class="s1">Feedback</span><span class="s2">(</span>
+                                <span class="s1">user_id </span><span class="s2">= </span><span class="s1">obj</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;user_id&quot;</span><span class="s2">),</span>
+                                <span class="s1">feedback </span><span class="s2">= </span><span class="s1">obj</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;feedback&quot;</span><span class="s2">),</span>
+                                <span class="s1">created_at </span><span class="s2">= </span><span class="s1">obj</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;submitted_at&quot;</span><span class="s2">)</span>
+                            <span class="s2">)</span>
+                        <span class="s2">)</span>
+                    <span class="s2">}</span>
+                    <span class="s1">binding</span><span class="s2">.</span><span class="s1">rvRecentActivity</span><span class="s2">.</span><span class="s1">adapter </span><span class="s2">= </span><span class="s1">FeedbackAdapter</span><span class="s2">(</span><span class="s1">feedbackList</span><span class="s2">)</span>
+                <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                    <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;No feedbacks found&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+                <span class="s2">}</span>
+            <span class="s2">},</span>
+            <span class="s2">{</span>
+                <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;Error loading feedbacks&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+            <span class="s2">})</span>
+
+        <span class="s1">Volley</span><span class="s2">.</span><span class="s1">newRequestQueue</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">()).</span><span class="s1">add</span><span class="s2">(</span><span class="s1">request</span><span class="s2">)</span>
+    <span class="s2">}</span>
+
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">showAddFacultyDialog</span><span class="s2">() {</span>
+        <span class="s0">val </span><span class="s1">dialogView </span><span class="s2">= </span><span class="s1">LayoutInflater</span><span class="s2">.</span><span class="s1">from</span><span class="s2">(</span><span class="s1">context</span><span class="s2">).</span><span class="s1">inflate</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">dialog_add_faculty</span><span class="s2">, </span><span class="s0">null</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">dialog </span><span class="s2">= </span><span class="s1">AlertDialog</span><span class="s2">.</span><span class="s1">Builder</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">())</span>
+            <span class="s2">.</span><span class="s1">setTitle</span><span class="s2">(</span><span class="s3">&quot;Add Faculty&quot;</span><span class="s2">)</span>
+            <span class="s2">.</span><span class="s1">setView</span><span class="s2">(</span><span class="s1">dialogView</span><span class="s2">)</span>
+            <span class="s2">.</span><span class="s1">create</span><span class="s2">()</span>
+
+        <span class="s0">val </span><span class="s1">etName </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">EditText</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">etName</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">etEmail </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">EditText</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">etEmail</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">etPhone </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">EditText</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">etPhone</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">etLoginId </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">EditText</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">etLoginId</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">etCollege </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">EditText</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">etCollege</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">etPassword </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">EditText</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">etPassword</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">btnSubmit </span><span class="s2">= </span><span class="s1">dialogView</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">&lt;</span><span class="s1">Button</span><span class="s2">&gt;(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">btnSubmitFaculty</span><span class="s2">)</span>
+
+        <span class="s1">etCollege</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span><span class="s1">collegeName</span><span class="s2">)</span>
+        <span class="s1">etPassword</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span><span class="s3">&quot;welcome&quot;</span><span class="s2">)</span>
+        <span class="s1">etPassword</span><span class="s2">.</span><span class="s1">inputType </span><span class="s2">= </span><span class="s1">InputType</span><span class="s2">.</span><span class="s1">TYPE_CLASS_TEXT or InputType</span><span class="s2">.</span><span class="s1">TYPE_TEXT_VARIATION_VISIBLE_PASSWORD</span>
+
+        <span class="s1">btnSubmit</span><span class="s2">.</span><span class="s1">isEnabled </span><span class="s2">= </span><span class="s0">false</span>
+
+        <span class="s1">getNextFacultyId </span><span class="s2">{ </span><span class="s1">newId </span><span class="s2">-&gt;</span>
+            <span class="s1">etLoginId</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span><span class="s1">newId</span><span class="s2">)</span>
+            <span class="s1">btnSubmit</span><span class="s2">.</span><span class="s1">isEnabled </span><span class="s2">= </span><span class="s0">true</span>
+        <span class="s2">}</span>
+
+        <span class="s1">btnSubmit</span><span class="s2">.</span><span class="s1">setOnClickListener </span><span class="s2">{</span>
+            <span class="s0">val </span><span class="s1">name </span><span class="s2">= </span><span class="s1">etName</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+            <span class="s0">val </span><span class="s1">email </span><span class="s2">= </span><span class="s1">etEmail</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+            <span class="s0">val </span><span class="s1">phone </span><span class="s2">= </span><span class="s1">etPhone</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+            <span class="s0">val </span><span class="s1">loginId </span><span class="s2">= </span><span class="s1">etLoginId</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+            <span class="s0">val </span><span class="s1">college </span><span class="s2">= </span><span class="s1">etCollege</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">()</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">name</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">() || </span><span class="s1">email</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">() || </span><span class="s1">phone</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+                <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;Please fill all fields&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+                <span class="s0">return</span><span class="s1">@setOnClickListener</span>
+            <span class="s2">}</span>
+
+            <span class="s1">postFacultyToServer</span><span class="s2">(</span><span class="s1">name</span><span class="s2">, </span><span class="s1">email</span><span class="s2">, </span><span class="s1">phone</span><span class="s2">, </span><span class="s1">college</span><span class="s2">, </span><span class="s1">loginId</span><span class="s2">, </span><span class="s3">&quot;welcome&quot;</span><span class="s2">)</span>
+            <span class="s1">dialog</span><span class="s2">.</span><span class="s1">dismiss</span><span class="s2">()</span>
+        <span class="s2">}</span>
+
+        <span class="s1">dialog</span><span class="s2">.</span><span class="s1">show</span><span class="s2">()</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">getNextFacultyId</span><span class="s2">(</span><span class="s1">callback: </span><span class="s2">(</span><span class="s1">String</span><span class="s2">) -&gt; </span><span class="s1">Unit</span><span class="s2">) {</span>
+        <span class="s0">val </span><span class="s1">college </span><span class="s2">= </span><span class="s1">collegeName ?: run </span><span class="s2">{</span>
+            <span class="s1">callback</span><span class="s2">(</span><span class="s3">&quot;FAC001&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s2">}</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.86.199.54/univault/getNextFacultyId.php?college=</span><span class="s0">${</span><span class="s1">college</span><span class="s2">.</span><span class="s1">replace</span><span class="s2">(</span><span class="s3">&quot; &quot;</span><span class="s2">, </span><span class="s3">&quot;%20&quot;</span><span class="s2">)</span><span class="s0">}</span><span class="s3">&quot;</span>
+
+        <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s0">null</span><span class="s2">,</span>
+            <span class="s2">{ </span><span class="s1">response </span><span class="s2">-&gt;</span>
+                <span class="s0">try </span><span class="s2">{</span>
+                    <span class="s1">callback</span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;next_id&quot;</span><span class="s2">))</span>
+                <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s1">e: Exception</span><span class="s2">) {</span>
+                    <span class="s1">callback</span><span class="s2">(</span><span class="s3">&quot;FAC001&quot;</span><span class="s2">)</span>
+                <span class="s2">}</span>
+            <span class="s2">},</span>
+            <span class="s2">{</span>
+                <span class="s1">callback</span><span class="s2">(</span><span class="s3">&quot;FAC001&quot;</span><span class="s2">)</span>
+            <span class="s2">})</span>
+
+        <span class="s1">Volley</span><span class="s2">.</span><span class="s1">newRequestQueue</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">()).</span><span class="s1">add</span><span class="s2">(</span><span class="s1">request</span><span class="s2">)</span>
+    <span class="s2">}</span>
+
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">postFacultyToServer</span><span class="s2">(</span>
+        <span class="s1">name: String</span><span class="s2">, </span><span class="s1">email: String</span><span class="s2">, </span><span class="s1">phone: String</span><span class="s2">,</span>
+        <span class="s1">college: String</span><span class="s2">, </span><span class="s1">loginId: String</span><span class="s2">, </span><span class="s1">password: String</span>
+    <span class="s2">) {</span>
+        <span class="s0">val </span><span class="s1">url </span><span class="s2">= </span><span class="s3">&quot;http://10.86.199.54/univault/faculty_register.php&quot;</span>
+        <span class="s0">val </span><span class="s1">params </span><span class="s2">= </span><span class="s1">JSONObject</span><span class="s2">().</span><span class="s1">apply </span><span class="s2">{</span>
+            <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;name&quot;</span><span class="s2">, </span><span class="s1">name</span><span class="s2">)</span>
+            <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;email&quot;</span><span class="s2">, </span><span class="s1">email</span><span class="s2">)</span>
+            <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;phone_number&quot;</span><span class="s2">, </span><span class="s1">phone</span><span class="s2">)</span>
+            <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;college&quot;</span><span class="s2">, </span><span class="s1">college</span><span class="s2">)</span>
+            <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;login_id&quot;</span><span class="s2">, </span><span class="s1">loginId</span><span class="s2">)</span>
+            <span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;password&quot;</span><span class="s2">, </span><span class="s1">password</span><span class="s2">)</span>
+        <span class="s2">}</span>
+
+        <span class="s0">val </span><span class="s1">request </span><span class="s2">= </span><span class="s1">JsonObjectRequest</span><span class="s2">(</span><span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">POST</span><span class="s2">, </span><span class="s1">url</span><span class="s2">, </span><span class="s1">params</span><span class="s2">,</span>
+            <span class="s2">{</span>
+                <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;Faculty added successfully&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+            <span class="s2">},</span>
+            <span class="s2">{</span>
+                <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">(), </span><span class="s3">&quot;Failed to add faculty: </span><span class="s0">${</span><span class="s1">it</span><span class="s2">.</span><span class="s1">message</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">()</span>
+            <span class="s2">})</span>
+
+        <span class="s1">Volley</span><span class="s2">.</span><span class="s1">newRequestQueue</span><span class="s2">(</span><span class="s1">requireContext</span><span class="s2">()).</span><span class="s1">add</span><span class="s2">(</span><span class="s1">request</span><span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDestroyView</span><span class="s2">() {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onDestroyView</span><span class="s2">()</span>
+        <span class="s1">_binding </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s2">}</span>
+
+    <span class="s1">companion </span><span class="s0">object </span><span class="s2">{</span>
+        <span class="s0">fun </span><span class="s1">newInstance</span><span class="s2">(</span><span class="s1">adminId: String</span><span class="s2">)</span><span class="s1">: AdminHomeFragment </span><span class="s2">{</span>
+            <span class="s0">val </span><span class="s1">fragment </span><span class="s2">= </span><span class="s1">AdminHomeFragment</span><span class="s2">()</span>
+            <span class="s1">fragment</span><span class="s2">.</span><span class="s1">arguments </span><span class="s2">= </span><span class="s1">Bundle</span><span class="s2">().</span><span class="s1">apply </span><span class="s2">{</span>
+                <span class="s1">putString</span><span class="s2">(</span><span class="s3">&quot;admin_id&quot;</span><span class="s2">, </span><span class="s1">adminId</span><span class="s2">)</span>
+            <span class="s2">}</span>
+            <span class="s0">return </span><span class="s1">fragment</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

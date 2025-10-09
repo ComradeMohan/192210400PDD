@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276756301302",
+    "project_id": "testing-5cd2f",
+    "storage_bucket": "testing-5cd2f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276756301302:android:9d43c59ef7c5ce096173d7",
+        "android_client_info": {
+          "package_name": "com.simats.univault"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeObyuJzH5b9LDyl28fuJzGENznhlsyrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

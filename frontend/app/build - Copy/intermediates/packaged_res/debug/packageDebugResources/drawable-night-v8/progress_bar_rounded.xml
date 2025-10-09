@@ -1,0 +1,22 @@
+<!-- res/drawable/progress_bar_rounded.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background track -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp"/>
+            <solid android:color="#2A3441"/> <!-- Light gray -->
+        </shape>
+    </item>
+
+    <!-- Progress bar fill -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="10dp"/>
+                <solid android:color="#3B82F6"/> <!-- Indigo -->
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>
