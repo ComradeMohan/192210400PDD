@@ -1,6 +1,7 @@
 # UNIVAULT 
 
 [![Star this repo](https://img.shields.io/github/stars/ComradeMohan/192210400PDD?style=social)](https://github.com/ComradeMohan/192210400PDD/stargazers)
+
 [![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white&style=flat-square)](#)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white&style=flat-square)](#)
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white&style=flat-square)](#)
@@ -68,3 +69,6 @@ A full-stack academic management system:
 2. Create a feature branch (`git checkout -b feature-name`).
 3. Commit your changes.
 4. Push to your branch and open a Pull Request.
+<a href='https://play.google.com/store/apps/details?id=com.simats.univault'>
+  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height='80'/>
+</a>
