@@ -115,7 +115,7 @@
 ## 🛠 Tech Stack
 
 <div align="center">
-<img src="assets/tech-stack.svg" width="100%" alt="Tech stack animated diagram" />
+<img src="tech-stack.svg" width="100%" alt="Tech stack animated diagram" />
 </div>
 
 <!-- Place the tech-stack.svg file in an `assets/` folder at the repo root so the path above resolves. -->
