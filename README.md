@@ -119,11 +119,11 @@
 </div>
 
 <!-- Place the tech-stack.svg file in an `assets/` folder at the repo root so the path above resolves. -->
-
+<!--
 | Backend | Database | Frontend | Notifications/Auth |
 |---------|----------|----------|-------------------|
 | ![PHP](https://img.shields.io/badge/-PHP-777BB4?logo=php&logoColor=white&style=flat-square) | ![MySQL](https://img.shields.io/badge/-MySQL-4479A1?logo=mysql&logoColor=white&style=flat-square) | ![Kotlin](https://img.shields.io/badge/-Kotlin-7F52FF?logo=kotlin&logoColor=white&style=flat-square) | ![Firebase](https://img.shields.io/badge/-Firebase-FFCA28?logo=firebase&logoColor=white&style=flat-square) |
-
+-->
 ---
 
 ## 🏗 Architecture
