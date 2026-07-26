@@ -10,7 +10,6 @@
 
 [![Stars](https://img.shields.io/github/stars/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/stargazers)
 [![Forks](https://img.shields.io/github/forks/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/network/members)
-[![Issues](https://img.shields.io/github/issues/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/commits/main)
 [![Repo Size](https://img.shields.io/github/repo-size/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD)
 
@@ -49,7 +48,6 @@
 - [Getting Started](#-getting-started)
 - [Usage](#-usage)
 - [Contributing](#-contributing)
-- [Star History](#-star-history)
 - [Author](#-author)
 
 ---
@@ -162,7 +160,7 @@ flowchart LR
 
 <div align="center">
 <!-- Replace with real screenshots: drag images into an issue/PR to get a hosted URL, or add them to a /screenshots folder and reference here -->
-<i>Add app screenshots here — e.g. login, dashboards, notices — for a stronger first impression.</i>
+<img src="./univault_banner.png" alt = "univault banner image">
 </div>
 
 ---
