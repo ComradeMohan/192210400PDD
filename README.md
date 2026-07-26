@@ -6,21 +6,17 @@
   <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&duration=3000&pause=1200&color=14B8A6&center=true&vCenter=true&width=600&lines=PHP+%2B+MySQL+%2B+Kotlin+%2B+Firebase;Multi-Role+Academic+Dashboards;Live+on+the+Google+Play+Store" alt="Typing SVG" />
 </a>
 
-<br/><br/>
-
 [![Stars](https://img.shields.io/github/stars/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/stargazers)
 [![Forks](https://img.shields.io/github/forks/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/network/members)
 [![Last Commit](https://img.shields.io/github/last-commit/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD/commits/main)
 [![Repo Size](https://img.shields.io/github/repo-size/ComradeMohan/192210400PDD?style=for-the-badge&logo=github&color=14b8a6&labelColor=0f172a)](https://github.com/ComradeMohan/192210400PDD)
 
-<br/>
 
 [![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white&labelColor=0f172a)](#)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white&labelColor=0f172a)](#)
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white&labelColor=0f172a)](#)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white&labelColor=0f172a)](#)
 
-<br/>
 
 [![Website](https://img.shields.io/badge/Website-univault.live-14b8a6?style=for-the-badge&logo=googlechrome&logoColor=white&labelColor=0f172a)](https://univault.live)
 
