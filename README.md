@@ -38,7 +38,7 @@
 </p>
 
  <picture>
-       <img src="./starme.svg" width="100%">
+       <img src="./assests/starme.svg" width="100%">
 </picture>
 
 </div>
@@ -195,7 +195,13 @@ flowchart LR
 
 <div align="center">
 <!-- Replace with real screenshots: drag images into an issue/PR to get a hosted URL, or add them to a /screenshots folder and reference here -->
-<img src="./univault_banner.png" alt="UniVault banner image" width="100%">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assests/univault_banner_dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./assests/univault_banner.png">
+  <img src="./assests/univault_banner.png" alt="Comrade Mohan — Full-Stack Developer & Product Builder" width="100%"/>
+</picture>
+
 </div>
 
 <br/>
