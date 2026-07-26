@@ -37,6 +37,10 @@
   ⭐ <b>If UniVault is useful to you, consider starring the repo</b> — it genuinely helps.
 </p>
 
+ <picture>
+       <img src="./starme.svg" width="100%">
+</picture>
+
 </div>
 
 <br/>
