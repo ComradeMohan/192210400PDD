@@ -2,78 +2,129 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="380" viewBox="0 0 1400 380">
 <defs>
 
+  <style>
+    :root {
+      --bg1:#0b1220; --bg2:#0f172a; --bg3:#071827;
+      --grid:#182a3d;
+      --card1:#1a2942; --card2:#0c1420;
+      --card-border-op:0.85;
+      --card-top:#ffffff; --card-top-op:0.14;
+      --title1:#ffffff; --title2:#a8f3e9; --title3:#14b8a6;
+      --sub-text:#8fa6b8;
+      --body-text:#c3d6e3;
+      --tag-text:#8fded3;
+      --divider:#2c4257;
+      --footer-text:#14b8a6;
+      --blob-op:0.16;
+      --sweep-op:0.05;
+      --shine-op:0.20;
+      --corner:#2dd4bf;
+      --corner-op:0.35;
+      --chip-op1:0.20;
+      --chip-op2:0.05;
+      --shadow-op:0.28;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg1:#eef6f5; --bg2:#e3f1ef; --bg3:#f8fbfa;
+        --grid:#d2e6e2;
+        --card1:#ffffff; --card2:#eef6f4;
+        --card-border-op:0.55;
+        --card-top:#0b1220; --card-top-op:0.06;
+        --title1:#0b1220; --title2:#0d7d6f; --title3:#0f9c8a;
+        --sub-text:#4b6a68;
+        --body-text:#2b4b48;
+        --tag-text:#0f8f7e;
+        --divider:#c8dedb;
+        --footer-text:#0f9c8a;
+        --blob-op:0.10;
+        --sweep-op:0.025;
+        --shine-op:0.30;
+        --corner:#0f9c8a;
+        --corner-op:0.3;
+        --chip-op1:0.32;
+        --chip-op2:0.10;
+        --shadow-op:0.12;
+      }
+    }
+
+  </style>
+
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#0b1220"/>
-    <stop offset="55%" stop-color="#0f172a"/>
-    <stop offset="100%" stop-color="#071827"/>
+    <stop offset="0%" style="stop-color:var(--bg1)"/>
+    <stop offset="55%" style="stop-color:var(--bg2)"/>
+    <stop offset="100%" style="stop-color:var(--bg3)"/>
   </linearGradient>
   <linearGradient id="g" x1="0" x2="1">
     <stop offset="0%" stop-color="#14b8a6"/>
     <stop offset="100%" stop-color="#2dd4bf"/>
   </linearGradient>
   <linearGradient id="titleGrad" x1="0" x2="1">
-    <stop offset="0%" stop-color="#ffffff"/>
-    <stop offset="55%" stop-color="#a8f3e9"/>
-    <stop offset="100%" stop-color="#14b8a6"/>
+    <stop offset="0%" style="stop-color:var(--title1)"/>
+    <stop offset="55%" style="stop-color:var(--title2)"/>
+    <stop offset="100%" style="stop-color:var(--title3)"/>
   </linearGradient>
   <linearGradient id="cardBG" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#1a2942"/>
-    <stop offset="100%" stop-color="#0c1420"/>
+    <stop offset="0%" style="stop-color:var(--card1)"/>
+    <stop offset="100%" style="stop-color:var(--card2)"/>
   </linearGradient>
   <linearGradient id="sweepGrad" x1="0" x2="1">
     <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-    <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05"/>
+    <stop offset="50%" style="stop-color:#ffffff; stop-opacity:var(--sweep-op)"/>
+    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="shineGrad" x1="0" x2="1" y1="0" y2="0">
+    <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="45%" style="stop-color:#ffffff; stop-opacity:var(--shine-op)"/>
+    <stop offset="55%" style="stop-color:#ffffff; stop-opacity:var(--shine-op)"/>
     <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
   </linearGradient>
   <radialGradient id="blob" cx="50%" cy="50%" r="50%">
-    <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.16"/>
+    <stop offset="0%" style="stop-color:#14b8a6; stop-opacity:var(--blob-op)"/>
     <stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/>
   </radialGradient>
   <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
-    <path d="M42 0H0V42" fill="none" stroke="#182a3d" stroke-width="1"/>
+    <path d="M42 0H0V42" fill="none" style="stroke:var(--grid)" stroke-width="1"/>
   </pattern>
   <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
     <feGaussianBlur stdDeviation="4.5" result="b"/>
     <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
   </filter>
   <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="180%">
-    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.35"/>
+    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.28"/>
   </filter>
   <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-    <path d="M0,0 L7,3 L0,6Z" fill="#2dd4bf"/>
+    <path d="M0,0 L7,3 L0,6Z" style="fill:var(--corner)"/>
   </marker>
 
+  <clipPath id="clip0"><rect width="190" height="220" rx="20"/></clipPath>
+  <clipPath id="clip1"><rect width="190" height="220" rx="20"/></clipPath>
+  <clipPath id="clip2"><rect width="190" height="220" rx="20"/></clipPath>
+  <clipPath id="clip3"><rect width="190" height="220" rx="20"/></clipPath>
+  <clipPath id="clip4"><rect width="190" height="220" rx="20"/></clipPath>
 
   <linearGradient id="chip-php" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.05"/>
+    <stop offset="0%" style="stop-color:#a78bfa; stop-opacity:var(--chip-op1)"/>
+    <stop offset="100%" style="stop-color:#a78bfa; stop-opacity:var(--chip-op2)"/>
   </linearGradient>
-  
-
   <linearGradient id="chip-mysql" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.05"/>
+    <stop offset="0%" style="stop-color:#60a5fa; stop-opacity:var(--chip-op1)"/>
+    <stop offset="100%" style="stop-color:#60a5fa; stop-opacity:var(--chip-op2)"/>
   </linearGradient>
-  
-
   <linearGradient id="chip-kotlin" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#c084fc" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#c084fc" stop-opacity="0.05"/>
+    <stop offset="0%" style="stop-color:#c084fc; stop-opacity:var(--chip-op1)"/>
+    <stop offset="100%" style="stop-color:#c084fc; stop-opacity:var(--chip-op2)"/>
   </linearGradient>
-  
-
   <linearGradient id="chip-firebase" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.05"/>
+    <stop offset="0%" style="stop-color:#fbbf24; stop-opacity:var(--chip-op1)"/>
+    <stop offset="100%" style="stop-color:#fbbf24; stop-opacity:var(--chip-op2)"/>
   </linearGradient>
-  
-
   <linearGradient id="chip-play" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#4ade80" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#4ade80" stop-opacity="0.05"/>
+    <stop offset="0%" style="stop-color:#4ade80; stop-opacity:var(--chip-op1)"/>
+    <stop offset="100%" style="stop-color:#4ade80; stop-opacity:var(--chip-op2)"/>
   </linearGradient>
-  
 </defs>
+
 <rect width="1400" height="380" fill="url(#bg)"/>
 <rect width="1400" height="380" fill="url(#grid)" opacity="0.5"/>
 
@@ -86,85 +137,106 @@
   </circle>
 </g>
 
-
-<g stroke="#2dd4bf" stroke-width="1.5" opacity="0.35" fill="none">
+<g style="stroke:var(--corner)" stroke-width="1.5" opacity="0.35" fill="none">
   <path d="M18,40 V18 H40"/>
   <path d="M1382,340 V362 H1360"/>
 </g>
-
 
 <rect x="-300" y="0" width="300" height="380" fill="url(#sweepGrad)" style="mix-blend-mode:overlay">
   <animateTransform attributeName="transform" type="translate" values="0,0; 1700,0" begin="2.4s" dur="7s" repeatCount="indefinite"/>
 </rect>
 
+<!-- particles -->
+<g opacity="0.7">
+  <circle cx="420" cy="55" r="1.8" style="fill:var(--corner)">
+    <animate attributeName="opacity" values="0.2;0.8;0.2" dur="4.4s" begin="0.4s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0; 8,-12; 0,0" dur="9s" begin="0s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="980" cy="70" r="1.6" style="fill:var(--corner)">
+    <animate attributeName="opacity" values="0.15;0.7;0.15" dur="5.2s" begin="1.1s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0; -10,-10; 0,0" dur="11s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="700" cy="330" r="1.7" style="fill:var(--corner)">
+    <animate attributeName="opacity" values="0.15;0.65;0.15" dur="4.8s" begin="0.8s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0; 12,8; 0,0" dur="10s" begin="0.2s" repeatCount="indefinite"/>
+  </circle>
+</g>
 
+<!-- title -->
 <g opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="0s" dur="0.5s" fill="freeze"/>
-  <text x="60" y="55" fill="url(#titleGrad)" font-size="34" font-family="Segoe UI, Arial" font-weight="700">Tech Stack</text>
-  <text x="60" y="85" fill="#8fa6b8" font-size="16" font-family="Segoe UI, Arial">Technologies powering UniVault</text>
-  <rect x="61" y="64" width="0" height="3" rx="1.5" fill="url(#g)">
+  <g transform="translate(60,30)">
+    <rect x="0" y="0" width="26" height="26" rx="7" fill="none" style="stroke:var(--corner)" stroke-width="1.6" opacity="0.9"/>
+    <path d="M8,9 L4,13 L8,17" style="stroke:var(--corner)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18,9 L22,13 L18,17" style="stroke:var(--corner)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="98" y="53" style="fill:url(#titleGrad)" font-size="34" font-family="Segoe UI, Arial" font-weight="700">Tech Stack</text>
+  <text x="98" y="83" style="fill:var(--sub-text)" font-size="16" font-family="Segoe UI, Arial">Technologies powering UniVault</text>
+  <rect x="99" y="62" width="0" height="3" rx="1.5" fill="url(#g)">
     <animate attributeName="width" from="0" to="150" begin="0.35s" dur="0.6s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1"/>
   </rect>
 </g>
 
 
-<g transform="translate(1150,32)" opacity="0" font-family="JetBrains Mono, Consolas, monospace">
-  <animate attributeName="opacity" from="0" to="1" begin="0.25s" dur="0.5s" fill="freeze"/>
-  <rect width="190" height="30" rx="15" fill="#101c2c" stroke="#234158" stroke-width="1"/>
-  <circle cx="18" cy="15" r="3.2" fill="#2dd4bf">
-    <animate attributeName="opacity" values="0.5;1;0.5" dur="2.4s" repeatCount="indefinite"/>
-  </circle>
-  <text x="30" y="20" font-size="11.5" fill="#a9d6cd" letter-spacing="0.5">5 STACKS &#8226; PRODUCTION GRADE</text>
-</g>
 
 <g id="cards">
 
+<!-- Card 0: PHP -->
 <g id="c0" transform="translate(85,130)" opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="0.3s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="0;1"/>
-  <animateTransform id="c0In" attributeName="transform" type="translate" values="85,130; 85,90" begin="0.3s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1"/>
-  <animateTransform attributeName="transform" type="translate" additive="sum" accumulate="none" values="0,0; 0,-6; 0,0" begin="c0In.end" dur="3.6s" repeatCount="indefinite"/>
+  <animateTransform id="c0In" attributeName="transform" type="translate" values="85,140; 85,90" begin="0.3s" dur="0.5s" fill="freeze" calcMode="spline" keySplines="0.2 0.05 0.2 1" keyTimes="0;1"/>
+  <animateTransform attributeName="transform" type="translate" additive="sum" values="0,0; 0,-6; 0,0" begin="c0In.end" dur="3.6s" repeatCount="indefinite"/>
 
   <rect width="190" height="220" rx="20" fill="url(#cardBG)" filter="url(#cardShadow)"/>
-  <rect width="190" height="220" rx="20" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity="0.85"/>
+  <rect width="190" height="220" rx="20" fill="none" stroke="#a78bfa" stroke-width="1.3" style="stroke-opacity:var(--card-border-op)"/>
   <rect x="1" y="1" width="188" height="218" rx="19" fill="none" stroke="#a78bfa" stroke-width="1.6" stroke-dasharray="840" stroke-dashoffset="840">
     <animate attributeName="stroke-dashoffset" from="840" to="0" begin="0.3s" dur="0.9s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="840;0"/>
   </rect>
-  <line x1="18" y1="14" x2="78" y2="14" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="18" y1="14" x2="78" y2="14" style="stroke:var(--card-top); stroke-opacity:var(--card-top-op)" stroke-width="2" stroke-linecap="round"/>
 
-  <circle cx="95" cy="62" r="44" fill="none" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4 9" opacity="0.45">
+  <g clip-path="url(#clip0)">
+    <g transform="skewX(-20)">
+      <rect x="-260" y="-20" width="130" height="260" fill="url(#shineGrad)">
+        <animateTransform attributeName="transform" type="translate" values="0,0; 480,0; 480,0" begin="1.2s" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.25 0.1 0.25 1; 0 0 1 1" keyTimes="0;0.125;1"/>
+      </rect>
+    </g>
+  </g>
+
+  <circle cx="95" cy="62" r="44" fill="none" style="stroke:#a78bfa" stroke-width="1.2" stroke-dasharray="4 9" opacity="0.45">
     <animateTransform attributeName="transform" type="rotate" from="0 95 62" to="360 95 62" begin="c0In.end" dur="10s" repeatCount="indefinite"/>
   </circle>
 
   <rect x="59" y="26" width="72" height="72" rx="18" fill="url(#chip-php)" stroke="#a78bfa" stroke-width="1.3" opacity="0.95"/>
   <g transform="translate(75,42)">
-    
-        <path d="M15,9 L6,20 L15,31" stroke="#a78bfa" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M25,9 L34,20 L25,31" stroke="#a78bfa" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M23,6 L17,34" stroke="#a78bfa" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-        
+    <g transform="translate(0, 10.4) scale(0.4)">
+      <path d="M7.579 10.123h14.204c4.169.035 7.19 1.237 9.063 3.604 1.873 2.367 2.491 5.6 1.855 9.699-.247 1.873-.795 3.71-1.643 5.512a16.385 16.385 0 01-3.392 4.876c-1.767 1.837-3.657 3.003-5.671 3.498a26.11 26.11 0 01-6.254.742h-6.36l-2.014 10.07H0l7.579-38.001m6.201 6.042l-3.18 15.9c.212.035.424.053.636.053h.742c3.392.035 6.219-.3 8.48-1.007 2.261-.742 3.781-3.321 4.558-7.738.636-3.71 0-5.848-1.908-6.413-1.873-.565-4.222-.83-7.049-.795-.424.035-.83.053-1.219.053h-1.113l.053-.053M41.093 0h7.314L46.34 10.123h6.572c3.604.071 6.289.813 8.056 2.226 1.802 1.413 2.332 4.099 1.59 8.056l-3.551 17.649h-7.42L54.979 21.2c.353-1.767.247-3.021-.318-3.763s-1.784-1.113-3.657-1.113l-5.883-.053-4.346 21.783h-7.314L41.093 0M70.412 10.123h14.204c4.169.035 7.19 1.237 9.063 3.604 1.873 2.367 2.491 5.6 1.855 9.699-.247 1.873-.795 3.71-1.643 5.512a16.385 16.385 0 01-3.392 4.876c-1.767 1.837-3.657 3.003-5.671 3.498a26.11 26.11 0 01-6.254.742h-6.36L70.2 48.124h-7.367l7.579-38.001m6.201 6.042l-3.18 15.9c.212.035.424.053.636.053h.742c3.392.035 6.219-.3 8.48-1.007 2.261-.742 3.781-3.321 4.558-7.738.636-3.71 0-5.848-1.908-6.413-1.873-.565-4.222-.83-7.049-.795-.424.035-.83.053-1.219.053H76.56l.053-.053" fill="#a78bfa"/>
+    </g>
   </g>
 
   <text x="95" y="120" text-anchor="middle" font-size="22" fill="#a78bfa" font-weight="700" font-family="Segoe UI, Arial">PHP</text>
-  <text x="95" y="144" text-anchor="middle" font-size="13.5" fill="#c3d6e3" font-family="Segoe UI, Arial">Backend APIs</text>
+  <text x="95" y="144" text-anchor="middle" font-size="13.5" style="fill:var(--body-text)" font-family="Segoe UI, Arial">Backend APIs</text>
 
-  <line x1="30" y1="164" x2="160" y2="164" stroke="#2c4257" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
+  <line x1="30" y1="164" x2="160" y2="164" style="stroke:var(--divider)" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
     <animate attributeName="stroke-dashoffset" from="130" to="0" begin="0.3s" dur="0.6s" fill="freeze" values="130;0"/>
   </line>
 
-  <circle cx="95" cy="180" r="3" fill="#2dd4bf">
-    <animate attributeName="opacity" values="0.5;1;0.5" begin="c0In.end" dur="2.4s" repeatCount="indefinite"/>
+  <!-- Pulse Echo -->
+  <circle cx="95" cy="180" r="3" fill="#a78bfa" opacity="0.8">
+    <animate attributeName="r" values="3;9" begin="c0In.end" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0" begin="c0In.end" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#8fded3" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">PRODUCTION READY</text>
+  <!-- Main Dot -->
+  <circle cx="95" cy="180" r="3" fill="#a78bfa"/>
+  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#a78bfa" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">SECURE APIS</text>
 </g>
 
-
 <g>
-  <path d="M275 200 H345" stroke="#1c3247" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
+  <path d="M275 200 H345" style="stroke:var(--divider)" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
   <path d="M275 200 H345" stroke="url(#g)" stroke-width="3" fill="none" marker-end="url(#arrow)"
         stroke-dasharray="70" stroke-dashoffset="70">
     <animate attributeName="stroke-dashoffset" from="70" to="0" begin="0.65s" dur="0.45s" fill="freeze" values="70;0"/>
   </path>
-  <circle r="4" fill="#2dd4bf" filter="url(#glow)">
+  <circle r="4" style="fill:var(--corner)" filter="url(#glow)">
     <animateMotion dur="1.6s" begin="0.65s" repeatCount="indefinite" path="M275 200 H345"/>
   </circle>
   <circle r="2.6" fill="#a8f3e9" opacity="0.8" filter="url(#glow)">
@@ -172,18 +244,26 @@
   </circle>
 </g>
 
-
+<!-- Card 1: MySQL -->
 <g id="c1" transform="translate(345,130)" opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="0.65s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="0;1"/>
-  <animateTransform id="c1In" attributeName="transform" type="translate" values="345,130; 345,90" begin="0.65s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1"/>
-  <animateTransform attributeName="transform" type="translate" additive="sum" accumulate="none" values="0,0; 0,-6; 0,0" begin="c1In.end" dur="3.6s" repeatCount="indefinite"/>
+  <animateTransform id="c1In" attributeName="transform" type="translate" values="345,140; 345,90" begin="0.65s" dur="0.5s" fill="freeze" calcMode="spline" keySplines="0.2 0.05 0.2 1" keyTimes="0;1"/>
+  <animateTransform attributeName="transform" type="translate" additive="sum" values="0,0; 0,-6; 0,0" begin="c1In.end" dur="3.6s" repeatCount="indefinite"/>
 
   <rect width="190" height="220" rx="20" fill="url(#cardBG)" filter="url(#cardShadow)"/>
-  <rect width="190" height="220" rx="20" fill="none" stroke="#60a5fa" stroke-width="1.3" opacity="0.85"/>
+  <rect width="190" height="220" rx="20" fill="none" stroke="#60a5fa" stroke-width="1.3" style="stroke-opacity:var(--card-border-op)"/>
   <rect x="1" y="1" width="188" height="218" rx="19" fill="none" stroke="#60a5fa" stroke-width="1.6" stroke-dasharray="840" stroke-dashoffset="840">
     <animate attributeName="stroke-dashoffset" from="840" to="0" begin="0.65s" dur="0.9s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="840;0"/>
   </rect>
-  <line x1="18" y1="14" x2="78" y2="14" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="18" y1="14" x2="78" y2="14" style="stroke:var(--card-top); stroke-opacity:var(--card-top-op)" stroke-width="2" stroke-linecap="round"/>
+
+  <g clip-path="url(#clip1)">
+    <g transform="skewX(-20)">
+      <rect x="-260" y="-20" width="130" height="260" fill="url(#shineGrad)">
+        <animateTransform attributeName="transform" type="translate" values="0,0; 480,0; 480,0" begin="2.0s" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.25 0.1 0.25 1; 0 0 1 1" keyTimes="0;0.125;1"/>
+      </rect>
+    </g>
+  </g>
 
   <circle cx="95" cy="62" r="44" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="4 9" opacity="0.45">
     <animateTransform attributeName="transform" type="rotate" from="0 95 62" to="360 95 62" begin="c1In.end" dur="10s" repeatCount="indefinite"/>
@@ -191,34 +271,35 @@
 
   <rect x="59" y="26" width="72" height="72" rx="18" fill="url(#chip-mysql)" stroke="#60a5fa" stroke-width="1.3" opacity="0.95"/>
   <g transform="translate(75,42)">
-    
-        <ellipse cx="20" cy="10" rx="14" ry="5" stroke="#60a5fa" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M6,10 V30 A14,5 0 0 0 34,30 V10" stroke="#60a5fa" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M6,20 A14,5 0 0 0 34,20" stroke="#60a5fa" stroke-width="2" fill="none" opacity="0.65"/>
-        
+    <ellipse cx="20" cy="10" rx="14" ry="5" stroke="#60a5fa" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6,10 V30 A14,5 0 0 0 34,30 V10" stroke="#60a5fa" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6,20 A14,5 0 0 0 34,20" stroke="#60a5fa" stroke-width="2" fill="none" opacity="0.65"/>
   </g>
 
   <text x="95" y="120" text-anchor="middle" font-size="22" fill="#60a5fa" font-weight="700" font-family="Segoe UI, Arial">MySQL</text>
-  <text x="95" y="144" text-anchor="middle" font-size="13.5" fill="#c3d6e3" font-family="Segoe UI, Arial">Database</text>
+  <text x="95" y="144" text-anchor="middle" font-size="13.5" style="fill:var(--body-text)" font-family="Segoe UI, Arial">Database</text>
 
-  <line x1="30" y1="164" x2="160" y2="164" stroke="#2c4257" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
+  <line x1="30" y1="164" x2="160" y2="164" style="stroke:var(--divider)" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
     <animate attributeName="stroke-dashoffset" from="130" to="0" begin="0.65s" dur="0.6s" fill="freeze" values="130;0"/>
   </line>
 
-  <circle cx="95" cy="180" r="3" fill="#2dd4bf">
-    <animate attributeName="opacity" values="0.5;1;0.5" begin="c1In.end" dur="2.4s" repeatCount="indefinite"/>
+  <!-- Pulse Echo -->
+  <circle cx="95" cy="180" r="3" fill="#60a5fa" opacity="0.8">
+    <animate attributeName="r" values="3;9" begin="c1In.end" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0" begin="c1In.end" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#8fded3" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">PRODUCTION READY</text>
+  <!-- Main Dot -->
+  <circle cx="95" cy="180" r="3" fill="#60a5fa"/>
+  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#60a5fa" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">RELATIONAL DB</text>
 </g>
 
-
 <g>
-  <path d="M535 200 H605" stroke="#1c3247" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
+  <path d="M535 200 H605" style="stroke:var(--divider)" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
   <path d="M535 200 H605" stroke="url(#g)" stroke-width="3" fill="none" marker-end="url(#arrow)"
         stroke-dasharray="70" stroke-dashoffset="70">
     <animate attributeName="stroke-dashoffset" from="70" to="0" begin="1.0s" dur="0.45s" fill="freeze" values="70;0"/>
   </path>
-  <circle r="4" fill="#2dd4bf" filter="url(#glow)">
+  <circle r="4" style="fill:var(--corner)" filter="url(#glow)">
     <animateMotion dur="1.6s" begin="1.0s" repeatCount="indefinite" path="M535 200 H605"/>
   </circle>
   <circle r="2.6" fill="#a8f3e9" opacity="0.8" filter="url(#glow)">
@@ -226,18 +307,26 @@
   </circle>
 </g>
 
-
+<!-- Card 2: Kotlin -->
 <g id="c2" transform="translate(605,130)" opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="1.0s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="0;1"/>
-  <animateTransform id="c2In" attributeName="transform" type="translate" values="605,130; 605,90" begin="1.0s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1"/>
-  <animateTransform attributeName="transform" type="translate" additive="sum" accumulate="none" values="0,0; 0,-6; 0,0" begin="c2In.end" dur="3.6s" repeatCount="indefinite"/>
+  <animateTransform id="c2In" attributeName="transform" type="translate" values="605,140; 605,90" begin="1.0s" dur="0.5s" fill="freeze" calcMode="spline" keySplines="0.2 0.05 0.2 1" keyTimes="0;1"/>
+  <animateTransform attributeName="transform" type="translate" additive="sum" values="0,0; 0,-6; 0,0" begin="c2In.end" dur="3.6s" repeatCount="indefinite"/>
 
   <rect width="190" height="220" rx="20" fill="url(#cardBG)" filter="url(#cardShadow)"/>
-  <rect width="190" height="220" rx="20" fill="none" stroke="#c084fc" stroke-width="1.3" opacity="0.85"/>
+  <rect width="190" height="220" rx="20" fill="none" stroke="#c084fc" stroke-width="1.3" style="stroke-opacity:var(--card-border-op)"/>
   <rect x="1" y="1" width="188" height="218" rx="19" fill="none" stroke="#c084fc" stroke-width="1.6" stroke-dasharray="840" stroke-dashoffset="840">
     <animate attributeName="stroke-dashoffset" from="840" to="0" begin="1.0s" dur="0.9s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="840;0"/>
   </rect>
-  <line x1="18" y1="14" x2="78" y2="14" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="18" y1="14" x2="78" y2="14" style="stroke:var(--card-top); stroke-opacity:var(--card-top-op)" stroke-width="2" stroke-linecap="round"/>
+
+  <g clip-path="url(#clip2)">
+    <g transform="skewX(-20)">
+      <rect x="-260" y="-20" width="130" height="260" fill="url(#shineGrad)">
+        <animateTransform attributeName="transform" type="translate" values="0,0; 480,0; 480,0" begin="2.8s" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.25 0.1 0.25 1; 0 0 1 1" keyTimes="0;0.125;1"/>
+      </rect>
+    </g>
+  </g>
 
   <circle cx="95" cy="62" r="44" fill="none" stroke="#c084fc" stroke-width="1.2" stroke-dasharray="4 9" opacity="0.45">
     <animateTransform attributeName="transform" type="rotate" from="0 95 62" to="360 95 62" begin="c2In.end" dur="10s" repeatCount="indefinite"/>
@@ -245,35 +334,35 @@
 
   <rect x="59" y="26" width="72" height="72" rx="18" fill="url(#chip-kotlin)" stroke="#c084fc" stroke-width="1.3" opacity="0.95"/>
   <g transform="translate(75,42)">
-    
-        <rect x="10" y="4" width="20" height="32" rx="4" stroke="#c084fc" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <line x1="10" y1="29" x2="30" y2="29" stroke="#c084fc" stroke-width="2" opacity="0.65"/>
-        <circle cx="20" cy="32.5" r="1.6" fill="#c084fc"/>
-        <path d="M16,12 L24,17 L16,22 Z" fill="#c084fc" opacity="0.9"/>
-        
+    <g transform="translate(8, 8)">
+      <path d="M1.3 24l11.3-11.5L24 24zM0 0h12L0 12.5zM13.4 0L0 14v10l12-12L24 0z" fill="#c084fc"/>
+    </g>
   </g>
 
   <text x="95" y="120" text-anchor="middle" font-size="22" fill="#c084fc" font-weight="700" font-family="Segoe UI, Arial">Kotlin</text>
-  <text x="95" y="144" text-anchor="middle" font-size="13.5" fill="#c3d6e3" font-family="Segoe UI, Arial">Android App</text>
+  <text x="95" y="144" text-anchor="middle" font-size="13.5" style="fill:var(--body-text)" font-family="Segoe UI, Arial">Android App</text>
 
-  <line x1="30" y1="164" x2="160" y2="164" stroke="#2c4257" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
+  <line x1="30" y1="164" x2="160" y2="164" style="stroke:var(--divider)" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
     <animate attributeName="stroke-dashoffset" from="130" to="0" begin="1.0s" dur="0.6s" fill="freeze" values="130;0"/>
   </line>
 
-  <circle cx="95" cy="180" r="3" fill="#2dd4bf">
-    <animate attributeName="opacity" values="0.5;1;0.5" begin="c2In.end" dur="2.4s" repeatCount="indefinite"/>
+  <!-- Pulse Echo -->
+  <circle cx="95" cy="180" r="3" fill="#c084fc" opacity="0.8">
+    <animate attributeName="r" values="3;9" begin="c2In.end" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0" begin="c2In.end" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#8fded3" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">PRODUCTION READY</text>
+  <!-- Main Dot -->
+  <circle cx="95" cy="180" r="3" fill="#c084fc"/>
+  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#c084fc" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">ANDROID APPS</text>
 </g>
 
-
 <g>
-  <path d="M795 200 H865" stroke="#1c3247" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
+  <path d="M795 200 H865" style="stroke:var(--divider)" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
   <path d="M795 200 H865" stroke="url(#g)" stroke-width="3" fill="none" marker-end="url(#arrow)"
         stroke-dasharray="70" stroke-dashoffset="70">
     <animate attributeName="stroke-dashoffset" from="70" to="0" begin="1.35s" dur="0.45s" fill="freeze" values="70;0"/>
   </path>
-  <circle r="4" fill="#2dd4bf" filter="url(#glow)">
+  <circle r="4" style="fill:var(--corner)" filter="url(#glow)">
     <animateMotion dur="1.6s" begin="1.35s" repeatCount="indefinite" path="M795 200 H865"/>
   </circle>
   <circle r="2.6" fill="#a8f3e9" opacity="0.8" filter="url(#glow)">
@@ -281,18 +370,26 @@
   </circle>
 </g>
 
-
+<!-- Card 3: Firebase -->
 <g id="c3" transform="translate(865,130)" opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="1.35s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="0;1"/>
-  <animateTransform id="c3In" attributeName="transform" type="translate" values="865,130; 865,90" begin="1.35s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1"/>
-  <animateTransform attributeName="transform" type="translate" additive="sum" accumulate="none" values="0,0; 0,-6; 0,0" begin="c3In.end" dur="3.6s" repeatCount="indefinite"/>
+  <animateTransform id="c3In" attributeName="transform" type="translate" values="865,140; 865,90" begin="1.35s" dur="0.5s" fill="freeze" calcMode="spline" keySplines="0.2 0.05 0.2 1" keyTimes="0;1"/>
+  <animateTransform attributeName="transform" type="translate" additive="sum" values="0,0; 0,-6; 0,0" begin="c3In.end" dur="3.6s" repeatCount="indefinite"/>
 
   <rect width="190" height="220" rx="20" fill="url(#cardBG)" filter="url(#cardShadow)"/>
-  <rect width="190" height="220" rx="20" fill="none" stroke="#fbbf24" stroke-width="1.3" opacity="0.85"/>
+  <rect width="190" height="220" rx="20" fill="none" stroke="#fbbf24" stroke-width="1.3" style="stroke-opacity:var(--card-border-op)"/>
   <rect x="1" y="1" width="188" height="218" rx="19" fill="none" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="840" stroke-dashoffset="840">
     <animate attributeName="stroke-dashoffset" from="840" to="0" begin="1.35s" dur="0.9s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="840;0"/>
   </rect>
-  <line x1="18" y1="14" x2="78" y2="14" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="18" y1="14" x2="78" y2="14" style="stroke:var(--card-top); stroke-opacity:var(--card-top-op)" stroke-width="2" stroke-linecap="round"/>
+
+  <g clip-path="url(#clip3)">
+    <g transform="skewX(-20)">
+      <rect x="-260" y="-20" width="130" height="260" fill="url(#shineGrad)">
+        <animateTransform attributeName="transform" type="translate" values="0,0; 480,0; 480,0" begin="3.6s" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.25 0.1 0.25 1; 0 0 1 1" keyTimes="0;0.125;1"/>
+      </rect>
+    </g>
+  </g>
 
   <circle cx="95" cy="62" r="44" fill="none" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="4 9" opacity="0.45">
     <animateTransform attributeName="transform" type="rotate" from="0 95 62" to="360 95 62" begin="c3In.end" dur="10s" repeatCount="indefinite"/>
@@ -300,33 +397,35 @@
 
   <rect x="59" y="26" width="72" height="72" rx="18" fill="url(#chip-firebase)" stroke="#fbbf24" stroke-width="1.3" opacity="0.95"/>
   <g transform="translate(75,42)">
-    
-        <path d="M20,4 L33,9.5 V19 C33,27.5 27.5,32.8 20,35.5 C12.5,32.8 7,27.5 7,19 V9.5 Z" stroke="#fbbf24" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M13.5,19.5 L18,24 L27,13.5" stroke="#fbbf24" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        
+    <g transform="translate(8, 8)">
+      <path d="M5.239 15.063 7.21 2.381a.453.453 0 0 1 .847-.145l2.12 3.979-4.938 8.848zM19.24 18.14 17.363 6.469a.454.454 0 0 0-.766-.246L4.76 18.14l6.55 3.691c.411.23.912.23 1.323 0l6.607-3.691zM13.917 7.955 12.4 5.052a.452.452 0 0 0-.8 0L4.939 16.989l8.978-9.034z" fill="#fbbf24"/>
+    </g>
   </g>
 
   <text x="95" y="120" text-anchor="middle" font-size="22" fill="#fbbf24" font-weight="700" font-family="Segoe UI, Arial">Firebase</text>
-  <text x="95" y="144" text-anchor="middle" font-size="13.5" fill="#c3d6e3" font-family="Segoe UI, Arial">Auth + FCM</text>
+  <text x="95" y="144" text-anchor="middle" font-size="13.5" style="fill:var(--body-text)" font-family="Segoe UI, Arial">Auth + FCM</text>
 
-  <line x1="30" y1="164" x2="160" y2="164" stroke="#2c4257" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
+  <line x1="30" y1="164" x2="160" y2="164" style="stroke:var(--divider)" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
     <animate attributeName="stroke-dashoffset" from="130" to="0" begin="1.35s" dur="0.6s" fill="freeze" values="130;0"/>
   </line>
 
-  <circle cx="95" cy="180" r="3" fill="#2dd4bf">
-    <animate attributeName="opacity" values="0.5;1;0.5" begin="c3In.end" dur="2.4s" repeatCount="indefinite"/>
+  <!-- Pulse Echo -->
+  <circle cx="95" cy="180" r="3" fill="#fbbf24" opacity="0.8">
+    <animate attributeName="r" values="3;9" begin="c3In.end" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0" begin="c3In.end" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#8fded3" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">PRODUCTION READY</text>
+  <!-- Main Dot -->
+  <circle cx="95" cy="180" r="3" fill="#fbbf24"/>
+  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#fbbf24" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">CLOUD SERVICES</text>
 </g>
 
-
 <g>
-  <path d="M1055 200 H1125" stroke="#1c3247" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
+  <path d="M1055 200 H1125" style="stroke:var(--divider)" stroke-width="3" fill="none" stroke-dasharray="4 5"/>
   <path d="M1055 200 H1125" stroke="url(#g)" stroke-width="3" fill="none" marker-end="url(#arrow)"
         stroke-dasharray="70" stroke-dashoffset="70">
     <animate attributeName="stroke-dashoffset" from="70" to="0" begin="1.7s" dur="0.45s" fill="freeze" values="70;0"/>
   </path>
-  <circle r="4" fill="#2dd4bf" filter="url(#glow)">
+  <circle r="4" style="fill:var(--corner)" filter="url(#glow)">
     <animateMotion dur="1.6s" begin="1.7s" repeatCount="indefinite" path="M1055 200 H1125"/>
   </circle>
   <circle r="2.6" fill="#a8f3e9" opacity="0.8" filter="url(#glow)">
@@ -334,18 +433,26 @@
   </circle>
 </g>
 
-
+<!-- Card 4: Google Play -->
 <g id="c4" transform="translate(1125,130)" opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="1.7s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="0;1"/>
-  <animateTransform id="c4In" attributeName="transform" type="translate" values="1125,130; 1125,90" begin="1.7s" dur="0.45s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1"/>
-  <animateTransform attributeName="transform" type="translate" additive="sum" accumulate="none" values="0,0; 0,-6; 0,0" begin="c4In.end" dur="3.6s" repeatCount="indefinite"/>
+  <animateTransform id="c4In" attributeName="transform" type="translate" values="1125,140; 1125,90" begin="1.7s" dur="0.5s" fill="freeze" calcMode="spline" keySplines="0.2 0.05 0.2 1" keyTimes="0;1"/>
+  <animateTransform attributeName="transform" type="translate" additive="sum" values="0,0; 0,-6; 0,0" begin="c4In.end" dur="3.6s" repeatCount="indefinite"/>
 
   <rect width="190" height="220" rx="20" fill="url(#cardBG)" filter="url(#cardShadow)"/>
-  <rect width="190" height="220" rx="20" fill="none" stroke="#4ade80" stroke-width="1.3" opacity="0.85"/>
+  <rect width="190" height="220" rx="20" fill="none" stroke="#4ade80" stroke-width="1.3" style="stroke-opacity:var(--card-border-op)"/>
   <rect x="1" y="1" width="188" height="218" rx="19" fill="none" stroke="#4ade80" stroke-width="1.6" stroke-dasharray="840" stroke-dashoffset="840">
     <animate attributeName="stroke-dashoffset" from="840" to="0" begin="1.7s" dur="0.9s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" values="840;0"/>
   </rect>
-  <line x1="18" y1="14" x2="78" y2="14" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="18" y1="14" x2="78" y2="14" style="stroke:var(--card-top); stroke-opacity:var(--card-top-op)" stroke-width="2" stroke-linecap="round"/>
+
+  <g clip-path="url(#clip4)">
+    <g transform="skewX(-20)">
+      <rect x="-260" y="-20" width="130" height="260" fill="url(#shineGrad)">
+        <animateTransform attributeName="transform" type="translate" values="0,0; 480,0; 480,0" begin="4.4s" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.25 0.1 0.25 1; 0 0 1 1" keyTimes="0;0.125;1"/>
+      </rect>
+    </g>
+  </g>
 
   <circle cx="95" cy="62" r="44" fill="none" stroke="#4ade80" stroke-width="1.2" stroke-dasharray="4 9" opacity="0.45">
     <animateTransform attributeName="transform" type="rotate" from="0 95 62" to="360 95 62" begin="c4In.end" dur="10s" repeatCount="indefinite"/>
@@ -353,33 +460,33 @@
 
   <rect x="59" y="26" width="72" height="72" rx="18" fill="url(#chip-play)" stroke="#4ade80" stroke-width="1.3" opacity="0.95"/>
   <g transform="translate(75,42)">
-    
-        <path d="M20,3 C26,9 27.5,17 25.5,25 L14.5,25 C12.5,17 14,9 20,3 Z" stroke="#4ade80" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="20" cy="14" r="3.2" stroke="#4ade80" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M14.5,23 L8,30 L14,27.5 Z" stroke="#4ade80" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M25.5,23 L32,30 L26,27.5 Z" stroke="#4ade80" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M17,27 L20,35 L23,27 Z" fill="#4ade80" opacity="0.85"/>
-        
+    <g transform="translate(8, 8) scale(1.5)">
+      <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27" fill="#4ade80"/>
+    </g>
   </g>
 
   <text x="95" y="120" text-anchor="middle" font-size="22" fill="#4ade80" font-weight="700" font-family="Segoe UI, Arial">Google Play</text>
-  <text x="95" y="144" text-anchor="middle" font-size="13.5" fill="#c3d6e3" font-family="Segoe UI, Arial">Deployment</text>
+  <text x="95" y="144" text-anchor="middle" font-size="13.5" style="fill:var(--body-text)" font-family="Segoe UI, Arial">Deployment</text>
 
-  <line x1="30" y1="164" x2="160" y2="164" stroke="#2c4257" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
+  <line x1="30" y1="164" x2="160" y2="164" style="stroke:var(--divider)" stroke-width="1" stroke-dasharray="130" stroke-dashoffset="130">
     <animate attributeName="stroke-dashoffset" from="130" to="0" begin="1.7s" dur="0.6s" fill="freeze" values="130;0"/>
   </line>
 
-  <circle cx="95" cy="180" r="3" fill="#2dd4bf">
-    <animate attributeName="opacity" values="0.5;1;0.5" begin="c4In.end" dur="2.4s" repeatCount="indefinite"/>
+  <!-- Pulse Echo -->
+  <circle cx="95" cy="180" r="3" fill="#4ade80" opacity="0.8">
+    <animate attributeName="r" values="3;9" begin="c4In.end" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0" begin="c4In.end" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#8fded3" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">PRODUCTION READY</text>
+  <!-- Main Dot -->
+  <circle cx="95" cy="180" r="3" fill="#4ade80"/>
+  <text x="95" y="202" text-anchor="middle" font-size="11.5" fill="#4ade80" font-family="JetBrains Mono, Consolas, monospace" letter-spacing="1">PLAY STORE</text>
 </g>
 
 </g>
 
 <g opacity="0">
   <animate attributeName="opacity" from="0" to="1" begin="2.2s" dur="0.7s" fill="freeze"/>
-  <text x="700" y="345" text-anchor="middle" fill="#14b8a6" font-size="15.5"
+  <text x="700" y="345" text-anchor="middle" style="fill:var(--footer-text)" font-size="15.5"
         font-family="JetBrains Mono, Consolas, monospace" letter-spacing="3">
     BUILT FOR PERFORMANCE &#8226; SECURITY &#8226; SCALABILITY
   </text>
