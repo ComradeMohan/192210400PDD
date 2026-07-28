@@ -87,7 +87,8 @@
 <b>Real-Time by Default</b><br/><sub>Push notifications via Firebase Cloud Messaging keep everyone in sync instantly.</sub>
 </td>
 <td width="25%" align="center">
-<b>Production-Ready</b><br/><sub>Live on the Google Play Store, not a prototype or class demo.</sub>
+<b>Production-Ready</b><br/>
+<sub>Production-grade app available on the Google Play Store for real users worldwide with continuous improvements.</sub>
 </td>
 <td width="25%" align="center">
 <b>Simple, Proven Stack</b><br/><sub>PHP + MySQL + Kotlin + Firebase — reliable, well-documented, easy to extend.</sub>
